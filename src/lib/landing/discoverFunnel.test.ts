@@ -2,10 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   buildDiscoverFunnelRef,
   buildDiscoverPlayHandoffUrl,
+  isDiscoverDirectMode,
   isDiscoverFunnelRef,
-} from "@/lib/landing/discoverFunnelRef";
+  resolveHandoffDisplayLocale,
+  toLandingLocale,
+} from "@/lib/landing/discoverFunnel";
 
-describe("discoverFunnelRef", () => {
+describe("discoverFunnel", () => {
   it("builds locale-aware ref tokens", () => {
     expect(buildDiscoverFunnelRef("ko", "mbti-personality-types")).toBe(
       "discover-ko-mbti-personality-types",
@@ -25,8 +28,17 @@ describe("discoverFunnelRef", () => {
     );
   });
 
-  it("detects discover funnel refs", () => {
+  it("detects discover funnel refs and direct mode", () => {
     expect(isDiscoverFunnelRef("discover-en-mbti-personality-types")).toBe(true);
     expect(isDiscoverFunnelRef("gsc-legacy")).toBe(false);
+    expect(isDiscoverDirectMode("direct")).toBe(true);
+    expect(isDiscoverDirectMode("intro")).toBe(false);
+  });
+
+  it("resolves handoff display locale from query with fallback", () => {
+    expect(resolveHandoffDisplayLocale("ko", "ja")).toBe("ko");
+    expect(resolveHandoffDisplayLocale(null, "ja")).toBe("ja");
+    expect(toLandingLocale("fr")).toBeNull();
+    expect(toLandingLocale("zh")).toBe("zh");
   });
 });

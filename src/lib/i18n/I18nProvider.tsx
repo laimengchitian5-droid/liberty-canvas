@@ -11,11 +11,11 @@ import {
 } from "react";
 import {
   DEFAULT_LOCALE,
-  LOCALE_STORAGE_KEY,
   getDirection,
   type Locale,
 } from "@/lib/i18n/config";
 import { getMessages, type LocaleMessages } from "@/lib/i18n/messages";
+import { persistClientLocale } from "@/lib/i18n/persistClientLocale";
 
 interface I18nContextValue {
   locale: Locale;
@@ -26,18 +26,6 @@ interface I18nContextValue {
 }
 
 const I18nContext = createContext<I18nContextValue | null>(null);
-
-const LEGACY_RUBEL_LOCALE_KEY = "rubel-display-locale";
-
-function persistClientLocale(locale: Locale): void {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
-  window.localStorage.setItem(LEGACY_RUBEL_LOCALE_KEY, locale);
-  document.cookie = `${LOCALE_STORAGE_KEY}=${locale};path=/;max-age=31536000;samesite=lax`;
-}
 
 function HtmlLocaleBinder({
   locale,

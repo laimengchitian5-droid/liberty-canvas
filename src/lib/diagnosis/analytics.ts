@@ -1,4 +1,5 @@
 import type { DiagnosisResult } from "@/types/diagnosis";
+import { readDiagnosisRef } from "@/lib/diagnosis/diagnosisSession";
 import { hasAnalyticsConsent } from "@/lib/privacy/consent";
 
 export type DiagnosisAnalyticsEvent =
@@ -114,7 +115,6 @@ export function trackDiagnosisEvent(
   };
 
   appendLog(detail);
-
   flushAnalyticsToServer(detail);
 
   try {
@@ -124,17 +124,7 @@ export function trackDiagnosisEvent(
   }
 }
 
-export function readDiagnosisRef(): string | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  try {
-    return sessionStorage.getItem("lc-diagnosis-ref");
-  } catch {
-    return null;
-  }
-}
+export { readDiagnosisRef } from "@/lib/diagnosis/diagnosisSession";
 
 export function readDiagnosisEventLog(): Record<string, unknown>[] {
   if (typeof window === "undefined") {

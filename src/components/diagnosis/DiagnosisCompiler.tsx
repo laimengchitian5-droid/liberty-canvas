@@ -18,9 +18,7 @@ import {
 
 } from "lucide-react";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
-import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useShallow } from "zustand/react/shallow";
 
@@ -37,7 +35,7 @@ import {
 import { compileLegallySafeResult } from "@/lib/diagnosis/compileLegallySafeResult";
 import { COMPILER_UI_MESSAGES } from "@/lib/diagnosis/compilerMessages";
 import { readDiagnosisRef, trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
-import { isDiscoverFunnelRef } from "@/lib/landing/discoverFunnelRef";
+import { useDiscoverDirectStart } from "@/hooks/useDiscoverDirectStart";
 import { getSiteUrl } from "@/lib/site/url";
 import { DiagnosisResultPage } from "@/components/diagnosis/DiagnosisResultPage";
 import { DiagnosisCompilerIntro } from "@/components/diagnosis/DiagnosisCompilerIntro";
@@ -1090,8 +1088,6 @@ const ViralSharePanel = ({
 export const DiagnosisCompiler = (props: DiagnosisCompilerProps) => {
 
   const programDefinition = resolveProgramDefinition(props);
-  const searchParams = useSearchParams();
-  const directStartTriggered = useRef(false);
 
   const isBuilderMode = isBuilderDiagnosisDefinition(programDefinition);
 
@@ -1322,26 +1318,7 @@ export const DiagnosisCompiler = (props: DiagnosisCompilerProps) => {
     startProgram();
   }, [isBuilderMode, programDefinition, startProgram]);
 
-  useEffect(() => {
-    if (phase !== "intro" || directStartTriggered.current) {
-      return;
-    }
-
-    if (searchParams.get("mode") !== "direct") {
-      return;
-    }
-
-    if (!isDiscoverFunnelRef(readDiagnosisRef())) {
-      return;
-    }
-
-    directStartTriggered.current = true;
-    const timer = window.setTimeout(() => {
-      handleStart();
-    }, 450);
-
-    return () => window.clearTimeout(timer);
-  }, [handleStart, phase, searchParams]);
+  useDiscoverDirectStart(phase, handleStart);
 
 
 

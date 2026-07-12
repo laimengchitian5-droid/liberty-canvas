@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n/config";
+
 export const LANDING_LOCALES = ["en", "ja", "ko", "zh"] as const;
 
 export type LandingLocale = (typeof LANDING_LOCALES)[number];
@@ -45,11 +47,6 @@ export const LANDING_LOCALE_META: Record<LandingLocale, LandingLocaleMeta> = {
   },
 };
 
-export function landingLocaleToAppLocale(
-  locale: LandingLocale,
-): "en" | "ja" | "ko" | "zh" {
-  if (locale === "ja") return "ja";
-  if (locale === "ko") return "ko";
-  if (locale === "zh") return "zh";
-  return "en";
+export function landingLocaleToAppLocale(locale: LandingLocale): Locale {
+  return locale;
 }

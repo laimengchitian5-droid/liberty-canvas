@@ -4,26 +4,15 @@ import {
   isLocale,
   type Locale,
 } from "@/lib/i18n/config";
+import { isLandingLocale, type LandingLocale } from "@/lib/landing/landingLocales";
 
 export const EDGE_LOCALE_HEADER = "x-lc-locale";
 
-const DISCOVER_PATH_LOCALES = ["en", "ja", "ko", "zh"] as const;
+const DISCOVER_PATH_LOCALE_RE = /^\/discover\/([a-z]{2})(?:\/|$)/;
 
-export function resolveDiscoverPathLocale(pathname: string): Locale | null {
-  const match = pathname.match(/^\/discover\/(en|ja|ko|zh)(?:\/|$)/);
-
-  if (!match?.[1]) {
-    return null;
-  }
-
-  const candidate = match[1];
-
-  return (DISCOVER_PATH_LOCALES as readonly string[]).includes(candidate)
-    ? (candidate as Locale)
-    : null;
-}
-
-export function normalizeLocaleCandidate(value: string | null | undefined): Locale | null {
+export function normalizeLocaleCandidate(
+  value: string | null | undefined,
+): Locale | null {
   if (!value) {
     return null;
   }
@@ -41,41 +30,50 @@ export function normalizeLocaleCandidate(value: string | null | undefined): Loca
   return null;
 }
 
-export function resolveAppLocaleFromRequest(input: {
+export function firstResolvedLocale(
+  ...candidates: Array<string | null | undefined>
+): Locale | null {
+  for (const candidate of candidates) {
+    const resolved = normalizeLocaleCandidate(candidate);
+
+    if (resolved) {
+      return resolved;
+    }
+  }
+
+  return null;
+}
+
+export function resolveDiscoverPathLocale(pathname: string): LandingLocale | null {
+  const candidate = pathname.match(DISCOVER_PATH_LOCALE_RE)?.[1];
+
+  return candidate && isLandingLocale(candidate) ? candidate : null;
+}
+
+export interface AppLocaleRequestInput {
   edgeLocale?: string | null;
   queryLang?: string | null;
   pathLocale?: string | null;
   cookieLocale?: string | null;
   acceptLanguage?: string | null;
-}): Locale {
-  const fromEdge = normalizeLocaleCandidate(input.edgeLocale);
+}
 
-  if (fromEdge) {
-    return fromEdge;
-  }
+export function resolveAppLocaleFromRequest(
+  input: AppLocaleRequestInput,
+): Locale {
+  const explicit = firstResolvedLocale(
+    input.edgeLocale,
+    input.queryLang,
+    input.pathLocale,
+    input.cookieLocale,
+  );
 
-  const fromQuery = normalizeLocaleCandidate(input.queryLang);
-
-  if (fromQuery) {
-    return fromQuery;
-  }
-
-  const fromPath = normalizeLocaleCandidate(input.pathLocale);
-
-  if (fromPath) {
-    return fromPath;
-  }
-
-  const fromCookie = normalizeLocaleCandidate(input.cookieLocale);
-
-  if (fromCookie) {
-    return fromCookie;
+  if (explicit) {
+    return explicit;
   }
 
   if (input.acceptLanguage) {
-    const parts = input.acceptLanguage.split(",");
-
-    for (const part of parts) {
+    for (const part of input.acceptLanguage.split(",")) {
       const tag = part.split(";")[0]?.trim();
       const resolved = normalizeLocaleCandidate(tag);
 

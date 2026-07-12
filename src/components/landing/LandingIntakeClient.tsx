@@ -2,17 +2,19 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { SatelliteIntakeForm, SatelliteLandingShell } from "@/components/satellite";
 import type { LandingPageDefinition } from "@/lib/landing/landingCatalog";
 import {
   buildDiscoverFunnelRef,
   buildDiscoverPlayHandoffUrl,
-} from "@/lib/landing/discoverFunnelRef";
+  type DiscoverFunnelSubmitEvent,
+} from "@/lib/landing/discoverFunnel";
 import {
   LANDING_LOCALE_META,
   type LandingLocale,
 } from "@/lib/landing/landingLocales";
+import { resolveLandingPsychTopic } from "@/lib/landing/resolveLandingPsychTopic";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
@@ -25,19 +27,37 @@ interface LandingIntakeClientProps {
   page: LandingPageDefinition;
 }
 
-function resolvePsychTopic(slug: string): "enneagram" | "big-five" {
-  return slug.includes("enneagram") ? "enneagram" : "big-five";
+function resolvePlayDestination(
+  page: LandingPageDefinition,
+  funnelRef: string,
+  direct: boolean,
+): string | null {
+  const plugPath = page.topic.plugPlayPath ?? page.topic.psychDiagnosisPath;
+
+  if (plugPath) {
+    return buildDiscoverPlayHandoffUrl(plugPath, page.locale, page.slug, { direct });
+  }
+
+  const params = new URLSearchParams({
+    lang: page.locale,
+    ref: funnelRef,
+  });
+
+  return `${buildPlayRoute(page.topic.playDiagnosisId)}?${params.toString()}`;
 }
 
 export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
   const router = useRouter();
   const { messages } = useI18n();
   const clusterLinks = listClusterLinksForTopic(page.slug, page.locale, 4);
-  const funnelRef = buildDiscoverFunnelRef(page.locale, page.slug);
+  const funnelRef = useMemo(
+    () => buildDiscoverFunnelRef(page.locale, page.slug),
+    [page.locale, page.slug],
+  );
   const plugPath = page.topic.plugPlayPath ?? page.topic.psychDiagnosisPath;
 
-  const trackFunnel = useCallback(
-    (event: "discover_funnel_submit" | "discover_funnel_direct") => {
+  const emitFunnelEvent = useCallback(
+    (event: DiscoverFunnelSubmitEvent) => {
       trackDiagnosisEvent(event, {
         ref: funnelRef,
         funnelStep: "discover_submit",
@@ -50,26 +70,17 @@ export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
 
   const navigateToPlay = useCallback(
     (userText: string | null, direct: boolean) => {
-      if (plugPath) {
-        if (userText) {
-          writePsychIntakeSeed({
-            topic: resolvePsychTopic(page.slug),
-            locale: page.locale,
-            userText,
-            keyword: page.copy.keyword,
-            createdAt: Date.now(),
-          });
-        }
-
-        router.push(
-          buildDiscoverPlayHandoffUrl(plugPath, page.locale, page.slug, {
-            direct,
-          }),
-        );
-        return;
+      if (userText && plugPath) {
+        writePsychIntakeSeed({
+          topic: resolveLandingPsychTopic(page.slug),
+          locale: page.locale,
+          userText,
+          keyword: page.copy.keyword,
+          createdAt: Date.now(),
+        });
       }
 
-      if (userText) {
+      if (userText && !plugPath) {
         writeSatelliteIntake({
           locale: page.locale,
           slug: page.slug,
@@ -81,25 +92,27 @@ export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
         });
       }
 
-      router.push(
-        `${buildPlayRoute(page.topic.playDiagnosisId)}?lang=${page.locale}&ref=${encodeURIComponent(funnelRef)}`,
-      );
+      const destination = resolvePlayDestination(page, funnelRef, direct);
+
+      if (destination) {
+        router.push(destination);
+      }
     },
     [funnelRef, page, plugPath, router],
   );
 
   const handleIntakeSubmit = useCallback(
     (userText: string) => {
-      trackFunnel("discover_funnel_submit");
+      emitFunnelEvent("discover_funnel_submit");
       navigateToPlay(userText, false);
     },
-    [navigateToPlay, trackFunnel],
+    [emitFunnelEvent, navigateToPlay],
   );
 
   const handleDirectStart = useCallback(() => {
-    trackFunnel("discover_funnel_direct");
+    emitFunnelEvent("discover_funnel_direct");
     navigateToPlay(null, true);
-  }, [navigateToPlay, trackFunnel]);
+  }, [emitFunnelEvent, navigateToPlay]);
 
   return (
     <SatelliteLandingShell locale={page.locale} slug={page.slug}>

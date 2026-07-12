@@ -1,49 +1,54 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Sparkles } from "lucide-react";
-import { getLocaleLabel, type Locale } from "@/lib/i18n/config";
+import { getLocaleLabel } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/I18nProvider";
-import { isDiscoverFunnelRef } from "@/lib/landing/discoverFunnelRef";
-import { isLandingLocale } from "@/lib/landing/landingLocales";
 import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
+import {
+  isDiscoverFunnelRef,
+  resolveHandoffDisplayLocale,
+  toLandingLocale,
+} from "@/lib/landing/discoverFunnel";
 import { peekPsychIntakeSeed } from "@/lib/psychology/psychIntakeStore";
 import { cn } from "@/lib/utils/cn";
 
 export function DiscoverPlayHandoff() {
   const searchParams = useSearchParams();
   const { locale, messages } = useI18n();
-  const [intakePreview, setIntakePreview] = useState<string | null>(null);
+  const trackedRef = useRef<string | null>(null);
 
   const ref = searchParams.get("ref")?.trim() ?? null;
-  const queryLang = searchParams.get("lang");
-  const displayLocale: Locale = useMemo(() => {
-    if (queryLang && isLandingLocale(queryLang)) {
-      return queryLang;
-    }
-
-    return locale;
-  }, [locale, queryLang]);
-
   const showHandoff = isDiscoverFunnelRef(ref);
 
-  useEffect(() => {
+  const displayLocale = useMemo(
+    () => resolveHandoffDisplayLocale(searchParams.get("lang"), locale),
+    [locale, searchParams],
+  );
+
+  const intakePreview = useMemo(() => {
     if (!showHandoff) {
+      return null;
+    }
+
+    const landingLocale = toLandingLocale(displayLocale);
+    const seed = peekPsychIntakeSeed(landingLocale ?? undefined);
+
+    return seed?.userText ?? null;
+  }, [displayLocale, showHandoff]);
+
+  useEffect(() => {
+    if (!showHandoff || !ref || trackedRef.current === ref) {
       return;
     }
 
+    trackedRef.current = ref;
     trackDiagnosisEvent("discover_play_arrival", {
       ref,
       funnelStep: "discover_arrival",
       locale: displayLocale,
     });
-
-    const seed = peekPsychIntakeSeed(
-      isLandingLocale(displayLocale) ? displayLocale : undefined,
-    );
-
-    setIntakePreview(seed?.userText ?? null);
   }, [displayLocale, ref, showHandoff]);
 
   if (!showHandoff) {
@@ -78,7 +83,7 @@ export function DiscoverPlayHandoff() {
           <span className="mb-1 block text-xs font-medium text-indigo-200">
             {copy.yourAnswerLabel}
           </span>
-          「{intakePreview}」
+          &ldquo;{intakePreview}&rdquo;
         </blockquote>
       ) : null}
       <p className="mt-3 flex items-center gap-1.5 text-xs text-indigo-200/90">

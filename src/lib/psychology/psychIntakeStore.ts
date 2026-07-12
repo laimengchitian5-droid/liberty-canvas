@@ -1,7 +1,16 @@
 import type { LandingLocale } from "@/lib/landing/landingLocales";
+import { isLandingLocale } from "@/lib/landing/landingLocales";
 import type { PsychTopicSlug } from "@/lib/psychology/types";
 
 export const PSYCH_INTAKE_STORAGE_KEY = "rubel-psych-intake-v1";
+
+const MAX_AGE_MS = 30 * 60 * 1000;
+const MAX_USER_TEXT_LENGTH = 2_000;
+
+const PSYCH_TOPIC_SLUGS: ReadonlySet<PsychTopicSlug> = new Set([
+  "big-five",
+  "enneagram",
+]);
 
 export interface PsychIntakeSeed {
   topic: PsychTopicSlug;
@@ -11,7 +20,67 @@ export interface PsychIntakeSeed {
   createdAt: number;
 }
 
-const MAX_AGE_MS = 30 * 60 * 1000;
+function isPsychTopicSlug(value: string): value is PsychTopicSlug {
+  return PSYCH_TOPIC_SLUGS.has(value as PsychTopicSlug);
+}
+
+function isFreshTimestamp(createdAt: number): boolean {
+  return Number.isFinite(createdAt) && Date.now() - createdAt <= MAX_AGE_MS;
+}
+
+function parsePsychIntakeSeed(raw: string | null): PsychIntakeSeed | null {
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+
+    if (typeof parsed !== "object" || parsed === null) {
+      return null;
+    }
+
+    const record = parsed as Record<string, unknown>;
+    const topic = record.topic;
+    const locale = record.locale;
+    const userText = record.userText;
+    const keyword = record.keyword;
+    const createdAt = record.createdAt;
+
+    if (
+      typeof topic !== "string" ||
+      !isPsychTopicSlug(topic) ||
+      typeof locale !== "string" ||
+      !isLandingLocale(locale) ||
+      typeof userText !== "string" ||
+      typeof keyword !== "string" ||
+      typeof createdAt !== "number" ||
+      !isFreshTimestamp(createdAt)
+    ) {
+      return null;
+    }
+
+    return {
+      topic,
+      locale,
+      keyword,
+      createdAt,
+      userText: userText.trim().slice(0, MAX_USER_TEXT_LENGTH),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function readStoredSeed(): PsychIntakeSeed | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return parsePsychIntakeSeed(
+    window.sessionStorage.getItem(PSYCH_INTAKE_STORAGE_KEY),
+  );
+}
 
 export function writePsychIntakeSeed(seed: PsychIntakeSeed): void {
   if (typeof window === "undefined") {
@@ -21,44 +90,11 @@ export function writePsychIntakeSeed(seed: PsychIntakeSeed): void {
   window.sessionStorage.setItem(PSYCH_INTAKE_STORAGE_KEY, JSON.stringify(seed));
 }
 
-function parsePsychIntakeSeed(raw: string | null): PsychIntakeSeed | null {
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    const parsed = JSON.parse(raw) as PsychIntakeSeed;
-
-    if (
-      typeof parsed.userText !== "string" ||
-      typeof parsed.locale !== "string" ||
-      typeof parsed.topic !== "string" ||
-      typeof parsed.createdAt !== "number" ||
-      Date.now() - parsed.createdAt > MAX_AGE_MS
-    ) {
-      return null;
-    }
-
-    return {
-      ...parsed,
-      userText: parsed.userText.trim().slice(0, 2_000),
-    };
-  } catch {
-    return null;
-  }
-}
-
 /** Read intake for Discover handoff UI without consuming. */
 export function peekPsychIntakeSeed(
   expectedLocale?: LandingLocale,
 ): PsychIntakeSeed | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const parsed = parsePsychIntakeSeed(
-    window.sessionStorage.getItem(PSYCH_INTAKE_STORAGE_KEY),
-  );
+  const parsed = readStoredSeed();
 
   if (!parsed) {
     return null;
@@ -75,23 +111,16 @@ export function consumePsychIntakeSeed(
   topic: PsychTopicSlug,
   locale: LandingLocale,
 ): PsychIntakeSeed | null {
-  if (typeof window === "undefined") {
+  const parsed = readStoredSeed();
+
+  if (!parsed || parsed.topic !== topic || parsed.locale !== locale) {
     return null;
   }
 
-  const raw = window.sessionStorage.getItem(PSYCH_INTAKE_STORAGE_KEY);
-
-  const parsed = parsePsychIntakeSeed(raw);
-
-  if (!parsed) {
-    return null;
+  if (typeof window !== "undefined") {
+    window.sessionStorage.removeItem(PSYCH_INTAKE_STORAGE_KEY);
   }
 
-  if (parsed.topic !== topic || parsed.locale !== locale) {
-    return null;
-  }
-
-  window.sessionStorage.removeItem(PSYCH_INTAKE_STORAGE_KEY);
   return parsed;
 }
 
