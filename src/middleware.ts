@@ -9,7 +9,7 @@ import {
   LOCALE_STORAGE_KEY,
   resolveAppLocaleFromRequest,
 } from "@/lib/i18n/resolveAppLocale";
-import { applyEdgeSeoHeaders } from "@/lib/seo/edgeSeo";
+import { applyEdgeSeoHeaders, isSearchCrawler, normalizeRefParam } from "@/lib/seo/edgeSeo";
 
 
 function applySecurityHeaders(response: NextResponse, csp: string): NextResponse {
@@ -115,6 +115,26 @@ export async function middleware(request: NextRequest) {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,
       sameSite: "lax",
+    });
+  }
+
+  const userAgent = request.headers.get("user-agent");
+
+  if (isSearchCrawler(userAgent)) {
+    const ref = normalizeRefParam(request.nextUrl.searchParams.get("ref"));
+    void fetch(`${request.nextUrl.origin}/api/diagnosis/analytics/events`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "crawler_visit",
+        at: new Date().toISOString(),
+        pathname: request.nextUrl.pathname,
+        ref,
+        userAgent: userAgent?.slice(0, 180) ?? null,
+        funnelStep: "discover_ref",
+      }),
+    }).catch(() => {
+      // ignore
     });
   }
 

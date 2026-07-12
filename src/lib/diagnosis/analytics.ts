@@ -19,6 +19,8 @@ export type DiagnosisAnalyticsEvent =
   | "plug_result_gallery_preview"
   | "plug_result_offline_restored"
   | "plug_result_completed"
+  | "catalog_search"
+  | "crawler_visit"
   | "builder_draft_saved"
   | "builder_preview_started";
 

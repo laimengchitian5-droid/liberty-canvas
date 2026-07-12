@@ -1,24 +1,20 @@
 # LibertyCanvas — ワンタップ・スコープメニュー
 
-チャットに **キーワード1つ** 送るだけで着手します。
-
 ## 完了済み
 
 | Phase | 内容 |
 |-------|------|
 | 0–1 | Core + i18n + Discover + SEO Query |
 | 2 | Scoring + Design tokens + Insights + Builder v2 |
-| 3A | CWV + Schema @graph + Lighthouse CI |
-| 3B | Hybrid Search + Intent + ref=search-* |
-| 3C | Edge SEO middleware |
-| 3D | ko/zh resultLocales + LibertyCanvas discover SEO |
+| 3 | SEO v3 + Query + Edge + i18n resultLocales |
+| **4** | **SearchPort + Postgres FTS + Vector hybrid + Log analytics + Scoring port** |
 
 ## 次の候補
 
 | キーワード | 内容 |
 |------------|------|
-| **`Phase 4 全部`** | Postgres FTS + Vector index |
+| **`Phase 5 全部`** | Rubel 統合・Observability |
+| **`Postgres プロビジョン`** | Vercel Postgres 接続 + 初回 reindex |
 | **`本番デプロイ`** | vercel deploy --prod |
-| **`E2E 拡張`** | Playwright perf budget |
 
-*最終更新: Phase 3 完了後*
+*Phase 4: POSTGRES_URL 未設定時は token 検索に自動フォールバック*

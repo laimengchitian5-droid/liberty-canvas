@@ -20,11 +20,19 @@ export interface ShareFunnelReport {
   shareRate: number | null;
 }
 
+export interface SearchAnalyticsReport {
+  totalSearches: number;
+  crawlerVisits: number;
+  topQueries: Array<{ query: string; count: number }>;
+  backendCounts: Record<string, number>;
+}
+
 export interface AnalyticsInsightsSummary {
   totals: Record<string, number>;
   bySlug: Record<string, Record<string, number>>;
   variantReports: AnalyticsVariantReport[];
   funnel: ShareFunnelReport;
+  search: SearchAnalyticsReport;
   recentEvents: StoredAnalyticsEvent[];
 }
 
@@ -74,6 +82,43 @@ function buildShareFunnelReport(events: readonly StoredAnalyticsEvent[]): ShareF
   };
 }
 
+function buildSearchAnalyticsReport(
+  events: readonly StoredAnalyticsEvent[],
+): SearchAnalyticsReport {
+  const queryCounts = new Map<string, number>();
+  const backendCounts: Record<string, number> = {};
+  let totalSearches = 0;
+  let crawlerVisits = 0;
+
+  for (const entry of events) {
+    if (entry.event === "catalog_search") {
+      totalSearches += 1;
+      const query = typeof entry.query === "string" ? entry.query : "unknown";
+      queryCounts.set(query, (queryCounts.get(query) ?? 0) + 1);
+
+      const backend =
+        typeof entry.searchBackend === "string" ? entry.searchBackend : "unknown";
+      backendCounts[backend] = (backendCounts[backend] ?? 0) + 1;
+    }
+
+    if (entry.event === "crawler_visit") {
+      crawlerVisits += 1;
+    }
+  }
+
+  const topQueries = Array.from(queryCounts.entries())
+    .map(([query, count]) => ({ query, count }))
+    .sort((left, right) => right.count - left.count)
+    .slice(0, 10);
+
+  return {
+    totalSearches,
+    crawlerVisits,
+    topQueries,
+    backendCounts,
+  };
+}
+
 export async function buildAnalyticsInsights(): Promise<AnalyticsInsightsSummary> {
   const events = await readEvents();
   const totals: Record<string, number> = {};
@@ -120,6 +165,7 @@ export async function buildAnalyticsInsights(): Promise<AnalyticsInsightsSummary
     bySlug,
     variantReports,
     funnel: buildShareFunnelReport(events),
+    search: buildSearchAnalyticsReport(events),
     recentEvents: events.slice(-20).reverse(),
   };
 }

@@ -13,7 +13,7 @@ import {
   readDiagnosisRef,
   trackDiagnosisEvent,
 } from "@/lib/diagnosis/analytics";
-import { buildUnifiedScoringViewFromVector } from "@/lib/diagnosis/scoring";
+import { scoringComputePort } from "@/lib/diagnosis/scoring/scoringPort";
 import { buildCosmicCharacterSheet } from "@/lib/diagnosis/cosmicPlanetEngine";
 import type { CosmicPlanetKind } from "@/lib/diagnosis/cosmicPlanetEngine";
 import {
@@ -272,7 +272,7 @@ export const DiagnosisResultPage = ({
   }, [definition.slug, outcome.winningArchetype.id]);
 
   const scoringView = useMemo(
-    () => buildUnifiedScoringViewFromVector(outcome.academicVector, "ocean"),
+    () => scoringComputePort.buildFromVector(outcome.academicVector, "ocean"),
     [outcome.academicVector],
   );
 

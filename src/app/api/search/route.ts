@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { buildUnifiedDiscoveryCatalog } from "@/lib/catalog/unifiedDiscoveryCatalog";
-import { searchUnifiedCatalog } from "@/lib/catalog/searchUnifiedCatalog";
+import { searchCatalog } from "@/lib/catalog/searchPort";
+import { resolveSearchBackend } from "@/lib/catalog/searchConfig";
+import { logCatalogSearchEvent } from "@/lib/catalog/logSearchAnalytics";
+import { appendSearchRefToHref } from "@/lib/seo/searchIntent";
 
 const querySchema = z.object({
   q: z.string().trim().min(1).max(120),
@@ -19,20 +21,28 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Invalid search query" }, { status: 400 });
   }
 
-  const catalog = await buildUnifiedDiscoveryCatalog();
-  const hits = searchUnifiedCatalog(catalog, parsed.data.q);
   const limit = parsed.data.limit ?? 24;
+  const result = await searchCatalog(parsed.data.q, limit);
+
+  void logCatalogSearchEvent({
+    query: result.query,
+    backend: result.backend,
+    total: result.total,
+    queryIntent: result.queryIntent,
+  });
 
   return NextResponse.json({
-    query: parsed.data.q,
-    queryIntent: hits[0]?.queryIntent ?? "navigational",
-    total: hits.length,
-    results: hits.slice(0, limit).map((hit) => ({
+    query: result.query,
+    queryIntent: result.queryIntent,
+    backend: result.backend,
+    configuredBackend: resolveSearchBackend(),
+    total: result.total,
+    results: result.results.map((hit) => ({
       id: hit.entry.id,
       slug: hit.entry.slug,
       title: hit.entry.title,
       subtitle: hit.entry.subtitle,
-      href: hit.entry.href,
+      href: appendSearchRefToHref(hit.entry.href, hit.entry.slug),
       kind: hit.entry.kind,
       score: hit.score,
       matchedTokens: hit.matchedTokens,

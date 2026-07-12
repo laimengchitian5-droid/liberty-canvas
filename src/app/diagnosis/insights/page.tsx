@@ -76,6 +76,34 @@ export default async function DiagnosisInsightsPage() {
           </ul>
         </section>
 
+        <section className={styles.panel} aria-labelledby="search-heading">
+          <h2 id="search-heading" className={styles.panelTitle}>
+            検索 / クローラー分析
+          </h2>
+          <ul className={styles.kpiGrid}>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Catalog Search</span>
+              <strong className={styles.kpiValue}>{insights.search.totalSearches}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Crawler Visits</span>
+              <strong className={styles.kpiValue}>{insights.search.crawlerVisits}</strong>
+            </li>
+          </ul>
+          {insights.search.topQueries.length > 0 ? (
+            <ul className={styles.metricList}>
+              {insights.search.topQueries.map((row) => (
+                <li key={row.query}>
+                  <span>{row.query}</span>
+                  <strong>{row.count}</strong>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.empty}>検索クエリはまだありません。</p>
+          )}
+        </section>
+
         <section className={styles.panel} aria-labelledby="totals-heading">
           <h2 id="totals-heading" className={styles.panelTitle}>
             イベント合計
