@@ -1,0 +1,45 @@
+/* WCAG 2.2 — minimum 44×44px pointer targets (enhanced mobile / AAA alignment) */
+.touchTarget {
+  min-inline-size: 2.75rem;
+  min-block-size: 2.75rem;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touchTargetInline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 2.75rem;
+  min-block-size: 2.75rem;
+  padding-inline: 0.65rem;
+  touch-action: manipulation;
+}
+
+/* High-contrast focus ring — emerald-500 equivalent (#10b981) */
+.focusRing:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(16 185 129 / 0.35);
+}
+
+/* Directional icons mirror in RTL; apply to arrows/chevrons only */
+.directionalIcon {
+  display: inline-flex;
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex-shrink: 0;
+}
+
+:global(html[dir="rtl"]) .directionalIcon {
+  transform: scaleX(-1);
+}
+
+/* Non-reversible symbols — never mirror (spinners, play, audio) */
+.staticIcon {
+  display: inline-flex;
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex-shrink: 0;
+  transform: none !important;
+}

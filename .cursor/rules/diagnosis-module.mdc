@@ -1,0 +1,26 @@
+---
+description: Adult-Cute AI personality diagnosis — UX, motion, and module boundaries
+globs: src/app/diagnosis/**,src/components/diagnosis/**,src/hooks/useDiagnosis*.ts,src/hooks/useAdviceStream.ts
+alwaysApply: false
+---
+
+# Diagnosis Module (Adult-Cute)
+
+**Audience:** sophisticated Japanese adult women. Tone: polite, gentle, elegant — never neon or clinical.
+
+## Visual
+- Palette: cream `#FAF9F6`, dusty rose, soft sage, gold accents. Generous whitespace.
+- Headers: serif (`Noto Serif JP` stack). Body: clean sans-serif.
+- Fixed card min-height during transitions to prevent CLS.
+
+## Motion (Framer Motion)
+- Question cards: `initial={{ opacity: 0, x: 20 }}` → `animate={{ opacity: 1, x: 0 }}`.
+- Spring: `stiffness: 300, damping: 30`. Respect `prefers-reduced-motion`.
+
+## Architecture
+- Engine state (`useDiagnosisEngine`) ≠ AI stream state (`useAdviceStream`).
+- Scoring is deterministic in `lib/diagnosis/scoreDiagnosis.ts` — never in components.
+- Phases: `intro` → `questions` → `result` → `advice`.
+
+## Icons
+- Use `lucide-react` for decorative icons only; pair with `aria-hidden` when redundant with text.

@@ -1,0 +1,23 @@
+---
+description: Strict diagnosis data contract — do not drift from typed matrix
+globs: src/types/diagnosis.ts,src/lib/diagnosis/**
+alwaysApply: false
+---
+
+# Diagnosis Data Contract
+
+Source of truth: `src/types/diagnosis.ts`.
+
+```ts
+PersonalityCategory = 'empathy' | 'logic' | 'creativity' | 'leadership'
+DiagnosticOption: { id, text, scores: Record<PersonalityCategory, number> }
+DiagnosticQuestion: { id, index, text, category, options }
+DiagnosisResult: { id, title, subtitle, baseAnalysis, themeColor, dominantCategory }
+AIPromptBlueprint: { systemContext, temperature, maxTokens, responseSchema }
+```
+
+Rules:
+- All option `scores` must include every `PersonalityCategory` key.
+- Copywriting in Japanese (です・ます). Adult-cute, zero taboo (no alcohol, lucky numbers, religion).
+- Result catalog lives in `lib/diagnosis/resultCatalog.ts` — do not hardcode titles in UI.
+- Parse AI advice with Zod (`personalizedAdviceSchema`); always ship typed fallbacks.

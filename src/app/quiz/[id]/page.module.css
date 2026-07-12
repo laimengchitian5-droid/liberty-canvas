@@ -1,0 +1,134 @@
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgb(16 185 129 / 0.12), transparent 32%),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  color: #0f172a;
+}
+
+.container {
+  width: min(100%, 48rem);
+  margin: 0 auto;
+  padding: clamp(1.25rem, 5vw, 2.5rem) clamp(1rem, 4vw, 1.5rem) 3rem;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.description {
+  margin: 0;
+  font-size: clamp(1rem, 3.5vw, 1.125rem);
+  line-height: 1.65;
+  color: #475569;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.metaCard {
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.metaLabel {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.metaValue {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.section {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.sectionTitle {
+  margin: 0 0 0.85rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.questionList,
+.resultList {
+  margin: 0;
+  padding-inline-start: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.questionItem,
+.resultItem {
+  line-height: 1.55;
+  color: #334155;
+}
+
+.questionMeta,
+.resultMeta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.ctaRow {
+  margin-top: 1.5rem;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 0.85rem;
+  background: #0f766e;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ctaButton:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .metaGrid {
+    grid-template-columns: 1fr;
+  }
+}

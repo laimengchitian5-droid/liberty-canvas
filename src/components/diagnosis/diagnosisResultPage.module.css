@@ -1,0 +1,765 @@
+.resultPage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  min-height: 28rem;
+  padding: clamp(1.1rem, 4vw, 1.75rem);
+  border-radius: 1.35rem;
+  background: rgb(255 252 247 / 0.92);
+  border: 1px solid rgb(168 152 142 / 0.18);
+  box-shadow:
+    0 1px 2px rgb(74 64 56 / 0.04),
+    0 18px 40px rgb(74 64 56 / 0.06);
+}
+
+.cosmicStage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-height: 22rem;
+  padding: 1rem;
+  border-radius: 1.2rem;
+  overflow: hidden;
+  background: linear-gradient(
+    165deg,
+    var(--cosmos-top, #12082a) 0%,
+    var(--cosmos-bottom, #2d1b69) 100%
+  );
+  contain: layout paint style;
+}
+
+.cosmicBackdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.starfield {
+  position: absolute;
+  inset: 0;
+  opacity: var(--star-opacity, 0.7);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgb(255 255 255 / 0.9) 0 1px, transparent 1px),
+    radial-gradient(circle at 72% 24%, rgb(255 255 255 / 0.75) 0 1px, transparent 1px),
+    radial-gradient(circle at 44% 68%, rgb(255 255 255 / 0.65) 0 1px, transparent 1px),
+    radial-gradient(circle at 86% 78%, rgb(255 255 255 / 0.55) 0 1px, transparent 1px),
+    radial-gradient(circle at 28% 82%, rgb(255 255 255 / 0.5) 0 1px, transparent 1px);
+  background-size: 100% 100%;
+  animation: cosmicDrift 24s linear infinite;
+}
+
+.auroraVeil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 10%,
+    rgb(255 255 255 / 0.08) 40%,
+    transparent 70%
+  );
+  animation: auroraSweep 8s ease-in-out infinite alternate;
+}
+
+.planetStageInner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 1fr) minmax(9rem, 1.15fr);
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 11.5rem;
+}
+
+.planetSystem {
+  position: relative;
+  width: 100%;
+  height: 9.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.planetOrb {
+  position: relative;
+  width: clamp(5.5rem, 24vw, 6.75rem);
+  height: clamp(5.5rem, 24vw, 6.75rem);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 32% 28%,
+    var(--planet-core-1) 0%,
+    var(--planet-core-2) 58%,
+    rgb(0 0 0 / 0.35) 100%
+  );
+  box-shadow:
+    0 0 24px var(--planet-glow),
+    0 0 48px var(--planet-glow),
+    inset -8px -10px 18px rgb(0 0 0 / 0.25);
+  animation: planetPulse var(--planet-pulse-ms, 5200ms) ease-in-out infinite;
+}
+
+.planetCrystalline {
+  background: radial-gradient(
+      circle at 30% 25%,
+      rgb(255 255 255 / 0.55) 0%,
+      transparent 28%
+    ),
+    radial-gradient(circle at 62% 68%, var(--planet-core-1) 0%, var(--planet-core-2) 70%);
+}
+
+.planetCloudy {
+  background: radial-gradient(
+      circle at 40% 35%,
+      rgb(255 255 255 / 0.35) 0%,
+      transparent 35%
+    ),
+    radial-gradient(circle at 55% 60%, var(--planet-core-1) 0%, var(--planet-core-2) 65%);
+}
+
+.planetAurora::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--planet-glow) 0%, transparent 68%);
+  opacity: 0.45;
+  animation: auroraSweep 6s ease-in-out infinite alternate;
+}
+
+.planetRing,
+.planetRingSecondary,
+.planetRingTertiary {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--planet-ring);
+  transform: rotate(var(--planet-tilt, 20deg));
+  pointer-events: none;
+}
+
+.planetRing {
+  width: clamp(7.5rem, 34vw, 9rem);
+  height: clamp(2.4rem, 10vw, 3rem);
+  animation: ringFloat 7s ease-in-out infinite;
+}
+
+.planetRingSecondary {
+  width: clamp(8.2rem, 36vw, 9.8rem);
+  height: clamp(2.8rem, 11vw, 3.4rem);
+  opacity: 0.75;
+  transform: rotate(calc(var(--planet-tilt, 20deg) + 14deg));
+  animation: ringFloat 9s ease-in-out infinite reverse;
+}
+
+.planetRingTertiary {
+  width: clamp(8.8rem, 38vw, 10.4rem);
+  height: clamp(3rem, 12vw, 3.6rem);
+  opacity: 0.55;
+  transform: rotate(calc(var(--planet-tilt, 20deg) - 10deg));
+  animation: ringFloat 11s ease-in-out infinite;
+}
+
+.radarWrapper {
+  width: 100%;
+  min-height: 10.5rem;
+}
+
+.radarSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.radarGuideRing {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.14);
+  stroke-width: 1;
+}
+
+.radarAxisLine {
+  stroke: rgb(255 255 255 / 0.18);
+  stroke-width: 1;
+}
+
+.radarPolygon {
+  fill: rgb(255 255 255 / 0.16);
+  stroke: var(--planet-core-1);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px var(--planet-glow));
+}
+
+.radarSvgLabel {
+  fill: rgb(255 252 247 / 0.88);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.cosmicStatusPanel {
+  position: relative;
+  z-index: 1;
+  min-height: 3.5rem;
+}
+
+.cosmicNickname {
+  margin: 0;
+  font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(1.05rem, 3.8vw, 1.25rem);
+  line-height: 1.45;
+  color: #fff8f2;
+}
+
+.cosmicCoreStatus {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgb(255 252 247 / 0.78);
+}
+
+.energyLevelList {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-height: 6.5rem;
+}
+
+.energyLevelItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 0.08);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.energyLevelLabel {
+  font-size: 0.68rem;
+  color: rgb(255 252 247 / 0.82);
+}
+
+.energyLevelValue {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fffdf9;
+  font-feature-settings: "tnum";
+}
+
+.energyLevelUnit {
+  font-size: 0.62rem;
+  color: rgb(255 252 247 / 0.65);
+}
+
+@keyframes planetPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes ringFloat {
+  0%,
+  100% {
+    transform: rotate(var(--planet-tilt, 20deg)) translateY(0);
+  }
+
+  50% {
+    transform: rotate(var(--planet-tilt, 20deg)) translateY(-3px);
+  }
+}
+
+@keyframes cosmicDrift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-2%, -1%, 0);
+  }
+}
+
+@keyframes auroraSweep {
+  from {
+    opacity: 0.25;
+    transform: translateX(-4%);
+  }
+
+  to {
+    opacity: 0.55;
+    transform: translateX(4%);
+  }
+}
+
+.heroSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.resultBadge {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: rgb(201 160 154 / 0.14);
+  color: #8f6f69;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.sectionEyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a8988e;
+}
+
+.resultTitle {
+  margin: 0;
+  font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(1.55rem, 4.8vw, 2rem);
+  line-height: 1.3;
+  color: #4a4038;
+}
+
+.resultSubtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #8b7d72;
+}
+
+.affirmationHero {
+  margin: 0.25rem 0 0;
+  padding: 0.95rem 1.05rem;
+  border-radius: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  background: rgb(196 169 98 / 0.14);
+  color: #6f5a38;
+}
+
+.sectionTitle {
+  margin: 0 0 0.35rem;
+  font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 1.05rem;
+  color: #4a4038;
+}
+
+.sectionLead {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: #8b7d72;
+}
+
+.radarSection,
+.analysisSection,
+.compatibilitySection,
+.shareSection {
+  display: flex;
+  flex-direction: column;
+  min-height: 10rem;
+}
+
+.radarGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+}
+
+.radarCell {
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.95rem;
+  background: rgb(255 252 247 / 0.85);
+  border: 1px solid rgb(168 152 142 / 0.16);
+}
+
+.radarCellHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.radarCellLabel {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #5c5047;
+}
+
+.radarCellValue {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4a4038;
+  font-feature-settings: "tnum";
+}
+
+.radarCellUnit {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #a8988e;
+}
+
+.radarTrack {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #efe8df;
+  overflow: hidden;
+}
+
+.radarFill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 320ms ease;
+}
+
+.radarDescription {
+  margin: 0.45rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: #8b7d72;
+}
+
+.analysisBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 6rem;
+}
+
+.analysisParagraph {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.85;
+  color: #5c5047;
+}
+
+.compatibilityHint {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 0.95rem;
+  background: rgb(244 114 182 / 0.1);
+  color: #9d5478;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.compatibilityPlaceholder {
+  min-height: 0;
+}
+
+.shareActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.shareButtonPrimary,
+.shareButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.shareButtonPrimary {
+  border: none;
+  background: linear-gradient(135deg, #1d9bf0, #0c7abf);
+  color: #fff;
+}
+
+.shareButton {
+  border: 1px solid rgb(168 152 142 / 0.28);
+  background: #fffdf9;
+  color: #6f6258;
+}
+
+.secondaryButton {
+  background: transparent;
+  border: 1px solid rgb(168 152 142 / 0.35);
+  color: #6f6258;
+}
+
+.shareIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+.shareButtonPrimary:focus-visible,
+.shareButton:focus-visible,
+.secondaryButton:focus-visible {
+  outline: 2px solid #c9a09a;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(201 160 154 / 0.35);
+}
+
+@media (min-width: 640px) {
+  .radarGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 640px) {
+  .energyLevelList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .planetStageInner {
+    grid-template-columns: 1fr;
+    min-height: 16rem;
+  }
+
+  .planetSystem {
+    height: 8.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radarFill,
+  .planetOrb,
+  .planetRing,
+  .planetRingSecondary,
+  .planetRingTertiary,
+  .starfield,
+  .auroraVeil {
+    animation: none;
+  }
+}
+
+@media print {
+  .shareSection,
+  .actions {
+    display: none;
+  }
+
+  .resultPage {
+    box-shadow: none;
+    border: 1px solid rgb(168 152 142 / 0.35);
+    break-inside: avoid;
+  }
+
+  .cosmicStage {
+    break-inside: avoid;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+.coldLinkShell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 20rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border-radius: 1.35rem;
+  background: rgb(255 252 247 / 0.92);
+  border: 1px solid rgb(168 152 142 / 0.18);
+  box-shadow:
+    0 1px 2px rgb(74 64 56 / 0.04),
+    0 18px 40px rgb(74 64 56 / 0.06);
+}
+
+.coldLinkTitle {
+  margin: 0;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  line-height: 1.25;
+  color: rgb(74 64 56);
+}
+
+.coldLinkActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.coldLinkPrimary,
+.coldLinkSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.coldLinkPrimary {
+  color: rgb(255 252 247);
+  background: linear-gradient(135deg, rgb(139 92 246), rgb(99 102 241));
+  border: none;
+}
+
+.coldLinkSecondary {
+  color: rgb(74 64 56);
+  background: rgb(255 252 247);
+  border: 1px solid rgb(168 152 142 / 0.35);
+}
+
+.planetGallerySection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.planetGalleryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.planetGalleryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 5.5rem;
+  padding: 0.55rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgb(168 152 142 / 0.22);
+  background: rgb(255 252 247 / 0.75);
+  cursor: pointer;
+}
+
+.planetGalleryCardActive {
+  border-color: rgb(139 92 246 / 0.55);
+  box-shadow: 0 0 0 2px rgb(139 92 246 / 0.15);
+}
+
+.planetGalleryCardOwned {
+  background: rgb(250 245 255 / 0.9);
+}
+
+.planetGalleryOrb {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+}
+
+.planetGalleryName {
+  font-size: 0.72rem;
+  line-height: 1.25;
+  text-align: center;
+  color: rgb(74 64 56);
+}
+
+.planetGalleryDetail {
+  padding: 0.85rem;
+  border-radius: 0.85rem;
+  background: rgb(248 244 255 / 0.75);
+  border: 1px solid rgb(168 152 142 / 0.18);
+}
+
+.planetGalleryNickname {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgb(74 64 56);
+}
+
+.planetGalleryStatus {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: rgb(107 93 84);
+}
+
+.planetGalleryOwnedBadge,
+.planetGalleryPreviewNote {
+  margin: 0.65rem 0 0;
+  font-size: 0.82rem;
+  color: rgb(107 93 84);
+}
+
+.adviceSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.adviceBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.adviceTipCard,
+.adviceAffirmationCard {
+  padding: 0.85rem;
+  border-radius: 0.85rem;
+  background: rgb(255 252 247 / 0.92);
+  border: 1px solid rgb(168 152 142 / 0.18);
+}
+
+.shareGrowthPanel {
+  padding: 0.75rem 0.95rem;
+  border-radius: 0.85rem;
+  border: 1px dashed rgb(168 152 142 / 0.35);
+  background: rgb(255 252 247 / 0.55);
+}
+
+.shareGrowthSummary {
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: rgb(107 93 84);
+}
+
+.shareGrowthBody {
+  margin-top: 0.65rem;
+}
+
+.shareGrowthLine {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgb(107 93 84);
+}
+
+.shareGrowthList {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: rgb(74 64 56);
+}
+
+@media (max-width: 520px) {
+  .planetGalleryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

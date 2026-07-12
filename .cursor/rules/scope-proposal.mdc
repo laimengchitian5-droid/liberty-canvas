@@ -1,0 +1,43 @@
+---
+description: Propose applicable implementation scopes before non-trivial coding tasks
+alwaysApply: true
+---
+
+# Implementation Scope Proposal (実装スコープ提案)
+
+When the user asks for **implementation, refactoring, bug fixes, or multi-file changes** (not pure Q&A), open with a concise **スコープ提案** block before editing.
+
+## Output format
+
+```markdown
+## スコープ提案
+- **目的:** …
+- **適用ルール:** project-core, …
+- **触るファイル:** (≤8 paths, or area globs)
+- **非スコープ:** …
+- **完了条件:** build / deploy / manual check
+```
+
+## Rule picker (LibertyCanvas)
+
+| 作業領域 | 追加ルール |
+|----------|------------|
+| 常時 | `project-core` |
+| `/diagnosis` UI・フロー | `diagnosis-module` |
+| 診断型・採点・resultCatalog | `diagnosis-types` |
+| advice ストリーム | `ai-streaming` |
+| `/api/chat`, `/api/diagnosis`, `lib/ai` | `ai-provider` |
+| `.tsx` / `.css` UI | `w3c-accessibility` |
+| モバイル・ナビ・shell・safe-area | `mobile-ux` |
+
+## Skip the block when
+
+- Single-line or single-file trivial fix
+- Deploy / git-only commands
+- User only wants docs or explanation
+- User explicitly says 「提案不要」
+
+## After implementation
+
+- State which scopes were actually touched
+- Note any scope drift (files outside proposal) and why

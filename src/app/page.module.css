@@ -1,0 +1,249 @@
+.page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgb(16 185 129 / 0.12), transparent 28%),
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.hero {
+  width: min(100%, 48rem);
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 4rem) 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1.1;
+}
+
+.titleAccent {
+  color: #0f766e;
+}
+
+.lead {
+  margin: 0;
+  color: #475569;
+  line-height: 1.65;
+  font-size: clamp(1rem, 3vw, 1.125rem);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.buttonPrimary,
+.buttonSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  min-inline-size: 2.75rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.buttonPrimary:focus-visible,
+.buttonSecondary:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(16 185 129 / 0.35);
+}
+
+.buttonPrimary {
+  background: #0f766e;
+  color: #ffffff;
+}
+
+.buttonSecondary {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.grid {
+  width: min(100%, 72rem);
+  margin: 0 auto;
+  padding: 0 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.card {
+  min-height: 9rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.cardFeatured {
+  border-color: #a7f3d0;
+  background: linear-gradient(165deg, #ecfdf5 0%, #ffffff 55%);
+  box-shadow: 0 12px 40px rgb(16 185 129 / 0.08);
+}
+
+.resultLinks {
+  width: min(100%, 48rem);
+  margin: 0 auto;
+  padding: 0 1rem 1.5rem;
+}
+
+.resultList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.resultLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f766e;
+  text-decoration: none;
+}
+
+.resultLink:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.cardTitle {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.cardText {
+  margin: 0;
+  color: #475569;
+  line-height: 1.55;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  margin-top: 0.75rem;
+  padding-block: 0.35rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f766e;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.cardLink:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.quizSection {
+  width: min(100%, 48rem);
+  margin: 0 auto;
+  padding: 1rem 1rem 3rem;
+}
+
+.quizHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.storageBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+}
+
+.quizList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.quizLink {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  min-height: 4.5rem;
+}
+
+.quizLink span {
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.empty {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .buttonPrimary,
+  .buttonSecondary {
+    width: 100%;
+  }
+}

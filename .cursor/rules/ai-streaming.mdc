@@ -1,0 +1,23 @@
+---
+description: Vercel AI SDK streaming for diagnosis advice and structured outputs
+globs: src/app/api/diagnosis/**,src/hooks/useAdviceStream.ts,src/lib/diagnosis/buildAdvicePrompt.ts,src/lib/diagnosis/parseAdviceResponse.ts
+alwaysApply: false
+---
+
+# AI Streaming (Diagnosis Advice)
+
+Prefer **Vercel AI SDK** (`ai`, `@ai-sdk/openai`, `@ai-sdk/anthropic`) for new advice routes.
+
+## Structured output
+- Enforce JSON: `personalizedAdvice`, `dailyTip`, `affirmation`.
+- Validate with Zod after stream completes; never trust raw model text blindly.
+- System prompt + `AIPromptBlueprint.responseSchema` must stay in sync.
+
+## Providers
+- OpenAI / Anthropic via AI SDK when keys exist.
+- Groq fallback is acceptable for dev; keep behavior identical at the type layer.
+
+## Client
+- Stream to UI character-by-character when possible; show `AdviceSkeleton` until parsed.
+- Abort in-flight streams on unmount (`AbortController`).
+- Never merge advice stream state into diagnosis engine hook.

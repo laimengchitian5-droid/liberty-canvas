@@ -1,0 +1,15 @@
+---
+description: W3C HTML and WCAG patterns for UI components
+globs: src/**/*.tsx,src/**/*.css
+alwaysApply: false
+---
+
+# W3C & WCAG
+
+- `<section>` only when it contains a heading (`h2`–`h6`); otherwise use `<div>`.
+- No `role="link"` on `<a>`, no `type="submit"` on anchors, no `role="timer"`.
+- `aria-label` on `<div>` requires `role="group"` (or semantic element).
+- Touch targets ≥ 44×44px; visible `:focus-visible` ring (emerald `#10b981`).
+- Do not nest interactive elements inside `<p>`. Use `<div>` + `<span>` for mixed Link/text.
+- Progress bars: `role="progressbar"` + `aria-valuemin/max/now`.
+- Numeric labels: `font-feature-settings: "tnum"`.

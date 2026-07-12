@@ -1,0 +1,103 @@
+.panelGuest,
+.panelAuthenticated {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+}
+
+.panelAuthenticated {
+  justify-content: center;
+}
+
+.modeSwitch {
+  display: inline-flex;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.modeButton,
+.actionButton,
+.submitButton {
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  font-size: clamp(0.72rem, 2.8vw, 0.78rem);
+  font-weight: 700;
+  padding-inline: 0.75rem;
+  min-block-size: 2.75rem;
+}
+
+.modeButtonActive,
+.submitButton {
+  border-color: #10b981;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.input {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.8rem;
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+}
+
+.error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+@media (min-width: 769px) {
+  .panelGuest,
+  .panelAuthenticated {
+    inline-size: min(100%, 12rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .panelGuest {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .fieldRow {
+    flex: 1 1 9rem;
+    min-inline-size: min(100%, 9rem);
+  }
+
+  .submitButton {
+    flex: 0 0 auto;
+    min-inline-size: 4.5rem;
+  }
+
+  .panelAuthenticated {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .actionButton {
+    min-inline-size: 5.5rem;
+  }
+}

@@ -1,0 +1,17 @@
+.appShell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
+}
+
+.appMain {
+  flex: 1;
+  padding-block-end: var(--lc-page-pad-bottom);
+}
+
+.appMainImmersive {
+  flex: 1;
+  padding-block-end: 0;
+}

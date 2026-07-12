@@ -1,0 +1,16 @@
+---
+description: LibertyCanvas core standards — type safety, minimal diffs, no ghost code
+alwaysApply: true
+---
+
+# LibertyCanvas Core
+
+- Stack: Next.js 14 App Router, React 18, TypeScript strict, CSS Modules + Tailwind (`cn()` in `lib/utils/cn.ts`).
+- AI: Vercel AI SDK via `lib/ai/provider.ts` (OpenAI → Anthropic → Groq fallback).
+- Zero `any`. Prefer discriminated unions and Zod at API boundaries.
+- No speculative imports or invented helpers. Reuse existing libs before adding npm packages.
+- Functional state updates for fast UI: `setIndex((prev) => prev + 1)`, guard with `isTransitioning`.
+- Keep server logic in RSC/route handlers; isolate streaming state in dedicated client hooks.
+- Match existing naming, file layout, and a11y patterns (`role="group"` + `aria-label` on labeled divs).
+- Active routes: `/`, `/assessment`, `/create`, `/diagnosis`, `/app/[id]`, `/quiz/[id]`.
+- Run `npm run build` after non-trivial changes.

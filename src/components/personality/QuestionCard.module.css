@@ -1,0 +1,309 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 4vw, 2rem);
+  width: min(100%, 42rem);
+  min-height: 28rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 1.75rem);
+  border-radius: 1.25rem;
+  background: linear-gradient(165deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.06),
+    0 18px 40px rgb(15 23 42 / 0.08);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.progressLabel {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+
+.progressTrack {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  transition: width 0.35s ease;
+}
+
+.questionPanel {
+  min-height: 8.5rem;
+}
+
+.questionText {
+  margin: 0;
+  font-size: clamp(1.25rem, 4.8vw, 1.75rem);
+  line-height: 1.45;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.helperText {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.scaleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.scaleLabels {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: clamp(0.68rem, 2.2vw, 0.75rem);
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+}
+
+.scaleAnchorLow,
+.scaleAnchorHigh,
+.scaleAnchorNeutral {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1 1 0;
+  justify-content: center;
+  min-width: 0;
+}
+
+.scaleAnchorLow {
+  color: #5b21b6;
+}
+
+.scaleAnchorHigh {
+  color: #047857;
+}
+
+.scaleAnchorNeutral {
+  color: #475569;
+}
+
+.polaritySymbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  background: rgb(15 23 42 / 0.08);
+}
+
+.optionContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  line-height: 1;
+}
+
+.optionSymbol {
+  font-size: 0.72em;
+  font-weight: 800;
+}
+
+.optionScore {
+  font-size: 1em;
+  font-weight: 800;
+}
+
+.optionRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(0.35rem, 2vw, 0.75rem);
+  inline-size: 100%;
+  min-block-size: 4.75rem;
+  padding-block: 0.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.optionButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1;
+  flex: 0 0 auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  scroll-snap-align: center;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  min-inline-size: 2.75rem;
+  min-block-size: 2.75rem;
+}
+
+.optionButton:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(16 185 129 / 0.35);
+}
+
+.optionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.optionButton[data-selected="true"] {
+  border-color: #0f172a;
+  box-shadow:
+    0 0 0 3px rgb(15 23 42 / 0.12),
+    0 10px 24px rgb(15 23 42 / 0.18);
+}
+
+.sizeXl {
+  inline-size: max(2.75rem, clamp(2.75rem, 12vw, 4.25rem));
+  block-size: max(2.75rem, clamp(2.75rem, 12vw, 4.25rem));
+  font-size: clamp(0.75rem, 2.8vw, 0.95rem);
+}
+
+.sizeLg {
+  inline-size: max(2.75rem, clamp(2.75rem, 10vw, 3.65rem));
+  block-size: max(2.75rem, clamp(2.75rem, 10vw, 3.65rem));
+  font-size: clamp(0.7rem, 2.4vw, 0.85rem);
+}
+
+.sizeMd {
+  inline-size: max(2.75rem, clamp(2.75rem, 9vw, 3.2rem));
+  block-size: max(2.75rem, clamp(2.75rem, 9vw, 3.2rem));
+  font-size: clamp(0.65rem, 2.2vw, 0.8rem);
+}
+
+.sizeSm {
+  inline-size: max(2.75rem, clamp(2.75rem, 8vw, 2.75rem));
+  block-size: max(2.75rem, clamp(2.75rem, 8vw, 2.75rem));
+  font-size: clamp(0.62rem, 2vw, 0.75rem);
+}
+
+.toneEmeraldStrong {
+  background: radial-gradient(circle at 30% 25%, #34d399 0%, #059669 70%);
+}
+
+.toneEmeraldMedium {
+  background: radial-gradient(circle at 30% 25%, #6ee7b7 0%, #10b981 75%);
+}
+
+.toneEmeraldLight {
+  background: radial-gradient(circle at 30% 25%, #a7f3d0 0%, #34d399 80%);
+  color: #065f46;
+}
+
+.toneNeutral {
+  background: radial-gradient(circle at 30% 25%, #f1f5f9 0%, #94a3b8 85%);
+  color: #334155;
+}
+
+.tonePurpleLight {
+  background: radial-gradient(circle at 30% 25%, #ddd6fe 0%, #a78bfa 80%);
+  color: #4c1d95;
+}
+
+.tonePurpleMedium {
+  background: radial-gradient(circle at 30% 25%, #c084fc 0%, #7c3aed 78%);
+}
+
+.tonePurpleStrong {
+  background: radial-gradient(circle at 30% 25%, #9333ea 0%, #6b21a8 72%);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.emptyState {
+  width: min(100%, 42rem);
+  min-height: 28rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+  border-radius: 1rem;
+  background: #f8fafc;
+  color: #475569;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.skeletonBlock {
+  min-height: 8.5rem;
+  border-radius: 0.85rem;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
+}
+
+@media (max-width: 480px) {
+  .optionRow {
+    gap: 0.3rem;
+  }
+
+  .scaleLabels {
+    font-size: 0.68rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .optionRow {
+    justify-content: center;
+  }
+
+  .optionButton {
+    margin-inline: 0.15rem;
+  }
+}

@@ -1,0 +1,14 @@
+---
+description: Unified AI provider resolution and SDK usage
+globs: src/lib/ai/**,src/app/api/chat/**,src/app/api/diagnosis/**
+alwaysApply: false
+---
+
+# AI Provider Layer
+
+- Resolve models only through `lib/ai/provider.ts` — never hardcode provider URLs in routes.
+- Priority: `OPENAI_API_KEY` → `ANTHROPIC_API_KEY` → `GROQ_API_KEY`.
+- Use `streamText()` from `ai` package; avoid hand-rolled SSE parsers in new code.
+- Legacy `/api/chat` may still use Groq fetch — migrate to AI SDK when touching that file.
+- Structured diagnosis advice: JSON with `personalizedAdvice`, `dailyTip`, `affirmation` + Zod validation.
+- Always ship typed fallbacks when keys are missing or upstream fails.

@@ -1,0 +1,26 @@
+---
+description: Mobile layout, safe-area, touch targets, and app shell chrome
+globs: src/components/Providers.tsx,src/styles/app-shell.module.css,src/app/globals.css,src/components/navigation/**,src/components/i18n/**,src/components/privacy/GDPRConsent*
+alwaysApply: false
+---
+
+# Mobile UX & App Shell
+
+## Layout tokens (`globals.css`)
+- `--lc-safe-top`, `--lc-safe-bottom`, `--lc-page-pad-bottom`
+- Use `100dvh` over `100vh` for full-height panels
+- `overflow-x: clip` on html/body/shell — avoid horizontal scroll bugs
+
+## Fixed chrome
+- **GlobalNav:** sticky top, safe-area-top, horizontal scroll tabs (no wrap), short labels ≤768px
+- **LocaleSwitcher:** fixed bottom, safe-area insets, min 44px select
+- **app-shell:** `appMain` gets `padding-block-end: var(--lc-page-pad-bottom)` — do not duplicate per-page unless page-specific need
+
+## Touch & motion
+- Interactive targets ≥ 44×44px (`accessibility.module.css` helpers)
+- Chat/forge panels on mobile: reserve space for bottom chrome (`calc(100dvh - 13rem)` pattern)
+- `GDPRConsent`: keep inside `AnimatePresence` conditional; `aria-modal="true"`
+
+## Do not
+- Nest `<main>` inside Providers wrapper (pages own the landmark)
+- Use `calc(100vh - 4rem)` for diagnosis shell — nav height is dynamic

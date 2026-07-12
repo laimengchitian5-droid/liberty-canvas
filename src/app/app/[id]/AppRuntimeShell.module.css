@@ -1,0 +1,40 @@
+.panel {
+  min-block-size: 12rem;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #f8fafc;
+}
+
+.chatPanel {
+  min-block-size: 24rem;
+}
+
+.lead {
+  margin: 0 0 1rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.errorText {
+  margin: 0;
+  color: #991b1b;
+}
+
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  padding-inline: 1rem;
+  border-radius: 999px;
+  background: #0f766e;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.linkButton:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}

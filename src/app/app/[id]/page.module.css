@@ -1,0 +1,89 @@
+.page {
+  inline-size: min(100%, 72rem);
+  margin-inline: auto;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hero {
+  min-block-size: 6rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.title {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.description {
+  margin: 0.75rem 0 0;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.metaCard {
+  padding: 0.85rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.metaValue {
+  font-size: 1rem;
+}
+
+.ctaRow {
+  min-block-size: 2.75rem;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  padding-inline: 1rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ctaButton:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .metaGrid {
+    grid-template-columns: 1fr;
+  }
+}

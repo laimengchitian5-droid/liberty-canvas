@@ -1,0 +1,47 @@
+{
+  "name": "libertycanvas",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "ci": "npm run lint && npm run test && npm run build",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install chromium"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.8",
+    "@ai-sdk/groq": "^4.0.5",
+    "@ai-sdk/openai": "^4.0.7",
+    "@ai-sdk/react": "^4.0.15",
+    "@google/generative-ai": "^0.24.1",
+    "@vercel/blob": "^2.4.1",
+    "ai": "^7.0.15",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.42.2",
+    "google-auth-library": "^9.15.1",
+    "lucide-react": "^1.23.0",
+    "next": "^14.2.28",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^3.24.2",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^20.17.30",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "autoprefixer": "^10.5.2",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.9"
+  }
+}
