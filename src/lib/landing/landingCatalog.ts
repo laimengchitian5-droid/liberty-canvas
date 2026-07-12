@@ -5,6 +5,7 @@ import { LANDING_LOCALES, LANDING_LOCALE_META } from "@/lib/landing/landingLocal
 import type { LandingTopicConfig } from "@/lib/landing/landingTopics";
 import { getLandingCopy } from "@/lib/landing/landingCopy";
 import { getLandingTopic, LANDING_TOPIC_SLUGS, LANDING_TOPICS } from "@/lib/landing/landingTopics";
+import { PRODUCT_NAME } from "@/lib/brand/constants";
 import { getSiteUrl } from "@/lib/site/url";
 
 export interface LandingPageDefinition {
@@ -85,7 +86,7 @@ export function buildLandingMetadata(page: LandingPageDefinition): Metadata {
       title: page.copy.title,
       description: page.copy.metaDescription,
       url: page.absoluteUrl,
-      siteName: "Rubel Canvas",
+      siteName: PRODUCT_NAME,
       locale: meta.ogLocale,
       type: "website",
     },
@@ -114,7 +115,7 @@ export function buildLandingJsonLd(page: LandingPageDefinition) {
         isAccessibleForFree: true,
         provider: {
           "@type": "Organization",
-          name: "Rubel Canvas",
+          name: PRODUCT_NAME,
           url: siteUrl,
           alternateName: "liberty-canvas",
         },
@@ -139,7 +140,7 @@ export function buildLandingJsonLd(page: LandingPageDefinition) {
         inLanguage: LANDING_LOCALE_META[page.locale].htmlLang,
         isPartOf: {
           "@type": "WebSite",
-          name: "Rubel Canvas",
+          name: PRODUCT_NAME,
           url: siteUrl,
         },
       },

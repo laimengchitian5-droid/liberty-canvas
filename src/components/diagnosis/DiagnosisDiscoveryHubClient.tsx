@@ -8,6 +8,7 @@ import {
   groupUnifiedDiscoveryCatalog,
   type UnifiedDiscoveryEntry,
 } from "@/lib/catalog/unifiedDiscoveryTypes";
+import { appendSearchRefToHref } from "@/lib/seo/searchIntent";
 import { HubSearchBar } from "@/components/catalog/HubSearchBar";
 import styles from "./diagnosisDiscoveryHub.module.css";
 
@@ -31,10 +32,16 @@ export const DiagnosisDiscoveryHubClient = ({
 
   const renderGrid = (entries: UnifiedDiscoveryEntry[], eyebrow?: string) => (
     <ul className={styles.grid} role="list">
-      {entries.map((entry) => (
+      {entries.map((entry) => {
+        const href =
+          query.trim().length > 0
+            ? appendSearchRefToHref(entry.href, entry.slug)
+            : entry.href;
+
+        return (
         <li key={entry.id}>
           <Link
-            href={entry.href}
+            href={href}
             className={styles.card}
             style={{ borderColor: `${entry.themeColor}44` }}
           >
@@ -46,7 +53,8 @@ export const DiagnosisDiscoveryHubClient = ({
             </span>
           </Link>
         </li>
-      ))}
+        );
+      })}
     </ul>
   );
 

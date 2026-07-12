@@ -9,6 +9,7 @@ import {
   LOCALE_STORAGE_KEY,
   resolveAppLocaleFromRequest,
 } from "@/lib/i18n/resolveAppLocale";
+import { applyEdgeSeoHeaders } from "@/lib/seo/edgeSeo";
 
 
 function applySecurityHeaders(response: NextResponse, csp: string): NextResponse {
@@ -117,7 +118,7 @@ export async function middleware(request: NextRequest) {
     });
   }
 
-  return applySecurityHeaders(response, csp);
+  return applyEdgeSeoHeaders(request, applySecurityHeaders(response, csp));
 }
 
 

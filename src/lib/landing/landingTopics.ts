@@ -13,14 +13,20 @@ export const LANDING_TOPIC_SLUGS = [
 
 export type LandingTopicSlug = (typeof LANDING_TOPIC_SLUGS)[number];
 
+export type LandingSearchIntent =
+  | "informational"
+  | "navigational"
+  | "commercial"
+  | "transactional";
+
 export interface LandingTopicConfig {
   slug: LandingTopicSlug;
   playDiagnosisId: string;
-  /** Primary Plug play route (Discover funnel). */
   plugPlayPath: string;
-  /** Legacy psych SEO path — redirects to plug play. */
   psychDiagnosisPath?: string;
   schemaType: "Quiz" | "MedicalWebPage" | "WebApplication";
+  searchIntent: LandingSearchIntent;
+  searchTags: readonly string[];
 }
 
 export const LANDING_TOPICS: LandingTopicConfig[] = [
@@ -30,6 +36,8 @@ export const LANDING_TOPICS: LandingTopicConfig[] = [
     plugPlayPath: "/diagnosis/play/big-five",
     psychDiagnosisPath: "/diagnosis/play/big-five",
     schemaType: "Quiz",
+    searchIntent: "informational",
+    searchTags: ["big five", "ocean", "ffm", "5因子", "personality science"],
   },
   {
     slug: "enneagram-nine-types",
@@ -37,54 +45,72 @@ export const LANDING_TOPICS: LandingTopicConfig[] = [
     plugPlayPath: "/diagnosis/play/motivation-spectrum",
     psychDiagnosisPath: "/diagnosis/play/motivation-spectrum",
     schemaType: "Quiz",
+    searchIntent: "informational",
+    searchTags: ["enneagram", "9 types", "motivation", "エニアグラム"],
   },
   {
     slug: "sixteen-personalities",
     playDiagnosisId: "rubel-introvert-level-v1",
     plugPlayPath: "/diagnosis/play/personality-spectrum",
     schemaType: "Quiz",
+    searchIntent: "commercial",
+    searchTags: ["16personalities", "personality types", "free test"],
   },
   {
     slug: "mbti-personality-types",
     playDiagnosisId: "rubel-introvert-level-v1",
     plugPlayPath: "/diagnosis/play/personality-spectrum",
     schemaType: "Quiz",
+    searchIntent: "commercial",
+    searchTags: ["mbti", "personality types", "jungian"],
   },
   {
     slug: "introvert-personality",
     playDiagnosisId: "rubel-introvert-level-v1",
     plugPlayPath: "/diagnosis/play/big-five",
     schemaType: "Quiz",
+    searchIntent: "informational",
+    searchTags: ["introvert", "内向", "quiet", "social battery"],
   },
   {
     slug: "love-language-test",
     playDiagnosisId: "rubel-neko-ja-v1",
     plugPlayPath: "/diagnosis/play/romance",
     schemaType: "Quiz",
+    searchIntent: "transactional",
+    searchTags: ["love language", "romance", "恋愛", "relationship"],
   },
   {
     slug: "attachment-style",
     playDiagnosisId: "rubel-ura-seishiki-v1",
     plugPlayPath: "/diagnosis/play/romance",
     schemaType: "MedicalWebPage",
+    searchIntent: "transactional",
+    searchTags: ["attachment", "恋愛", "relationship", "secure"],
   },
   {
     slug: "burnout-personality",
     playDiagnosisId: "rubel-burnout-v1",
     plugPlayPath: "/diagnosis/play/motivation-spectrum",
     schemaType: "MedicalWebPage",
+    searchIntent: "informational",
+    searchTags: ["burnout", "燃え尽き", "stress", "rest"],
   },
   {
     slug: "inner-child-healing",
     playDiagnosisId: "rubel-ura-seishiki-v1",
     plugPlayPath: "/diagnosis/play/personality-spectrum",
     schemaType: "MedicalWebPage",
+    searchIntent: "informational",
+    searchTags: ["inner child", "healing", "self care"],
   },
   {
     slug: "shadow-self-archetype",
     playDiagnosisId: "rubel-ura-seishiki-v1",
     plugPlayPath: "/diagnosis/play/genz",
     schemaType: "Quiz",
+    searchIntent: "transactional",
+    searchTags: ["shadow self", "archetype", "genz", "cosmic"],
   },
 ];
 

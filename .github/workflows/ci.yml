@@ -19,6 +19,25 @@ jobs:
       - run: npm run test
       - run: npm run build
 
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Start Next.js server
+        run: npm run start -- -p 3000 &
+      - name: Lighthouse CI (CWV gate)
+        run: LIGHTHOUSE_BASE_URL=http://127.0.0.1:3000 npm run lighthouse:ci
+        env:
+          LH_MIN_PERFORMANCE: "0.68"
+          LH_MIN_ACCESSIBILITY: "0.90"
+
   e2e:
     runs-on: ubuntu-latest
     needs: quality

@@ -7,11 +7,13 @@ import { CosmicPlanetVisual } from "@/components/diagnosis/CosmicPlanetVisual";
 import { CosmicPlanetGallery } from "@/components/diagnosis/CosmicPlanetGallery";
 import { PlugAdvicePanel } from "@/components/diagnosis/PlugAdvicePanel";
 import { ShareGrowthInsights } from "@/components/diagnosis/ShareGrowthInsights";
+import { DiagnosisCompilerTraitChart } from "@/components/diagnosis/DiagnosisCompilerTraitChart";
 import { COMPILER_UI_MESSAGES } from "@/lib/diagnosis/compilerMessages";
 import {
   readDiagnosisRef,
   trackDiagnosisEvent,
 } from "@/lib/diagnosis/analytics";
+import { buildUnifiedScoringViewFromVector } from "@/lib/diagnosis/scoring";
 import { buildCosmicCharacterSheet } from "@/lib/diagnosis/cosmicPlanetEngine";
 import type { CosmicPlanetKind } from "@/lib/diagnosis/cosmicPlanetEngine";
 import {
@@ -125,6 +127,7 @@ const ViralSharePanel = ({
       slug: definition.slug,
       planet: planetKind,
       archetypeId: outcome.winningArchetype.id,
+      funnelStep: "share",
       ...shareMeta,
     });
     const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
@@ -259,6 +262,20 @@ export const DiagnosisResultPage = ({
     persistPlugResultSnapshot(definition.slug, outcome, sheet);
   }, [definition.slug, outcome, sheet]);
 
+  useEffect(() => {
+    trackDiagnosisEvent("plug_result_completed", {
+      slug: definition.slug,
+      ref: readDiagnosisRef(),
+      funnelStep: "result_view",
+      archetypeId: outcome.winningArchetype.id,
+    });
+  }, [definition.slug, outcome.winningArchetype.id]);
+
+  const scoringView = useMemo(
+    () => buildUnifiedScoringViewFromVector(outcome.academicVector, "ocean"),
+    [outcome.academicVector],
+  );
+
   const archetype = outcome.winningArchetype;
   const { narrative } = sheet;
 
@@ -300,6 +317,18 @@ export const DiagnosisResultPage = ({
           })
         }
       />
+
+      <section className={styles.analysisSection} aria-labelledby="traits-heading">
+        <h3 id="traits-heading" className={styles.sectionTitle}>
+          {localeMessages.traitsProfileTitle}
+        </h3>
+        <p className={styles.sectionLead}>{localeMessages.traitsProfileLead}</p>
+        <DiagnosisCompilerTraitChart
+          academicVector={scoringView.academicVector}
+          themeColor={archetype.themeColor}
+          variant="five"
+        />
+      </section>
 
       <section className={styles.analysisSection} aria-labelledby="analysis-heading">
         <h3 id="analysis-heading" className={styles.sectionTitle}>

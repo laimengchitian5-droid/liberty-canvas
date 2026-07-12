@@ -30,7 +30,7 @@ export function DiagnosisRefCapture() {
 
     try {
       sessionStorage.setItem(REF_STORAGE_KEY, ref);
-      trackDiagnosisEvent("diagnosis_ref_captured", { ref });
+      trackDiagnosisEvent("diagnosis_ref_captured", { ref, funnelStep: "discover_ref" });
     } catch {
       // ignore
     }

@@ -25,6 +25,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     query: parsed.data.q,
+    queryIntent: hits[0]?.queryIntent ?? "navigational",
     total: hits.length,
     results: hits.slice(0, limit).map((hit) => ({
       id: hit.entry.id,
@@ -35,6 +36,8 @@ export async function GET(request: Request) {
       kind: hit.entry.kind,
       score: hit.score,
       matchedTokens: hit.matchedTokens,
+      queryIntent: hit.queryIntent,
+      entryIntent: hit.entryIntent,
     })),
   });
 }

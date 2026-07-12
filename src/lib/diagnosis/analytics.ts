@@ -18,13 +18,23 @@ export type DiagnosisAnalyticsEvent =
   | "plug_result_advice_completed"
   | "plug_result_gallery_preview"
   | "plug_result_offline_restored"
+  | "plug_result_completed"
   | "builder_draft_saved"
   | "builder_preview_started";
+
+export type FunnelStep =
+  | "discover_ref"
+  | "play_start"
+  | "result_view"
+  | "share";
 
 export interface DiagnosisAnalyticsPayload {
   ref?: string | null;
   category?: string;
   variant?: string;
+  funnelStep?: FunnelStep;
+  frameworkId?: string;
+  slug?: string;
   [key: string]: string | number | boolean | null | undefined;
 }
 

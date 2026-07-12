@@ -18,6 +18,18 @@ html {
   --lc-safe-top: env(safe-area-inset-top, 0px);
   --lc-safe-bottom: env(safe-area-inset-bottom, 0px);
   --lc-page-pad-bottom: calc(5rem + var(--lc-safe-bottom));
+  --lc-color-cream: #faf9f6;
+  --lc-color-cream-soft: #fffcf7;
+  --lc-color-dusty-rose: #c9a09a;
+  --lc-color-sage: #9caf88;
+  --lc-color-gold: #c4a962;
+  --lc-color-ink: #4a4038;
+  --lc-color-ink-muted: #6f6258;
+  --lc-font-hero: clamp(1.65rem, 4.5vw, 2.35rem);
+  --lc-font-title: clamp(1.25rem, 3.2vw, 1.65rem);
+  --lc-font-body: clamp(0.92rem, 2.2vw, 1rem);
+  --lc-touch-min: 44px;
+  --lc-radius-card: 1.25rem;
 }
 
 @media (max-width: 640px) {

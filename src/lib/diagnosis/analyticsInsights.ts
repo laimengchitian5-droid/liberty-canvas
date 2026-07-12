@@ -9,15 +9,69 @@ export interface AnalyticsVariantReport {
   adviceOpens: number;
 }
 
+export interface ShareFunnelReport {
+  discoverRefs: number;
+  playStarts: number;
+  resultViews: number;
+  shareEvents: number;
+  /** playStarts / discoverRefs when refs > 0 */
+  refToPlayRate: number | null;
+  /** shareEvents / resultViews when results > 0 */
+  shareRate: number | null;
+}
+
 export interface AnalyticsInsightsSummary {
   totals: Record<string, number>;
   bySlug: Record<string, Record<string, number>>;
   variantReports: AnalyticsVariantReport[];
+  funnel: ShareFunnelReport;
   recentEvents: StoredAnalyticsEvent[];
 }
 
 async function readEvents(): Promise<StoredAnalyticsEvent[]> {
   return readJsonStore<StoredAnalyticsEvent[]>(STORE_KEY, []);
+}
+
+function buildShareFunnelReport(events: readonly StoredAnalyticsEvent[]): ShareFunnelReport {
+  let discoverRefs = 0;
+  let playStarts = 0;
+  let resultViews = 0;
+  let shareEvents = 0;
+
+  for (const entry of events) {
+    if (entry.event === "diagnosis_ref_captured") {
+      discoverRefs += 1;
+    }
+
+    if (entry.event === "diagnosis_started" || entry.funnelStep === "play_start") {
+      playStarts += 1;
+    }
+
+    if (
+      entry.event === "plug_result_completed" ||
+      entry.funnelStep === "result_view"
+    ) {
+      resultViews += 1;
+    }
+
+    if (
+      entry.event.startsWith("plug_result_share") ||
+      entry.funnelStep === "share"
+    ) {
+      shareEvents += 1;
+    }
+  }
+
+  return {
+    discoverRefs,
+    playStarts,
+    resultViews,
+    shareEvents,
+    refToPlayRate:
+      discoverRefs > 0 ? Math.round((playStarts / discoverRefs) * 1000) / 10 : null,
+    shareRate:
+      resultViews > 0 ? Math.round((shareEvents / resultViews) * 1000) / 10 : null,
+  };
 }
 
 export async function buildAnalyticsInsights(): Promise<AnalyticsInsightsSummary> {
@@ -65,6 +119,9 @@ export async function buildAnalyticsInsights(): Promise<AnalyticsInsightsSummary
     totals,
     bySlug,
     variantReports,
+    funnel: buildShareFunnelReport(events),
     recentEvents: events.slice(-20).reverse(),
   };
 }
+
+export { buildShareFunnelReport };

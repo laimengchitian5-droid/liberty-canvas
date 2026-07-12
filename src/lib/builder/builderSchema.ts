@@ -46,6 +46,7 @@ export const builderDiagnosisDefinitionSchema = z.object({
     .min(2)
     .max(64)
     .regex(/^[a-z0-9-]+$/),
+  frameworkId: z.enum(["ocean", "four_axis", "custom"]).optional(),
   eyebrow: z.string().min(1),
   title: z.string().min(1),
   subtitle: z.string().min(1),

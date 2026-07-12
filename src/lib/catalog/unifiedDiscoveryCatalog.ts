@@ -1,6 +1,7 @@
 import { buildDiagnosisDiscoveryCatalog } from "@/lib/builder/discoveryCatalog";
 import { listHubCards } from "@/lib/rubel/repository";
 import type { UnifiedDiscoveryEntry } from "@/lib/catalog/unifiedDiscoveryTypes";
+import { LANDING_TOPICS } from "@/lib/landing/landingTopics";
 
 export type {
   UnifiedDiscoveryEntry,
@@ -9,6 +10,27 @@ export type {
 export { groupUnifiedDiscoveryCatalog } from "@/lib/catalog/unifiedDiscoveryTypes";
 
 const RUBEL_ACCENT = "#6366F1";
+
+function resolveSearchMetaForSlug(slug: string): Pick<
+  UnifiedDiscoveryEntry,
+  "searchIntent" | "searchTags"
+> {
+  const topic = LANDING_TOPICS.find((entry) =>
+    entry.plugPlayPath.endsWith(`/${slug}`),
+  );
+
+  if (topic) {
+    return {
+      searchIntent: topic.searchIntent,
+      searchTags: topic.searchTags,
+    };
+  }
+
+  return {
+    searchIntent: slug.includes("romance") ? "transactional" : "navigational",
+    searchTags: [slug.replace(/-/g, " ")],
+  };
+}
 
 export async function buildUnifiedDiscoveryCatalog(): Promise<
   UnifiedDiscoveryEntry[]
@@ -30,6 +52,7 @@ export async function buildUnifiedDiscoveryCatalog(): Promise<
     kind:
       entry.source === "official" ? "plug-official" : "plug-community",
     questionCount: entry.questionCount,
+    ...resolveSearchMetaForSlug(entry.slug),
   }));
 
   const quick: UnifiedDiscoveryEntry[] = rubelCards.map((card) => ({
@@ -44,6 +67,8 @@ export async function buildUnifiedDiscoveryCatalog(): Promise<
     kind: "rubel-quick",
     questionCount: card.questionCount,
     trendingLabel: card.trendingLabel,
+    searchIntent: "transactional",
+    searchTags: [card.title, "quick", "1問"],
   }));
 
   return [...plug, ...quick];

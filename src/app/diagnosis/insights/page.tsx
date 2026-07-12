@@ -36,6 +36,46 @@ export default async function DiagnosisInsightsPage() {
           </p>
         </header>
 
+        <section className={styles.panel} aria-labelledby="funnel-heading">
+          <h2 id="funnel-heading" className={styles.panelTitle}>
+            シェアファネル KPI
+          </h2>
+          <ul className={styles.kpiGrid}>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Discover ref</span>
+              <strong className={styles.kpiValue}>{insights.funnel.discoverRefs}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Play 開始</span>
+              <strong className={styles.kpiValue}>{insights.funnel.playStarts}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>結果表示</span>
+              <strong className={styles.kpiValue}>{insights.funnel.resultViews}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>シェア</span>
+              <strong className={styles.kpiValue}>{insights.funnel.shareEvents}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Ref→Play 率</span>
+              <strong className={styles.kpiValue}>
+                {insights.funnel.refToPlayRate !== null
+                  ? `${insights.funnel.refToPlayRate}%`
+                  : "—"}
+              </strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Share 率</span>
+              <strong className={styles.kpiValue}>
+                {insights.funnel.shareRate !== null
+                  ? `${insights.funnel.shareRate}%`
+                  : "—"}
+              </strong>
+            </li>
+          </ul>
+        </section>
+
         <section className={styles.panel} aria-labelledby="totals-heading">
           <h2 id="totals-heading" className={styles.panelTitle}>
             イベント合計

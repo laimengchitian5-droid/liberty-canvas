@@ -5,6 +5,7 @@ import type {
   SeoTuningBlock,
   ViralShareBlock,
 } from "@/types/diagnosisCompiler";
+import type { PsychFrameworkId } from "@/lib/diagnosis/scoring/types";
 
 /**
  * No-code builder block kinds — creators assemble these without touching code.
@@ -99,6 +100,8 @@ export interface BuilderResultConfig {
 export interface BuilderDiagnosisDefinition {
   id: string;
   slug: string;
+  /** Scoring framework — drives default weights and result layout. */
+  frameworkId?: PsychFrameworkId;
   eyebrow: string;
   title: string;
   subtitle: string;

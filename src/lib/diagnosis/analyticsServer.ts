@@ -9,6 +9,10 @@ const analyticsEventSchema = z.object({
   at: z.string().min(1),
   slug: z.string().optional(),
   ref: z.string().nullable().optional(),
+  funnelStep: z
+    .enum(["discover_ref", "play_start", "result_view", "share"])
+    .optional(),
+  frameworkId: z.string().optional(),
   planet: z.string().optional(),
   variant: z.string().optional(),
   source: z.string().optional(),

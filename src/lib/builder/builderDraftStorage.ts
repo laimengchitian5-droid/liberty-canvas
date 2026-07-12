@@ -43,6 +43,7 @@ export function createDefaultBuilderDraft(): BuilderDiagnosisDefinition {
   return {
     id,
     slug: `draft-${id.slice(-6)}`,
+    frameworkId: "ocean",
     eyebrow: "No-Code Builder",
     title: "新しい診断",
     subtitle: "会話型フローでつくるオリジナル性格診断",

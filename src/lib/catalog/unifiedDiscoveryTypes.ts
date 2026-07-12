@@ -1,3 +1,5 @@
+import type { SearchIntent } from "@/lib/seo/searchIntent";
+
 export type UnifiedDiscoveryKind =
   | "plug-official"
   | "plug-community"
@@ -15,6 +17,8 @@ export interface UnifiedDiscoveryEntry {
   kind: UnifiedDiscoveryKind;
   questionCount: number;
   trendingLabel?: string;
+  searchIntent?: SearchIntent;
+  searchTags?: readonly string[];
 }
 
 export function groupUnifiedDiscoveryCatalog(

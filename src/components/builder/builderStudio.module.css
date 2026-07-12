@@ -275,6 +275,51 @@
   font-size: 0.88rem;
 }
 
+.fieldHint {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: rgb(148 163 184);
+}
+
+.choiceEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(51 65 85);
+  background: rgb(2 6 23 / 0.45);
+}
+
+.scoreFieldset {
+  margin: 0;
+  padding: 0.65rem;
+  border: 1px solid rgb(51 65 85);
+  border-radius: 0.65rem;
+}
+
+.scoreLegend {
+  padding: 0 0.35rem;
+  font-size: 0.78rem;
+  color: rgb(148 163 184);
+}
+
+.scoreRow {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr 2.5rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  margin-top: 0.35rem;
+}
+
+.scoreValue {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  color: rgb(196 181 253);
+}
+
 @media (max-width: 768px) {
   .studio {
     grid-template-columns: 1fr;

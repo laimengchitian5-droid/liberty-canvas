@@ -126,3 +126,35 @@
   font-size: 0.85rem;
   color: rgb(148 163 184);
 }
+
+.kpiGrid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.65rem;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(51 65 85);
+  background: rgb(2 6 23 / 0.55);
+}
+
+.kpiLabel {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.kpiValue {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: rgb(196 181 253);
+}

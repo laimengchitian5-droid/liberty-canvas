@@ -12,6 +12,7 @@ import {
 import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
 import { buildPlayRoute, writeSatelliteIntake } from "@/lib/satellite";
 import { writePsychIntakeSeed } from "@/lib/psychology/psychIntakeStore";
+import { listClusterLinksForTopic } from "@/lib/seo/internalLinks";
 import { cn } from "@/lib/utils/cn";
 
 interface LandingIntakeClientProps {
@@ -20,6 +21,7 @@ interface LandingIntakeClientProps {
 
 export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
   const router = useRouter();
+  const clusterLinks = listClusterLinksForTopic(page.slug, page.locale, 4);
 
   const handleIntakeSubmit = useCallback(
     (userText: string) => {
@@ -74,6 +76,33 @@ export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
         copy={page.copy}
         onSubmit={handleIntakeSubmit}
       />
+      {clusterLinks.length > 0 ? (
+        <nav
+          className="mx-auto mt-8 max-w-md"
+          aria-label={
+            page.locale === "ja" ? "関連トピック" : "Related topics"
+          }
+        >
+          <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
+            {page.locale === "ja" ? "関連トピック" : "Related topics"}
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {clusterLinks.map((link) => (
+              <li key={link.slug}>
+                <Link
+                  href={link.href}
+                  className={cn(
+                    rubelDs.glassCard,
+                    "inline-flex min-h-11 items-center px-3 py-2 text-sm capitalize",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null}
     </SatelliteLandingShell>
   );
 }

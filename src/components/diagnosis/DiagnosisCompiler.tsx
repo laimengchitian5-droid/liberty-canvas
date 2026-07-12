@@ -34,6 +34,7 @@ import {
 
 import { compileLegallySafeResult } from "@/lib/diagnosis/compileLegallySafeResult";
 import { COMPILER_UI_MESSAGES } from "@/lib/diagnosis/compilerMessages";
+import { readDiagnosisRef, trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 import { getSiteUrl } from "@/lib/site/url";
 import { DiagnosisResultPage } from "@/components/diagnosis/DiagnosisResultPage";
 import { DiagnosisCompilerIntro } from "@/components/diagnosis/DiagnosisCompilerIntro";
@@ -1300,6 +1301,21 @@ export const DiagnosisCompiler = (props: DiagnosisCompilerProps) => {
 
   );
 
+  const handleStart = useCallback(() => {
+    const frameworkId =
+      isBuilderMode && "frameworkId" in programDefinition
+        ? programDefinition.frameworkId ?? "ocean"
+        : "ocean";
+
+    trackDiagnosisEvent("diagnosis_started", {
+      slug: programDefinition.slug,
+      ref: readDiagnosisRef(),
+      funnelStep: "play_start",
+      frameworkId,
+    });
+    startProgram();
+  }, [isBuilderMode, programDefinition, startProgram]);
+
 
 
   return (
@@ -1310,7 +1326,7 @@ export const DiagnosisCompiler = (props: DiagnosisCompilerProps) => {
 
         {phase === "intro" ? (
 
-          <DiagnosisCompilerIntro definition={programDefinition} onStart={startProgram} />
+          <DiagnosisCompilerIntro definition={programDefinition} onStart={handleStart} />
 
         ) : null}
 

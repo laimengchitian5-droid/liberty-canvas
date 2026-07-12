@@ -14,16 +14,38 @@ import {
   type BuilderDraftRecord,
 } from "@/lib/builder/builderDraftStorage";
 import { validateBuilderDefinition } from "@/lib/builder/convertBuilderToPlugDefinition";
+import {
+  applyFrameworkTemplate,
+  FRAMEWORK_TEMPLATES,
+} from "@/lib/builder/frameworkRegistry";
+import { PSYCH_FRAMEWORK_IDS, type PsychFrameworkId } from "@/lib/diagnosis/scoring";
+import { LEGAL_TRAIT_KEYS } from "@/lib/diagnosis/academicTraitVector";
 import type {
   BuilderBlock,
   BuilderDiagnosisDefinition,
   ConversationalQuestionBlock,
+  OceanTraitKey,
 } from "@/types/builder";
-import { isConversationalQuestionBlock } from "@/types/builder";
+import { isConversationalQuestionBlock, OCEAN_TRAIT_KEYS } from "@/types/builder";
+import type { ResultLayoutKind } from "@/types/diagnosisCompiler";
 import styles from "./builderStudio.module.css";
 
 type StudioMode = "edit" | "preview";
 type EditorTab = "blocks" | "results";
+
+const OCEAN_LABELS: Readonly<Record<OceanTraitKey, string>> = {
+  openness: "開放性",
+  conscientiousness: "誠実性",
+  extraversion: "外向性",
+  agreeableness: "協調性",
+  neuroticism: "感情変動",
+};
+
+const LAYOUT_LABELS: Readonly<Record<ResultLayoutKind, string>> = {
+  full_affirmation_chart: "5因子チャート",
+  character_archetype_card: "キャラクター型",
+  compatibility_radar: "相性レーダー",
+};
 
 const BuilderStudio = () => {
   const [drafts, setDrafts] = useState<BuilderDraftRecord[]>([]);
@@ -478,6 +500,28 @@ const BuilderStudio = () => {
               }
             />
           </label>
+          <label className={styles.field}>
+            スコアリングフレームワーク
+            <select
+              className={styles.input}
+              value={definition.frameworkId ?? "ocean"}
+              onChange={(event) => {
+                const next = event.target.value as PsychFrameworkId;
+                updateDefinition((current) =>
+                  applyFrameworkTemplate(current, next),
+                );
+              }}
+            >
+              {PSYCH_FRAMEWORK_IDS.map((id) => (
+                <option key={id} value={id}>
+                  {FRAMEWORK_TEMPLATES[id].label}
+                </option>
+              ))}
+            </select>
+            <span className={styles.fieldHint}>
+              {FRAMEWORK_TEMPLATES[definition.frameworkId ?? "ocean"].description}
+            </span>
+          </label>
         </section>
 
         {editorTab === "blocks" ? (
@@ -551,35 +595,84 @@ const BuilderStudio = () => {
                 />
               </label>
               {selectedBlock.choices.map((choice, index) => (
-                <label key={choice.id} className={styles.field}>
-                  選択肢 {index + 1}
-                  <input
-                    className={styles.input}
-                    value={choice.label}
-                    onChange={(event) =>
-                      updateDefinition((current) => ({
-                        ...current,
-                        blocks: current.blocks.map((block) => {
-                          if (
-                            block.id !== selectedBlock.id ||
-                            block.type !== "CONVERSATIONAL_QUESTION"
-                          ) {
-                            return block;
-                          }
+                <div key={choice.id} className={styles.choiceEditor}>
+                  <label className={styles.field}>
+                    選択肢 {index + 1}
+                    <input
+                      className={styles.input}
+                      value={choice.label}
+                      onChange={(event) =>
+                        updateDefinition((current) => ({
+                          ...current,
+                          blocks: current.blocks.map((block) => {
+                            if (
+                              block.id !== selectedBlock.id ||
+                              block.type !== "CONVERSATIONAL_QUESTION"
+                            ) {
+                              return block;
+                            }
 
-                          return {
-                            ...block,
-                            choices: block.choices.map((entry) =>
-                              entry.id === choice.id
-                                ? { ...entry, label: event.target.value }
-                                : entry,
-                            ),
-                          };
-                        }),
-                      }))
-                    }
-                  />
-                </label>
+                            return {
+                              ...block,
+                              choices: block.choices.map((entry) =>
+                                entry.id === choice.id
+                                  ? { ...entry, label: event.target.value }
+                                  : entry,
+                              ),
+                            };
+                          }),
+                        }))
+                      }
+                    />
+                  </label>
+                  <fieldset className={styles.scoreFieldset}>
+                    <legend className={styles.scoreLegend}>OCEAN 重み</legend>
+                    {OCEAN_TRAIT_KEYS.map((traitKey) => (
+                      <label key={traitKey} className={styles.scoreRow}>
+                        <span>{OCEAN_LABELS[traitKey]}</span>
+                        <input
+                          type="range"
+                          min={0}
+                          max={1}
+                          step={0.05}
+                          value={choice.scores[traitKey] ?? 0}
+                          onChange={(event) => {
+                            const value = Number.parseFloat(event.target.value);
+                            updateDefinition((current) => ({
+                              ...current,
+                              blocks: current.blocks.map((block) => {
+                                if (
+                                  block.id !== selectedBlock.id ||
+                                  block.type !== "CONVERSATIONAL_QUESTION"
+                                ) {
+                                  return block;
+                                }
+
+                                return {
+                                  ...block,
+                                  choices: block.choices.map((entry) =>
+                                    entry.id === choice.id
+                                      ? {
+                                          ...entry,
+                                          scores: {
+                                            ...entry.scores,
+                                            [traitKey]: value,
+                                          },
+                                        }
+                                      : entry,
+                                  ),
+                                };
+                              }),
+                            }));
+                          }}
+                        />
+                        <span className={styles.scoreValue}>
+                          {(choice.scores[traitKey] ?? 0).toFixed(2)}
+                        </span>
+                      </label>
+                    ))}
+                  </fieldset>
+                </div>
               ))}
             </div>
           ) : null}
@@ -651,6 +744,28 @@ const BuilderStudio = () => {
         ) : (
         <section className={styles.blocksSection}>
           <h2 className={styles.sectionTitle}>結果タイプ</h2>
+          <label className={styles.field}>
+            結果レイアウト
+            <select
+              className={styles.input}
+              value={definition.resultConfig.layout}
+              onChange={(event) =>
+                updateDefinition((current) => ({
+                  ...current,
+                  resultConfig: {
+                    ...current.resultConfig,
+                    layout: event.target.value as ResultLayoutKind,
+                  },
+                }))
+              }
+            >
+              {(Object.keys(LAYOUT_LABELS) as ResultLayoutKind[]).map((layout) => (
+                <option key={layout} value={layout}>
+                  {LAYOUT_LABELS[layout]}
+                </option>
+              ))}
+            </select>
+          </label>
           {definition.resultConfig.results.map((result, index) => (
             <div key={result.id} className={styles.blockEditor}>
               <p className={styles.resultIndex}>タイプ {index + 1}</p>
@@ -714,6 +829,46 @@ const BuilderStudio = () => {
                   }
                 />
               </label>
+              {index === 0 ? (
+                <fieldset className={styles.scoreFieldset}>
+                  <legend className={styles.scoreLegend}>アーキタイプ traitProfile</legend>
+                  {LEGAL_TRAIT_KEYS.map((traitKey) => (
+                    <label key={traitKey} className={styles.scoreRow}>
+                      <span>{traitKey.replace("trait_", "")}</span>
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={result.traitProfile[traitKey] ?? 0}
+                        onChange={(event) => {
+                          const value = Number.parseFloat(event.target.value);
+                          updateDefinition((current) => ({
+                            ...current,
+                            resultConfig: {
+                              ...current.resultConfig,
+                              results: current.resultConfig.results.map((entry) =>
+                                entry.id === result.id
+                                  ? {
+                                      ...entry,
+                                      traitProfile: {
+                                        ...entry.traitProfile,
+                                        [traitKey]: value,
+                                      },
+                                    }
+                                  : entry,
+                              ),
+                            },
+                          }));
+                        }}
+                      />
+                      <span className={styles.scoreValue}>
+                        {(result.traitProfile[traitKey] ?? 0).toFixed(2)}
+                      </span>
+                    </label>
+                  ))}
+                </fieldset>
+              ) : null}
             </div>
           ))}
         </section>
