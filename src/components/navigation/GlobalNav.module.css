@@ -28,6 +28,8 @@
 .authSlot {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
   inline-size: 100%;
   min-block-size: 2.75rem;
 }

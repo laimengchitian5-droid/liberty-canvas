@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import { UserAuthPanel } from "@/components/auth/UserAuthPanel";
+import { LocaleSwitcher } from "@/components/i18n/LocaleSwitcher";
 import { PRODUCT_NAME } from "@/lib/brand/constants";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { deriveCreatorAccent } from "@/lib/rubel/creatorDisplay";
@@ -102,6 +103,7 @@ export function GlobalNav() {
         </div>
 
         <div className={styles.authSlot}>
+          <LocaleSwitcher />
           <UserAuthPanel />
         </div>
       </div>
