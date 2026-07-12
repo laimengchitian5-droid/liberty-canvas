@@ -146,12 +146,29 @@ export interface PlugBridgeMessages {
   cta: string;
 }
 
+
+export interface DiscoverFunnelMessages {
+  skipToQuiz: string;
+  handoffEyebrow: string;
+  handoffTitle: string;
+  handoffLead: string;
+  yourAnswerLabel: string;
+  localeBadge: string;
+}
+
+export interface CompilerIntroMessages {
+  startLabel: (minutes: number) => string;
+  tagsGroupAria: string;
+}
+
 export interface LocaleMessages {
   likert: LikertMessages;
   common: CommonMessages;
   nav: NavMessages;
   rubelPlay: RubelPlayMessages;
   plugBridge: PlugBridgeMessages;
+  discoverFunnel: DiscoverFunnelMessages;
+  compilerIntro: CompilerIntroMessages;
   feed: FeedMessages;
   header: HeaderMessages;
   gdpr: GdprMessages;
@@ -188,12 +205,40 @@ const PLUG_BRIDGE_EN: PlugBridgeMessages = {
   cta: "Try the cosmic diagnosis →",
 };
 
+const DISCOVER_FUNNEL_EN: DiscoverFunnelMessages = {
+  skipToQuiz: "Start the full quiz without writing →",
+  handoffEyebrow: "LibertyCanvas · Discover",
+  handoffTitle: "Your answer is ready for the cosmic diagnosis",
+  handoffLead: "We kept your words and language — tap below to begin.",
+  yourAnswerLabel: "Your answer",
+  localeBadge: "Language",
+};
+
+const COMPILER_INTRO_EN: CompilerIntroMessages = {
+  startLabel: (minutes) => `Start diagnosis (~${minutes} min)`,
+  tagsGroupAria: "Diagnosis tags",
+};
+
 const PLUG_BRIDGE_JA: PlugBridgeMessages = {
   ariaLabel: "本格宇宙診断へのおすすめ",
   eyebrow: "LibertyCanvas · 自由",
   title: "あなたの宇宙キャラクターを見つけよう",
   lead: "会話型Plug診断なら、宇宙キャラ結果・AIアドバイス・シェアカードが楽しめます。",
   cta: "宇宙診断をはじめる →",
+};
+
+const DISCOVER_FUNNEL_JA: DiscoverFunnelMessages = {
+  skipToQuiz: "入力せずに診断をはじめる →",
+  handoffEyebrow: "LibertyCanvas · Discover",
+  handoffTitle: "あなたの回答を宇宙診断へ引き継ぎました",
+  handoffLead: "言語と回答を保持したまま — 下のボタンで診断開始。",
+  yourAnswerLabel: "あなたの回答",
+  localeBadge: "表示言語",
+};
+
+const COMPILER_INTRO_JA: CompilerIntroMessages = {
+  startLabel: (minutes) => `診断をはじめる（約${minutes}分）`,
+  tagsGroupAria: "診断タグ",
 };
 
 const NAV_KO: NavMessages = {
@@ -226,12 +271,40 @@ const PLUG_BRIDGE_KO: PlugBridgeMessages = {
   cta: "우주 진단 시작 →",
 };
 
+const DISCOVER_FUNNEL_KO: DiscoverFunnelMessages = {
+  skipToQuiz: "입력 없이 전체 검사 시작 →",
+  handoffEyebrow: "LibertyCanvas · Discover",
+  handoffTitle: "답변이 우주 진단으로 이어집니다",
+  handoffLead: "언어와 답변을 유지했습니다 — 아래에서 시작하세요.",
+  yourAnswerLabel: "내 답변",
+  localeBadge: "표시 언어",
+};
+
+const COMPILER_INTRO_KO: CompilerIntroMessages = {
+  startLabel: (minutes) => `진단 시작 (~${minutes}분)`,
+  tagsGroupAria: "진단 태그",
+};
+
 const PLUG_BRIDGE_ZH: PlugBridgeMessages = {
   ariaLabel: "深度宇宙诊断推荐",
   eyebrow: "LibertyCanvas · 自由",
   title: "发现你的宇宙角色",
   lead: "Plug 对话型诊断 — 宇宙角色结果、AI 建议与分享卡片。",
   cta: "开始宇宙诊断 →",
+};
+
+const DISCOVER_FUNNEL_ZH: DiscoverFunnelMessages = {
+  skipToQuiz: "不写回答，直接开始完整测验 →",
+  handoffEyebrow: "LibertyCanvas · Discover",
+  handoffTitle: "你的回答已接入宇宙诊断",
+  handoffLead: "已保留语言与回答 — 点击下方开始。",
+  yourAnswerLabel: "你的回答",
+  localeBadge: "显示语言",
+};
+
+const COMPILER_INTRO_ZH: CompilerIntroMessages = {
+  startLabel: (minutes) => `开始诊断（约 ${minutes} 分钟）`,
+  tagsGroupAria: "诊断标签",
 };
 
 const PLAY_EN: RubelPlayMessages = {
@@ -527,6 +600,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_EN,
     rubelPlay: PLAY_EN,
     plugBridge: PLUG_BRIDGE_EN,
+    discoverFunnel: DISCOVER_FUNNEL_EN,
+    compilerIntro: COMPILER_INTRO_EN,
     feed: FEED_EN,
     header: HEADER_EN,
     gdpr: GDPR_EN,
@@ -554,6 +629,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_JA,
     rubelPlay: PLAY_JA,
     plugBridge: PLUG_BRIDGE_JA,
+    discoverFunnel: DISCOVER_FUNNEL_JA,
+    compilerIntro: COMPILER_INTRO_JA,
     feed: FEED_JA,
     header: HEADER_JA,
     gdpr: GDPR_JA,
@@ -577,6 +654,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_KO,
     rubelPlay: PLAY_KO,
     plugBridge: PLUG_BRIDGE_KO,
+    discoverFunnel: DISCOVER_FUNNEL_KO,
+    compilerIntro: COMPILER_INTRO_KO,
     feed: FEED_EN,
     header: { ...HEADER_EN, brandTitle: "LibertyCanvas", create: "만들기" },
     gdpr: GDPR_EN,
@@ -599,6 +678,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_ZH,
     rubelPlay: PLAY_ZH,
     plugBridge: PLUG_BRIDGE_ZH,
+    discoverFunnel: DISCOVER_FUNNEL_ZH,
+    compilerIntro: COMPILER_INTRO_ZH,
     feed: FEED_EN,
     header: { ...HEADER_EN, brandTitle: "LibertyCanvas", create: "创建" },
     gdpr: GDPR_EN,
@@ -626,6 +707,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_EN,
     rubelPlay: PLAY_EN,
     plugBridge: PLUG_BRIDGE_EN,
+    discoverFunnel: DISCOVER_FUNNEL_EN,
+    compilerIntro: COMPILER_INTRO_EN,
     feed: FEED_EN,
     header: HEADER_EN,
     gdpr: GDPR_EN,
@@ -653,6 +736,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_EN,
     rubelPlay: PLAY_EN,
     plugBridge: PLUG_BRIDGE_EN,
+    discoverFunnel: DISCOVER_FUNNEL_EN,
+    compilerIntro: COMPILER_INTRO_EN,
     feed: FEED_EN,
     header: HEADER_EN,
     gdpr: GDPR_EN,
@@ -680,6 +765,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_EN,
     rubelPlay: PLAY_EN,
     plugBridge: PLUG_BRIDGE_EN,
+    discoverFunnel: DISCOVER_FUNNEL_EN,
+    compilerIntro: COMPILER_INTRO_EN,
     feed: FEED_EN,
     header: HEADER_EN,
     gdpr: GDPR_EN,
@@ -712,6 +799,8 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     },
     rubelPlay: PLAY_FR,
     plugBridge: PLUG_BRIDGE_EN,
+    discoverFunnel: DISCOVER_FUNNEL_EN,
+    compilerIntro: COMPILER_INTRO_EN,
     feed: FEED_EN,
     header: { ...HEADER_EN, create: "Créer" },
     gdpr: GDPR_EN,

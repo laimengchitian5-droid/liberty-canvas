@@ -58,7 +58,11 @@ function buildShareFunnelReport(events: readonly StoredAnalyticsEvent[]): ShareF
   let shareEvents = 0;
 
   for (const entry of events) {
-    if (entry.event === "diagnosis_ref_captured") {
+    if (
+      entry.event === "diagnosis_ref_captured" ||
+      entry.event === "discover_funnel_submit" ||
+      entry.event === "discover_funnel_direct"
+    ) {
       discoverRefs += 1;
     }
 

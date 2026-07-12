@@ -8,6 +8,7 @@ import { buildContentSecurityPolicy } from "@/lib/security/csp";
 import {
   LOCALE_STORAGE_KEY,
   resolveAppLocaleFromRequest,
+  resolveDiscoverPathLocale,
 } from "@/lib/i18n/resolveAppLocale";
 import { applyEdgeSeoHeaders, isSearchCrawler, normalizeRefParam } from "@/lib/seo/edgeSeo";
 import {
@@ -129,9 +130,11 @@ export async function middleware(request: NextRequest) {
   requestHeaders.set("Content-Security-Policy", csp);
 
   const queryLang = request.nextUrl.searchParams.get("lang");
+  const pathLocale = resolveDiscoverPathLocale(request.nextUrl.pathname);
   const resolvedLocale = resolveAppLocaleFromRequest({
     cookieLocale: request.cookies.get(LOCALE_STORAGE_KEY)?.value,
     queryLang,
+    pathLocale,
     acceptLanguage: request.headers.get("accept-language"),
   });
 
@@ -141,7 +144,7 @@ export async function middleware(request: NextRequest) {
     request: { headers: requestHeaders },
   });
 
-  if (queryLang) {
+  if (queryLang || pathLocale) {
     response.cookies.set(LOCALE_STORAGE_KEY, resolvedLocale, {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,

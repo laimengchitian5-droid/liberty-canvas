@@ -5,7 +5,23 @@ import {
   type Locale,
 } from "@/lib/i18n/config";
 
-const PUBLIC_LOCALES = ["ja", "en", "ko", "zh", "fr", "de", "ar", "he"] as const;
+export const EDGE_LOCALE_HEADER = "x-lc-locale";
+
+const DISCOVER_PATH_LOCALES = ["en", "ja", "ko", "zh"] as const;
+
+export function resolveDiscoverPathLocale(pathname: string): Locale | null {
+  const match = pathname.match(/^\/discover\/(en|ja|ko|zh)(?:\/|$)/);
+
+  if (!match?.[1]) {
+    return null;
+  }
+
+  const candidate = match[1];
+
+  return (DISCOVER_PATH_LOCALES as readonly string[]).includes(candidate)
+    ? (candidate as Locale)
+    : null;
+}
 
 export function normalizeLocaleCandidate(value: string | null | undefined): Locale | null {
   if (!value) {
@@ -26,14 +42,28 @@ export function normalizeLocaleCandidate(value: string | null | undefined): Loca
 }
 
 export function resolveAppLocaleFromRequest(input: {
-  cookieLocale?: string | null;
+  edgeLocale?: string | null;
   queryLang?: string | null;
+  pathLocale?: string | null;
+  cookieLocale?: string | null;
   acceptLanguage?: string | null;
 }): Locale {
+  const fromEdge = normalizeLocaleCandidate(input.edgeLocale);
+
+  if (fromEdge) {
+    return fromEdge;
+  }
+
   const fromQuery = normalizeLocaleCandidate(input.queryLang);
 
   if (fromQuery) {
     return fromQuery;
+  }
+
+  const fromPath = normalizeLocaleCandidate(input.pathLocale);
+
+  if (fromPath) {
+    return fromPath;
   }
 
   const fromCookie = normalizeLocaleCandidate(input.cookieLocale);
@@ -58,4 +88,6 @@ export function resolveAppLocaleFromRequest(input: {
   return DEFAULT_LOCALE;
 }
 
-export { LOCALE_STORAGE_KEY, PUBLIC_LOCALES };
+export const PUBLIC_LOCALES = ["ja", "en", "ko", "zh", "fr", "de", "ar", "he"] as const;
+
+export { LOCALE_STORAGE_KEY };

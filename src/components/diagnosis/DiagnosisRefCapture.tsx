@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 
 const REF_STORAGE_KEY = "lc-diagnosis-ref";
+const LANG_STORAGE_KEY = "lc-diagnosis-lang";
 
 export function captureDiagnosisRef(): string | null {
   if (typeof window === "undefined") {
@@ -23,14 +24,21 @@ export function DiagnosisRefCapture() {
 
   useEffect(() => {
     const ref = searchParams.get("ref")?.trim();
-
-    if (!ref) {
-      return;
-    }
+    const lang = searchParams.get("lang")?.trim();
 
     try {
-      sessionStorage.setItem(REF_STORAGE_KEY, ref);
-      trackDiagnosisEvent("diagnosis_ref_captured", { ref, funnelStep: "discover_ref" });
+      if (ref) {
+        sessionStorage.setItem(REF_STORAGE_KEY, ref);
+        trackDiagnosisEvent("diagnosis_ref_captured", {
+          ref,
+          funnelStep: "discover_ref",
+          locale: lang ?? undefined,
+        });
+      }
+
+      if (lang) {
+        sessionStorage.setItem(LANG_STORAGE_KEY, lang);
+      }
     } catch {
       // ignore
     }

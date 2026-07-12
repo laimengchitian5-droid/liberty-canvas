@@ -5,8 +5,10 @@ import { useEffect, type ReactNode } from "react";
 import {
   LANDING_LOCALES,
   LANDING_LOCALE_META,
+  landingLocaleToAppLocale,
   type LandingLocale,
 } from "@/lib/landing/landingLocales";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
 import { rubelTheme } from "@/lib/rubel/theme";
 import { cn } from "@/lib/utils/cn";
@@ -23,17 +25,19 @@ export function SatelliteLandingShell({
   children,
 }: SatelliteLandingShellProps) {
   const meta = LANDING_LOCALE_META[locale];
+  const { setLocale } = useI18n();
 
   useEffect(() => {
     document.documentElement.lang = meta.htmlLang;
-  }, [meta.htmlLang]);
+    setLocale(landingLocaleToAppLocale(locale));
+  }, [locale, meta.htmlLang, setLocale]);
 
   return (
     <div className={cn(rubelTheme.page, meta.fontClass)}>
       <header className={cn("px-4 py-3", rubelDs.glassHeader)}>
         <div className={cn(rubelTheme.container, "flex items-center justify-between gap-3")}>
           <Link href="/" className="text-sm font-semibold text-indigo-300">
-            Rubel Canvas
+            LibertyCanvas
           </Link>
           <nav className="flex gap-1" aria-label="Region">
             {LANDING_LOCALES.map((code) => (

@@ -3,6 +3,9 @@ import { hasAnalyticsConsent } from "@/lib/privacy/consent";
 
 export type DiagnosisAnalyticsEvent =
   | "diagnosis_ref_captured"
+  | "discover_funnel_submit"
+  | "discover_funnel_direct"
+  | "discover_play_arrival"
   | "diagnosis_started"
   | "diagnosis_completed"
   | "diagnosis_advice_opened"
@@ -32,6 +35,8 @@ export type DiagnosisAnalyticsEvent =
 
 export type FunnelStep =
   | "discover_ref"
+  | "discover_submit"
+  | "discover_arrival"
   | "play_start"
   | "result_view"
   | "share";

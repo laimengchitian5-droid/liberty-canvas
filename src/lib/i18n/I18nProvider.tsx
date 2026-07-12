@@ -13,7 +13,6 @@ import {
   DEFAULT_LOCALE,
   LOCALE_STORAGE_KEY,
   getDirection,
-  isLocale,
   type Locale,
 } from "@/lib/i18n/config";
 import { getMessages, type LocaleMessages } from "@/lib/i18n/messages";
@@ -30,40 +29,14 @@ const I18nContext = createContext<I18nContextValue | null>(null);
 
 const LEGACY_RUBEL_LOCALE_KEY = "rubel-display-locale";
 
-function readStoredLocale(): Locale {
+function persistClientLocale(locale: Locale): void {
   if (typeof window === "undefined") {
-    return DEFAULT_LOCALE;
+    return;
   }
 
-  const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-
-  if (stored && isLocale(stored)) {
-    return stored;
-  }
-
-  const legacyRubel = window.localStorage.getItem(LEGACY_RUBEL_LOCALE_KEY);
-
-  if (legacyRubel) {
-    const migrated =
-      legacyRubel === "ja"
-        ? "ja"
-        : legacyRubel === "fr"
-          ? "fr"
-          : "en";
-
-    if (isLocale(migrated)) {
-      window.localStorage.setItem(LOCALE_STORAGE_KEY, migrated);
-      return migrated;
-    }
-  }
-
-  const browser = window.navigator.language.slice(0, 2);
-
-  if (isLocale(browser)) {
-    return browser;
-  }
-
-  return DEFAULT_LOCALE;
+  window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  window.localStorage.setItem(LEGACY_RUBEL_LOCALE_KEY, locale);
+  document.cookie = `${LOCALE_STORAGE_KEY}=${locale};path=/;max-age=31536000;samesite=lax`;
 }
 
 function HtmlLocaleBinder({
@@ -91,21 +64,16 @@ export function I18nProvider({
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
-    const stored = readStoredLocale();
-    setLocaleState(stored);
-  }, []);
+    persistClientLocale(initialLocale);
+    setLocaleState(initialLocale);
+  }, [initialLocale]);
 
   const direction = getDirection(locale);
   const isRtl = direction === "rtl";
 
   const setLocale = useCallback((nextLocale: Locale) => {
     setLocaleState(nextLocale);
-
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
-      window.localStorage.setItem(LEGACY_RUBEL_LOCALE_KEY, nextLocale);
-      document.cookie = `${LOCALE_STORAGE_KEY}=${nextLocale};path=/;max-age=31536000;samesite=lax`;
-    }
+    persistClientLocale(nextLocale);
   }, []);
 
   const value = useMemo<I18nContextValue>(

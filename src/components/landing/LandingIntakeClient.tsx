@@ -6,9 +6,15 @@ import { useCallback } from "react";
 import { SatelliteIntakeForm, SatelliteLandingShell } from "@/components/satellite";
 import type { LandingPageDefinition } from "@/lib/landing/landingCatalog";
 import {
+  buildDiscoverFunnelRef,
+  buildDiscoverPlayHandoffUrl,
+} from "@/lib/landing/discoverFunnelRef";
+import {
   LANDING_LOCALE_META,
   type LandingLocale,
 } from "@/lib/landing/landingLocales";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
 import { buildPlayRoute, writeSatelliteIntake } from "@/lib/satellite";
 import { writePsychIntakeSeed } from "@/lib/psychology/psychIntakeStore";
@@ -19,55 +25,81 @@ interface LandingIntakeClientProps {
   page: LandingPageDefinition;
 }
 
+function resolvePsychTopic(slug: string): "enneagram" | "big-five" {
+  return slug.includes("enneagram") ? "enneagram" : "big-five";
+}
+
 export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
   const router = useRouter();
+  const { messages } = useI18n();
   const clusterLinks = listClusterLinksForTopic(page.slug, page.locale, 4);
+  const funnelRef = buildDiscoverFunnelRef(page.locale, page.slug);
+  const plugPath = page.topic.plugPlayPath ?? page.topic.psychDiagnosisPath;
 
-  const handleIntakeSubmit = useCallback(
-    (userText: string) => {
-      const plugPath = page.topic.plugPlayPath;
-      const ref = `discover-${page.slug}`;
+  const trackFunnel = useCallback(
+    (event: "discover_funnel_submit" | "discover_funnel_direct") => {
+      trackDiagnosisEvent(event, {
+        ref: funnelRef,
+        funnelStep: "discover_submit",
+        locale: page.locale,
+        slug: page.slug,
+      });
+    },
+    [funnelRef, page.locale, page.slug],
+  );
 
+  const navigateToPlay = useCallback(
+    (userText: string | null, direct: boolean) => {
       if (plugPath) {
-        writePsychIntakeSeed({
-          topic: page.slug.includes("enneagram") ? "enneagram" : "big-five",
-          locale: page.locale,
-          userText,
-          keyword: page.copy.keyword,
-          createdAt: Date.now(),
-        });
+        if (userText) {
+          writePsychIntakeSeed({
+            topic: resolvePsychTopic(page.slug),
+            locale: page.locale,
+            userText,
+            keyword: page.copy.keyword,
+            createdAt: Date.now(),
+          });
+        }
+
         router.push(
-          `${plugPath}?lang=${page.locale}&ref=${encodeURIComponent(ref)}`,
+          buildDiscoverPlayHandoffUrl(plugPath, page.locale, page.slug, {
+            direct,
+          }),
         );
         return;
       }
 
-      if (page.topic.psychDiagnosisPath) {
-        writePsychIntakeSeed({
-          topic: page.slug.includes("enneagram") ? "enneagram" : "big-five",
+      if (userText) {
+        writeSatelliteIntake({
           locale: page.locale,
-          userText,
+          slug: page.slug,
           keyword: page.copy.keyword,
+          promptText: page.copy.promptLabel,
+          userText,
+          playDiagnosisId: page.topic.playDiagnosisId,
           createdAt: Date.now(),
         });
-        router.push(`${page.topic.psychDiagnosisPath}?lang=${page.locale}`);
-        return;
       }
 
-      writeSatelliteIntake({
-        locale: page.locale,
-        slug: page.slug,
-        keyword: page.copy.keyword,
-        promptText: page.copy.promptLabel,
-        userText,
-        playDiagnosisId: page.topic.playDiagnosisId,
-        createdAt: Date.now(),
-      });
-
-      router.push(buildPlayRoute(page.topic.playDiagnosisId));
+      router.push(
+        `${buildPlayRoute(page.topic.playDiagnosisId)}?lang=${page.locale}&ref=${encodeURIComponent(funnelRef)}`,
+      );
     },
-    [page, router],
+    [funnelRef, page, plugPath, router],
   );
+
+  const handleIntakeSubmit = useCallback(
+    (userText: string) => {
+      trackFunnel("discover_funnel_submit");
+      navigateToPlay(userText, false);
+    },
+    [navigateToPlay, trackFunnel],
+  );
+
+  const handleDirectStart = useCallback(() => {
+    trackFunnel("discover_funnel_direct");
+    navigateToPlay(null, true);
+  }, [navigateToPlay, trackFunnel]);
 
   return (
     <SatelliteLandingShell locale={page.locale} slug={page.slug}>
@@ -76,6 +108,20 @@ export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
         copy={page.copy}
         onSubmit={handleIntakeSubmit}
       />
+      {plugPath ? (
+        <div className="mx-auto mt-4 max-w-md text-center">
+          <button
+            type="button"
+            onClick={handleDirectStart}
+            className={cn(
+              rubelDs.glassCard,
+              "inline-flex min-h-11 w-full items-center justify-center px-4 py-3 text-sm font-medium text-indigo-200 hover:border-indigo-400/40",
+            )}
+          >
+            {messages.discoverFunnel.skipToQuiz}
+          </button>
+        </div>
+      ) : null}
       {clusterLinks.length > 0 ? (
         <nav
           className="mx-auto mt-8 max-w-md"
@@ -135,7 +181,7 @@ export function LandingHubClient({ locale, pages }: LandingHubClientProps) {
         <h1 className="text-2xl font-bold">{hubTitle}</h1>
         <p className="mt-2 text-sm text-slate-400">LibertyCanvas · AI × 性格診断 × 自由</p>
         <Link
-          href="/diagnosis"
+          href={`/diagnosis?lang=${locale}`}
           className={cn(
             rubelDs.primary,
             "mt-4 inline-flex min-h-11 w-full items-center justify-center text-sm font-semibold",
@@ -143,7 +189,11 @@ export function LandingHubClient({ locale, pages }: LandingHubClientProps) {
         >
           {locale === "ja"
             ? "宇宙キャラ診断カタログを見る →"
-            : "Explore cosmic diagnosis catalog →"}
+            : locale === "ko"
+              ? "우주 캐릭터 진단 카탈로그 →"
+              : locale === "zh"
+                ? "查看宇宙角色诊断目录 →"
+                : "Explore cosmic diagnosis catalog →"}
         </Link>
         <ul className="mt-6 space-y-3">
           {pages.map((entry) => (

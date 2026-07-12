@@ -10,7 +10,15 @@ const analyticsEventSchema = z.object({
   slug: z.string().optional(),
   ref: z.string().nullable().optional(),
   funnelStep: z
-    .enum(["discover_ref", "play_start", "result_view", "share", "search"])
+    .enum([
+      "discover_ref",
+      "discover_submit",
+      "discover_arrival",
+      "play_start",
+      "result_view",
+      "share",
+      "search",
+    ])
     .optional(),
   frameworkId: z.string().optional(),
   query: z.string().optional(),

@@ -5,7 +5,9 @@ import {
   type Locale,
 } from "@/lib/i18n/config";
 import {
+  EDGE_LOCALE_HEADER,
   LOCALE_STORAGE_KEY,
+  normalizeLocaleCandidate,
   resolveAppLocaleFromRequest,
 } from "@/lib/i18n/resolveAppLocale";
 import { buildRootMetadata } from "@/lib/seo/siteMetadata";
@@ -25,6 +27,11 @@ export const viewport: Viewport = {
 function resolveServerLocale(): Locale {
   const cookieStore = cookies();
   const headerStore = headers();
+  const edgeLocale = normalizeLocaleCandidate(headerStore.get(EDGE_LOCALE_HEADER));
+
+  if (edgeLocale) {
+    return edgeLocale;
+  }
 
   return resolveAppLocaleFromRequest({
     cookieLocale: cookieStore.get(LOCALE_STORAGE_KEY)?.value,

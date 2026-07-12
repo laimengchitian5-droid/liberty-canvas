@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveAppLocaleFromRequest } from "@/lib/i18n/resolveAppLocale";
+import { resolveAppLocaleFromRequest, resolveDiscoverPathLocale } from "@/lib/i18n/resolveAppLocale";
 
 describe("resolveAppLocaleFromRequest", () => {
   it("prefers query lang over cookie", () => {
@@ -9,6 +9,31 @@ describe("resolveAppLocaleFromRequest", () => {
         cookieLocale: "ja",
       }),
     ).toBe("ko");
+  });
+
+  it("prefers path locale over cookie when query is absent", () => {
+    expect(
+      resolveAppLocaleFromRequest({
+        pathLocale: "en",
+        cookieLocale: "ja",
+      }),
+    ).toBe("en");
+  });
+
+  it("prefers query lang over discover path locale", () => {
+    expect(
+      resolveAppLocaleFromRequest({
+        queryLang: "zh",
+        pathLocale: "ja",
+      }),
+    ).toBe("zh");
+  });
+
+  it("resolves discover path locale from pathname", () => {
+    expect(resolveDiscoverPathLocale("/discover/ko/mbti-personality-types")).toBe(
+      "ko",
+    );
+    expect(resolveDiscoverPathLocale("/diagnosis/play/romance")).toBeNull();
   });
 
   it("falls back to accept-language", () => {
