@@ -91,7 +91,7 @@ export function buildLandingMetadata(page: LandingPageDefinition): Metadata {
       type: "website",
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: page.copy.headline,
       description: page.copy.metaDescription,
     },

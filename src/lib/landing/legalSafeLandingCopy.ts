@@ -7,6 +7,8 @@ const LEGAL_DISCLAIMER: Record<LandingLocale, string> = {
   ja: "LibertyCanvas は学術的なビッグファイブ因子とオリジナルの Liberty アーキタイプを用います。商用ライセンス診断ではありません。",
   ko: "LibertyCanvas는 학술적 Big Five 요인과 오리지널 Liberty 아키타입을 사용합니다. 라이선스 성격검사가 아닙니다.",
   zh: "LibertyCanvas 使用学术大五因子与原创 Liberty 原型，非授权商用性格测验。",
+  fr: "LibertyCanvas utilise la science académique du Big Five et des archétypes Liberty originaux — pas d'instruments propriétaires sous licence.",
+  de: "LibertyCanvas nutzt akademische Big-Five-Trait-Wissenschaft und originale Liberty-Archetypen — keine lizenzierten proprietären Typinstrumente.",
 };
 
 type LegalOverrideMatrix = Partial<

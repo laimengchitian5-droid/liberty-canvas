@@ -8,13 +8,13 @@ import { buildLandingIntakeOutcome } from "@/lib/landing/landingIntakeBridge";
 import { getSeedDiagnosisById } from "@/lib/rubel/repository";
 
 describe("landingCatalog", () => {
-  it("generates 40 static params (10 topics × 4 locales)", () => {
-    expect(listLandingStaticParams()).toHaveLength(40);
+  it("generates 60 static params (10 topics × 6 locales)", () => {
+    expect(listLandingStaticParams()).toHaveLength(60);
   });
 
   it("lists all landing pages with absolute urls", () => {
     const pages = listAllLandingPages();
-    expect(pages).toHaveLength(40);
+    expect(pages).toHaveLength(60);
     expect(pages[0]?.absoluteUrl).toContain("/discover/");
   });
 
@@ -25,6 +25,15 @@ describe("landingCatalog", () => {
 
     const jaPage = buildLandingPageDefinition("ja", "sixteen-personalities");
     expect(jaPage?.copy.headline).not.toMatch(/16Personalities|MBTI/i);
+  });
+
+  it("serves fr/de discover copy without trademark terms", () => {
+    const frPage = buildLandingPageDefinition("fr", "mbti-personality-types");
+    expect(frPage?.copy.headline).toContain("cosmique");
+    expect(frPage?.copy.title).toMatch(/1 réponse/i);
+
+    const dePage = buildLandingPageDefinition("de", "enneagram-nine-types");
+    expect(dePage?.copy.headline).not.toMatch(/Enneagramm|MBTI/i);
   });
 });
 

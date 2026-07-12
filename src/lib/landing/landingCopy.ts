@@ -1,6 +1,9 @@
-import type { LandingLocale } from "@/lib/landing/landingLocales";
-import type { LandingTopicSlug } from "@/lib/landing/landingTopics";
+import type { LandingLocale, CoreLandingLocale } from "@/lib/landing/landingLocales";
+import { isEuropeanDiscoverLocale } from "@/lib/landing/landingLocales";
+import { getDiscoverCopyFrDe } from "@/lib/landing/discoverCopyFrDe";
 import { getLegalSafeLandingCopy } from "@/lib/landing/legalSafeLandingCopy";
+import { applySerpClickPack } from "@/lib/landing/serpClickPack";
+import type { LandingTopicSlug } from "@/lib/landing/landingTopics";
 
 export interface LandingFaqItem {
   question: string;
@@ -23,7 +26,7 @@ export interface LandingPageCopy {
   faq: LandingFaqItem[];
 }
 
-type CopyMatrix = Record<LandingTopicSlug, Record<LandingLocale, LandingPageCopy>>;
+type CopyMatrix = Record<LandingTopicSlug, Record<CoreLandingLocale, LandingPageCopy>>;
 
 export const LANDING_COPY: CopyMatrix = {
   "big-five-ocean": {
@@ -1183,5 +1186,12 @@ export function getLandingCopy(
   slug: LandingTopicSlug,
   locale: LandingLocale,
 ): LandingPageCopy {
-  return getLegalSafeLandingCopy(slug, locale) ?? LANDING_COPY[slug][locale];
+  if (isEuropeanDiscoverLocale(locale)) {
+    return applySerpClickPack(slug, locale, getDiscoverCopyFrDe(slug, locale));
+  }
+
+  const copy =
+    getLegalSafeLandingCopy(slug, locale) ?? LANDING_COPY[slug][locale as CoreLandingLocale];
+
+  return applySerpClickPack(slug, locale, copy);
 }

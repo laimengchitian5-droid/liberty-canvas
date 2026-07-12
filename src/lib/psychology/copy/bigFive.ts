@@ -1,8 +1,9 @@
-import type { LandingLocale } from "@/lib/landing/landingLocales";
+import type { CoreLandingLocale, LandingLocale } from "@/lib/landing/landingLocales";
+import { resolveCoreLandingLocale } from "@/lib/landing/landingLocales";
 import type { BigFiveLocaleCopy } from "@/lib/psychology/types";
 
 const SHARED_FAQ: Record<
-  LandingLocale,
+  CoreLandingLocale,
   Array<{ question: string; answer: string }>
 > = {
   en: [
@@ -55,7 +56,7 @@ const SHARED_FAQ: Record<
   ],
 };
 
-export const BIG_FIVE_COPY: Record<LandingLocale, BigFiveLocaleCopy> = {
+export const BIG_FIVE_COPY: Record<CoreLandingLocale, BigFiveLocaleCopy> = {
   en: {
     locale: "en",
     keyword: "Big Five OCEAN Personality Test",
@@ -279,5 +280,12 @@ export const BIG_FIVE_COPY: Record<LandingLocale, BigFiveLocaleCopy> = {
 };
 
 export function getBigFiveCopy(locale: LandingLocale): BigFiveLocaleCopy {
-  return BIG_FIVE_COPY[locale];
+  const coreLocale = resolveCoreLandingLocale(locale);
+  const copy = BIG_FIVE_COPY[coreLocale];
+
+  if (coreLocale === locale) {
+    return copy;
+  }
+
+  return { ...copy, locale };
 }

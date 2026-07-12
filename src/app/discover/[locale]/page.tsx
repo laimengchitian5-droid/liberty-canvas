@@ -7,6 +7,7 @@ import {
   isLandingLocale,
   type LandingLocale,
 } from "@/lib/landing/landingLocales";
+import { PRODUCT_NAME } from "@/lib/brand/constants";
 import { LANDING_TOPIC_SLUGS } from "@/lib/landing/landingTopics";
 import { notFound } from "next/navigation";
 
@@ -24,14 +25,16 @@ export async function generateMetadata({
   const { locale } = await params;
 
   if (!isLandingLocale(locale)) {
-    return { title: "Discover | Rubel Canvas" };
+    return { title: `Discover | ${PRODUCT_NAME}` };
   }
 
   const titles: Record<LandingLocale, string> = {
-    en: "Global Personality Tests — Rubel Canvas Discover",
-    ja: "世界の性格診断キーワード — Rubel Canvas Discover",
-    ko: "글로벌 성격 검사 키워드 — Rubel Canvas Discover",
-    zh: "全球性格测试关键词 — Rubel Canvas Discover",
+    en: "Global Personality Tests — LibertyCanvas Discover",
+    ja: "世界の性格診断キーワード — LibertyCanvas Discover",
+    ko: "글로벌 성격 검사 키워드 — LibertyCanvas Discover",
+    zh: "全球性格测试关键词 — LibertyCanvas Discover",
+    fr: "Tests de personnalité mondiaux — LibertyCanvas Discover",
+    de: "Globale Persönlichkeitstests — LibertyCanvas Discover",
   };
 
   return {
@@ -66,7 +69,7 @@ export default async function DiscoverLocaleHub({ params }: DiscoverLocaleHubPro
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            name: `Rubel Canvas Discover (${locale})`,
+            name: `${PRODUCT_NAME} Discover (${locale})`,
             inLanguage: LANDING_LOCALE_META[locale].htmlLang,
             hasPart: pages.map((entry) => ({
               "@type": "WebPage",

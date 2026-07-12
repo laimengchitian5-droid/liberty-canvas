@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { listAllLandingPages } from "@/lib/landing/landingCatalog";
+import { LANDING_LOCALES } from "@/lib/landing/landingLocales";
 import { listMergedPlugDiagnosisSlugs } from "@/lib/builder/plugCatalog";
 import { buildDiagnosisResultPageUrl } from "@/lib/diagnosis/share";
 import { listPlugDiagnosisSlugs } from "@/config/diagnoses";
@@ -62,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
-    ...["en", "ja", "ko", "zh"].map((locale) => ({
+    ...LANDING_LOCALES.map((locale) => ({
       url: `${siteUrl}/discover/${locale}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,

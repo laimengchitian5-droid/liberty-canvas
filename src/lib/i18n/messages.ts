@@ -302,6 +302,24 @@ const DISCOVER_FUNNEL_ZH: DiscoverFunnelMessages = {
   localeBadge: "显示语言",
 };
 
+const DISCOVER_FUNNEL_FR: DiscoverFunnelMessages = {
+  skipToQuiz: "Commencer le quiz complet sans écrire →",
+  handoffEyebrow: "LibertyCanvas · Discover",
+  handoffTitle: "Votre réponse est prête pour le diagnostic cosmique",
+  handoffLead: "Langue et réponse conservées — appuyez ci-dessous pour commencer.",
+  yourAnswerLabel: "Votre réponse",
+  localeBadge: "Langue",
+};
+
+const DISCOVER_FUNNEL_DE: DiscoverFunnelMessages = {
+  skipToQuiz: "Vollständiges Quiz ohne Eingabe starten →",
+  handoffEyebrow: "LibertyCanvas · Discover",
+  handoffTitle: "Ihre Antwort ist bereit für die Kosmos-Diagnose",
+  handoffLead: "Sprache und Antwort beibehalten — unten tippen zum Start.",
+  yourAnswerLabel: "Ihre Antwort",
+  localeBadge: "Sprache",
+};
+
 const COMPILER_INTRO_ZH: CompilerIntroMessages = {
   startLabel: (minutes) => `开始诊断（约 ${minutes} 分钟）`,
   tagsGroupAria: "诊断标签",
@@ -765,7 +783,7 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     nav: NAV_EN,
     rubelPlay: PLAY_EN,
     plugBridge: PLUG_BRIDGE_EN,
-    discoverFunnel: DISCOVER_FUNNEL_EN,
+    discoverFunnel: DISCOVER_FUNNEL_DE,
     compilerIntro: COMPILER_INTRO_EN,
     feed: FEED_EN,
     header: HEADER_EN,
@@ -799,7 +817,7 @@ const MESSAGES: Record<Locale, LocaleMessages> = {
     },
     rubelPlay: PLAY_FR,
     plugBridge: PLUG_BRIDGE_EN,
-    discoverFunnel: DISCOVER_FUNNEL_EN,
+    discoverFunnel: DISCOVER_FUNNEL_FR,
     compilerIntro: COMPILER_INTRO_EN,
     feed: FEED_EN,
     header: { ...HEADER_EN, create: "Créer" },

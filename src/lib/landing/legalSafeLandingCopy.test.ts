@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { getLandingCopy } from "@/lib/landing/landingCopy";
 import { LANDING_LOCALES } from "@/lib/landing/landingLocales";
 
-const TRADEMARK_PATTERN = /MBTI|INFP|Enneagram|16Personalities|16personalities|エニアグラム|九型人格|에니어그램/i;
+const TRADEMARK_PATTERN =
+  /MBTI|INFP|Enneagram|Enneagramm|Énéagramme|16Personalities|16personalities|エニアグラム|九型人格|에니어그램/i;
 
 const LEGAL_SHIELD_SLUGS = [
   "enneagram-nine-types",

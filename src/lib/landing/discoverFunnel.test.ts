@@ -38,7 +38,9 @@ describe("discoverFunnel", () => {
   it("resolves handoff display locale from query with fallback", () => {
     expect(resolveHandoffDisplayLocale("ko", "ja")).toBe("ko");
     expect(resolveHandoffDisplayLocale(null, "ja")).toBe("ja");
-    expect(toLandingLocale("fr")).toBeNull();
+    expect(toLandingLocale("fr")).toBe("fr");
+    expect(toLandingLocale("de")).toBe("de");
+    expect(toLandingLocale("ar")).toBeNull();
     expect(toLandingLocale("zh")).toBe("zh");
   });
 });

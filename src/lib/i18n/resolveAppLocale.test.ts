@@ -33,6 +33,10 @@ describe("resolveAppLocaleFromRequest", () => {
     expect(resolveDiscoverPathLocale("/discover/ko/mbti-personality-types")).toBe(
       "ko",
     );
+    expect(resolveDiscoverPathLocale("/discover/fr/enneagram-nine-types")).toBe(
+      "fr",
+    );
+    expect(resolveDiscoverPathLocale("/discover/de/big-five-ocean")).toBe("de");
     expect(resolveDiscoverPathLocale("/diagnosis/play/romance")).toBeNull();
   });
 

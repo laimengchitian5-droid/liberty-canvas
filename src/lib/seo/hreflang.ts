@@ -1,9 +1,10 @@
+import { LANDING_LOCALES, type LandingLocale } from "@/lib/landing/landingLocales";
 import { getSiteUrl } from "@/lib/site/url";
 
 /** Locales exposed in hreflang alternates (discover + landing matrix). */
-export const HREFLANG_LOCALES = ["ja", "en", "ko", "zh"] as const;
+export const HREFLANG_LOCALES = LANDING_LOCALES;
 
-export type HreflangLocale = (typeof HREFLANG_LOCALES)[number];
+export type HreflangLocale = LandingLocale;
 
 export function buildHreflangAlternates(
   path: string,

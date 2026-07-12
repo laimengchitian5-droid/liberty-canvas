@@ -1,4 +1,5 @@
-import type { LandingLocale } from "@/lib/landing/landingLocales";
+import type { CoreLandingLocale, LandingLocale } from "@/lib/landing/landingLocales";
+import { resolveCoreLandingLocale } from "@/lib/landing/landingLocales";
 import type { EnneagramLocaleCopy, EnneagramTypeDefinition } from "@/lib/psychology/types";
 
 function typesEn(): EnneagramTypeDefinition[] {
@@ -57,7 +58,7 @@ function typesZh(): EnneagramTypeDefinition[] {
   ];
 }
 
-export const ENNEAGRAM_COPY: Record<LandingLocale, EnneagramLocaleCopy> = {
+export const ENNEAGRAM_COPY: Record<CoreLandingLocale, EnneagramLocaleCopy> = {
   en: {
     locale: "en",
     keyword: "Motivation Spectrum Personality Test",
@@ -169,5 +170,12 @@ export const ENNEAGRAM_COPY: Record<LandingLocale, EnneagramLocaleCopy> = {
 };
 
 export function getEnneagramCopy(locale: LandingLocale): EnneagramLocaleCopy {
-  return ENNEAGRAM_COPY[locale];
+  const coreLocale = resolveCoreLandingLocale(locale);
+  const copy = ENNEAGRAM_COPY[coreLocale];
+
+  if (coreLocale === locale) {
+    return copy;
+  }
+
+  return { ...copy, locale };
 }
