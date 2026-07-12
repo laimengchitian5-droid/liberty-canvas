@@ -12,9 +12,9 @@ const SHARED_FAQ: Record<
         "Yes. Rubel Canvas is a no-login, all-affirming AI personality experience — Lu (Liberate) + Bel (Beautiful) = your inner canvas.",
     },
     {
-      question: "How is this different from 16Personalities?",
+      question: "How is this different from other type quizzes?",
       answer:
-        "We focus on OCEAN science with an empathetic AI chat that quotes your exact answers — a free alternative built for emotional validation.",
+        "We focus on OCEAN science with an empathetic AI chat that quotes your exact answers — built for emotional validation on LibertyCanvas.",
     },
   ],
   ja: [
@@ -24,9 +24,9 @@ const SHARED_FAQ: Record<
         "はい。Rubel Canvas はログイン不要の全肯定 AI 性格診断です。Lu（Liberate）+ Bel（Beautiful）= あなたの内面キャンバス。",
     },
     {
-      question: "16Personalities との違いは？",
+      question: "他のタイプ診断との違いは？",
       answer:
-        "OCEAN 科学指標に基づき、あなたの選択をそのまま引用する共感的 AI チャットが特徴の無料代替サービスです。",
+        "OCEAN 科学指標に基づき、あなたの選択をそのまま引用する共感的 AI チャットが特徴の LibertyCanvas 体験です。",
     },
   ],
   ko: [
@@ -36,9 +36,9 @@ const SHARED_FAQ: Record<
         "네. Rubel Canvas는 로그인 없이 이용하는 전격 긍정 AI 성격 진단입니다.",
     },
     {
-      question: "16Personalities와 무엇이 다른가요?",
+      question: "다른 유형 검사와 무엇이 다른가요?",
       answer:
-        "OCEAN 과학 지표와 공감형 AI 채팅을 결합한 무료 대안입니다.",
+        "OCEAN 과학 지표와 공감형 AI 채팅을 결합한 LibertyCanvas 경험입니다.",
     },
   ],
   zh: [
@@ -48,9 +48,9 @@ const SHARED_FAQ: Record<
         "是的。Rubel Canvas 是无需登录的全肯定 AI 性格测试。",
     },
     {
-      question: "与 16Personalities 有何不同？",
+      question: "与其他类型测验有何不同？",
       answer:
-        "基于 OCEAN 科学指标，并提供引用你原话的共情 AI 聊天——免费替代方案。",
+        "基于 OCEAN 科学指标，并提供引用你原话的共情 AI 聊天——LibertyCanvas 原创体验。",
     },
   ],
 };

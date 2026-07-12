@@ -18,10 +18,13 @@ describe("landingCatalog", () => {
     expect(pages[0]?.absoluteUrl).toContain("/discover/");
   });
 
-  it("resolves sixteen-personalities ja page", () => {
-    const page = buildLandingPageDefinition("ja", "sixteen-personalities");
-    expect(page?.copy.headline).toContain("16Personalities");
-    expect(page?.topic.plugPlayPath).toBe("/diagnosis/play/personality-spectrum");
+  it("resolves sixteen-personalities with legal-safe copy", () => {
+    const enPage = buildLandingPageDefinition("en", "sixteen-personalities");
+    expect(enPage?.copy.headline).toContain("cosmic character");
+    expect(enPage?.topic.plugPlayPath).toBe("/diagnosis/play/personality-spectrum");
+
+    const jaPage = buildLandingPageDefinition("ja", "sixteen-personalities");
+    expect(jaPage?.copy.headline).not.toMatch(/16Personalities|MBTI/i);
   });
 });
 
@@ -33,7 +36,7 @@ describe("buildLandingIntakeOutcome", () => {
     const outcome = buildLandingIntakeOutcome(diagnosis!, {
       locale: "en",
       slug: "sixteen-personalities",
-      keyword: "16Personalities",
+      keyword: "Personality Spectrum",
       promptText: "How do you recharge?",
       userText: "I need solo time with books after parties.",
       playDiagnosisId: diagnosis!.id,

@@ -1,5 +1,6 @@
 import type { LandingLocale } from "@/lib/landing/landingLocales";
 import type { LandingTopicSlug } from "@/lib/landing/landingTopics";
+import { getLegalSafeLandingCopy } from "@/lib/landing/legalSafeLandingCopy";
 
 export interface LandingFaqItem {
   question: string;
@@ -1182,5 +1183,5 @@ export function getLandingCopy(
   slug: LandingTopicSlug,
   locale: LandingLocale,
 ): LandingPageCopy {
-  return LANDING_COPY[slug][locale];
+  return getLegalSafeLandingCopy(slug, locale) ?? LANDING_COPY[slug][locale];
 }

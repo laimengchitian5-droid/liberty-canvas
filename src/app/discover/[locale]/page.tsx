@@ -37,7 +37,7 @@ export async function generateMetadata({
   return {
     title: titles[locale],
     description:
-      "Programmatic SEO landing pages for Big Five, Enneagram, 16Personalities, MBTI and more. One answer → Rubel Canvas AI engine.",
+      "Programmatic SEO landing pages for Big Five, Motivation Spectrum, Personality Spectrum and more. One answer → LibertyCanvas AI engine.",
     alternates: {
       languages: Object.fromEntries(
         LANDING_LOCALES.map((code) => [code, `/discover/${code}`]),

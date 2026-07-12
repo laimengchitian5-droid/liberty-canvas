@@ -19,7 +19,7 @@ const HIGH_VALUE_KEYWORDS = [
 
   "Empathetic Personality Test",
 
-  "16Personalities Free Alternative",
+  "Free Personality Spectrum Test",
 
   "No-Login Personality Diagnosis",
 
@@ -39,7 +39,7 @@ const HIGH_VALUE_KEYWORDS = [
 
   "Big Five",
 
-  "Enneagram",
+  "Motivation Spectrum",
 
   "OCEAN",
 
@@ -93,7 +93,7 @@ export function buildHomeKeywords(): string[] {
 
     "1問 性格診断",
 
-    "16personalities 日本語",
+    "性格タイプ 診断 無料",
 
     "裏性格診断",
 
@@ -313,7 +313,7 @@ export function buildHomeJsonLd(diagnosisCount: number) {
 
           "No-Login Personality Diagnosis",
 
-          "16Personalities Free Alternative",
+          "Free Personality Spectrum Test",
 
           "全肯定 AI チャット",
 
@@ -323,7 +323,7 @@ export function buildHomeJsonLd(diagnosisCount: number) {
 
           "Big Five OCEAN entry",
 
-          "Enneagram nine-types entry",
+          "Motivation Spectrum entry",
 
         ],
 
@@ -377,13 +377,13 @@ export function buildHomeJsonLd(diagnosisCount: number) {
 
             "@type": "Question",
 
-            name: "Is Rubel Canvas a free 16Personalities alternative?",
+            name: "Is LibertyCanvas a free personality test alternative?",
 
             acceptedAnswer: {
 
               "@type": "Answer",
 
-              text: "Yes. Rubel Canvas offers no-login empathetic personality tests with all-affirming AI chat — a free alternative built for emotional validation.",
+              text: "Yes. LibertyCanvas offers no-login empathetic personality tests with all-affirming AI chat — built on academic Big Five science and original Liberty archetypes.",
 
             },
 
@@ -409,13 +409,13 @@ export function buildHomeJsonLd(diagnosisCount: number) {
 
             "@type": "Question",
 
-            name: "Where are Big Five and Enneagram tests?",
+            name: "Where are Big Five and Motivation Spectrum tests?",
 
             acceptedAnswer: {
 
               "@type": "Answer",
 
-              text: `Big Five OCEAN: ${siteUrl}/diagnosis/big-five. Enneagram 9 Types: ${siteUrl}/diagnosis/enneagram. Both are free, multilingual, and powered by Qwen AI.`,
+              text: `Big Five OCEAN: ${siteUrl}/diagnosis/play/big-five. Motivation Spectrum: ${siteUrl}/diagnosis/play/motivation-spectrum. Both are free, multilingual, and powered by affirming AI on LibertyCanvas.`,
 
             },
 
@@ -443,7 +443,7 @@ export function buildHomeJsonLd(diagnosisCount: number) {
 
             name: "Big Five OCEAN Personality Test",
 
-            url: `${siteUrl}/diagnosis/big-five`,
+            url: `${siteUrl}/diagnosis/play/big-five`,
 
           },
 
@@ -453,9 +453,9 @@ export function buildHomeJsonLd(diagnosisCount: number) {
 
             position: 2,
 
-            name: "Enneagram Nine Types Personality Test",
+            name: "Motivation Spectrum Personality Test",
 
-            url: `${siteUrl}/diagnosis/enneagram`,
+            url: `${siteUrl}/diagnosis/play/motivation-spectrum`,
 
           },
 

@@ -46,7 +46,7 @@ export const LANDING_TOPICS: LandingTopicConfig[] = [
     psychDiagnosisPath: "/diagnosis/play/motivation-spectrum",
     schemaType: "Quiz",
     searchIntent: "informational",
-    searchTags: ["enneagram", "9 types", "motivation", "エニアグラム"],
+    searchTags: ["motivation spectrum", "9 patterns", "drive", "動機", "personality science"],
   },
   {
     slug: "sixteen-personalities",
@@ -54,7 +54,7 @@ export const LANDING_TOPICS: LandingTopicConfig[] = [
     plugPlayPath: "/diagnosis/play/personality-spectrum",
     schemaType: "Quiz",
     searchIntent: "commercial",
-    searchTags: ["16personalities", "personality types", "free test"],
+    searchTags: ["personality spectrum", "four axis", "trait radar", "free test"],
   },
   {
     slug: "mbti-personality-types",
@@ -62,7 +62,7 @@ export const LANDING_TOPICS: LandingTopicConfig[] = [
     plugPlayPath: "/diagnosis/play/personality-spectrum",
     schemaType: "Quiz",
     searchIntent: "commercial",
-    searchTags: ["mbti", "personality types", "jungian"],
+    searchTags: ["personality spectrum", "trait axes", "type finder", "性格タイプ"],
   },
   {
     slug: "introvert-personality",

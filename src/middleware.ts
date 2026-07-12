@@ -10,6 +10,10 @@ import {
   resolveAppLocaleFromRequest,
 } from "@/lib/i18n/resolveAppLocale";
 import { applyEdgeSeoHeaders, isSearchCrawler, normalizeRefParam } from "@/lib/seo/edgeSeo";
+import {
+  buildLegacyRedirectUrl,
+  resolveLegacyDiagnosisRedirect,
+} from "@/lib/seo/legacyRouteMatrix";
 import { postCrawlerVisitFromEdge } from "@/lib/catalog/crawlerAnalyticsEdge";
 import {
   isRubelConvergeRedirectEnabled,
@@ -96,6 +100,13 @@ async function handleUserApiGate(request: NextRequest): Promise<NextResponse> {
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api/users/")) {
     return handleUserApiGate(request);
+  }
+
+  const legacyTarget = resolveLegacyDiagnosisRedirect(request.nextUrl.pathname);
+
+  if (legacyTarget) {
+    const redirectUrl = buildLegacyRedirectUrl(request.nextUrl, legacyTarget);
+    return NextResponse.redirect(redirectUrl, 308);
   }
 
   if (isRubelConvergeRedirectEnabled()) {

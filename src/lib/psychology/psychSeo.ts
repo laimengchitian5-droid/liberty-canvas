@@ -44,7 +44,7 @@ export function buildPsychPageKeywords(topic: PsychTopicSlug): string[] {
   const base = [
     "All-Affirming AI Chat",
     "Empathetic Personality Test",
-    "16Personalities Free Alternative",
+    "Free Personality Spectrum Test",
     "No-Login Personality Diagnosis",
     "AI 性格診断",
     "全肯定 AI チャット",
@@ -56,7 +56,7 @@ export function buildPsychPageKeywords(topic: PsychTopicSlug): string[] {
     return [...base, "Big Five", "OCEAN", "ビッグファイブ", "大五人格", "빅파이브"];
   }
 
-  return [...base, "Enneagram", "九型人格", "エニアグラム", "에니어그램"];
+  return [...base, "Motivation Spectrum", "動機スペクトル", "动机光谱", "동기 스펙트럼"];
 }
 
 export function buildPsychPageMetadata(topic: PsychTopicSlug): Metadata {

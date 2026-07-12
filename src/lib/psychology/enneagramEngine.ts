@@ -25,8 +25,8 @@ export function formatEnneagramShareText(
 ): string {
   const url =
     locale === "ja"
-      ? "https://liberty-canvas.vercel.app/diagnosis/enneagram"
-      : `https://liberty-canvas.vercel.app/diagnosis/enneagram?lang=${locale}`;
+      ? "https://liberty-canvas.vercel.app/diagnosis/play/motivation-spectrum"
+      : `https://liberty-canvas.vercel.app/diagnosis/play/motivation-spectrum?lang=${locale}`;
 
-  return `${result.typeName}\n${result.summary}\n${url}\n#RubelCanvas #Enneagram`;
+  return `${result.typeName}\n${result.summary}\n${url}\n#LibertyCanvas #MotivationSpectrum`;
 }
