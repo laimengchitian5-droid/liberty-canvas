@@ -1,5 +1,9 @@
 import { appendAnalyticsEvent } from "@/lib/diagnosis/analyticsServer";
+import type { StoredAnalyticsEvent } from "@/lib/diagnosis/analyticsServer";
 import type { CatalogSearchBackend } from "@/lib/catalog/searchConfig";
+import { buildCrawlerVisitPayload } from "@/lib/catalog/crawlerAnalyticsEdge";
+
+export { buildCrawlerVisitPayload, postCrawlerVisitFromEdge } from "@/lib/catalog/crawlerAnalyticsEdge";
 
 export async function logCatalogSearchEvent(input: {
   query: string;
@@ -28,14 +32,9 @@ export async function logCrawlerVisitEvent(input: {
   userAgent: string | null;
 }): Promise<void> {
   try {
-    await appendAnalyticsEvent({
-      event: "crawler_visit",
-      at: new Date().toISOString(),
-      pathname: input.pathname.slice(0, 180),
-      ref: input.ref,
-      userAgent: input.userAgent?.slice(0, 180),
-      funnelStep: "discover_ref",
-    });
+    await appendAnalyticsEvent(
+      buildCrawlerVisitPayload(input) as StoredAnalyticsEvent,
+    );
   } catch {
     // non-blocking
   }

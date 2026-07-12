@@ -27,12 +27,23 @@ export interface SearchAnalyticsReport {
   backendCounts: Record<string, number>;
 }
 
+export interface RubelBridgeReport {
+  impressions: number;
+  clicks: number;
+  handoffsReceived: number;
+  plugStartsFromBridge: number;
+  /** plugStartsFromBridge / clicks when clicks > 0 */
+  clickToPlayRate: number | null;
+}
+
 export interface AnalyticsInsightsSummary {
   totals: Record<string, number>;
   bySlug: Record<string, Record<string, number>>;
+  byRef: Record<string, number>;
   variantReports: AnalyticsVariantReport[];
   funnel: ShareFunnelReport;
   search: SearchAnalyticsReport;
+  bridge: RubelBridgeReport;
   recentEvents: StoredAnalyticsEvent[];
 }
 
@@ -119,6 +130,59 @@ function buildSearchAnalyticsReport(
   };
 }
 
+function buildRubelBridgeReport(events: readonly StoredAnalyticsEvent[]): RubelBridgeReport {
+  let impressions = 0;
+  let clicks = 0;
+  let handoffsReceived = 0;
+  let plugStartsFromBridge = 0;
+
+  for (const entry of events) {
+    if (entry.event === "rubel_bridge_impression") {
+      impressions += 1;
+    }
+
+    if (entry.event === "rubel_bridge_click") {
+      clicks += 1;
+    }
+
+    if (entry.event === "rubel_bridge_handoff_received") {
+      handoffsReceived += 1;
+    }
+
+    if (
+      entry.event === "diagnosis_started" &&
+      entry.ref === "rubel-bridge"
+    ) {
+      plugStartsFromBridge += 1;
+    }
+  }
+
+  return {
+    impressions,
+    clicks,
+    handoffsReceived,
+    plugStartsFromBridge,
+    clickToPlayRate:
+      clicks > 0 ? Math.round((plugStartsFromBridge / clicks) * 1000) / 10 : null,
+  };
+}
+
+function buildByRefReport(events: readonly StoredAnalyticsEvent[]): Record<string, number> {
+  const byRef: Record<string, number> = {};
+
+  for (const entry of events) {
+    const ref = typeof entry.ref === "string" ? entry.ref : null;
+
+    if (!ref) {
+      continue;
+    }
+
+    byRef[ref] = (byRef[ref] ?? 0) + 1;
+  }
+
+  return byRef;
+}
+
 export async function buildAnalyticsInsights(): Promise<AnalyticsInsightsSummary> {
   const events = await readEvents();
   const totals: Record<string, number> = {};
@@ -163,11 +227,13 @@ export async function buildAnalyticsInsights(): Promise<AnalyticsInsightsSummary
   return {
     totals,
     bySlug,
+    byRef: buildByRefReport(events),
     variantReports,
     funnel: buildShareFunnelReport(events),
     search: buildSearchAnalyticsReport(events),
+    bridge: buildRubelBridgeReport(events),
     recentEvents: events.slice(-20).reverse(),
   };
 }
 
-export { buildShareFunnelReport };
+export { buildShareFunnelReport, buildRubelBridgeReport };

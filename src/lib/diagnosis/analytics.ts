@@ -1,4 +1,5 @@
 import type { DiagnosisResult } from "@/types/diagnosis";
+import { hasAnalyticsConsent } from "@/lib/privacy/consent";
 
 export type DiagnosisAnalyticsEvent =
   | "diagnosis_ref_captured"
@@ -21,6 +22,11 @@ export type DiagnosisAnalyticsEvent =
   | "plug_result_completed"
   | "catalog_search"
   | "crawler_visit"
+  | "rubel_play_started"
+  | "rubel_play_completed"
+  | "rubel_bridge_impression"
+  | "rubel_bridge_click"
+  | "rubel_bridge_handoff_received"
   | "builder_draft_saved"
   | "builder_preview_started";
 
@@ -41,6 +47,18 @@ export interface DiagnosisAnalyticsPayload {
 }
 
 const LOG_KEY = "lc-diagnosis-events";
+
+function canTrackClientAnalytics(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  if (window.__personalityQuizAnalyticsEnabled === true) {
+    return true;
+  }
+
+  return hasAnalyticsConsent();
+}
 
 function flushAnalyticsToServer(entry: Record<string, unknown>): void {
   if (typeof window === "undefined") {
@@ -77,6 +95,10 @@ export function trackDiagnosisEvent(
   payload: DiagnosisAnalyticsPayload = {},
 ): void {
   if (typeof window === "undefined") {
+    return;
+  }
+
+  if (!canTrackClientAnalytics()) {
     return;
   }
 

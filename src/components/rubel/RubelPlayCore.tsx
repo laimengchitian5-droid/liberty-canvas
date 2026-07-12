@@ -17,9 +17,11 @@ import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
 import { requestRubelHfReply } from "@/lib/rubel/network/rubelHfClient";
 import { extractResultData } from "@/lib/rubel/resultData";
 import { buildShareText, getResultEditorial } from "@/lib/rubel/resultEditorial";
+import { suggestPlugDiagnosisSlug } from "@/lib/rubel/suggestPlugDiagnosisSlug";
 import { cn } from "@/lib/utils/cn";
 import type { Diagnosis, PlayOutcome, TraitVector } from "@/types/rubel";
 import { PlugCosmicBridgeCta } from "@/components/rubel/PlugCosmicBridgeCta";
+import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 
 type Phase = "quiz" | "reveal" | "chat";
 
@@ -69,6 +71,11 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
       setEnginePayload(payload ?? extractResultData(diagnosis, outcome));
       setWinningResultName(outcome.winningResult.name);
       setPhase("reveal");
+      trackDiagnosisEvent("rubel_play_completed", {
+        rubelDiagnosisId: diagnosis.id,
+        slug: suggestPlugDiagnosisSlug(outcome.profile),
+        funnelStep: "result_view",
+      });
     },
     [diagnosis, onPlayComplete],
   );
@@ -109,8 +116,12 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
     if (!hasAutoStarted && diagnosis.questions.length > 0) {
       startQuiz();
       setHasAutoStarted(true);
+      trackDiagnosisEvent("rubel_play_started", {
+        rubelDiagnosisId: diagnosis.id,
+        funnelStep: "play_start",
+      });
     }
-  }, [diagnosis.questions.length, hasAutoStarted, startQuiz]);
+  }, [diagnosis.id, diagnosis.questions.length, hasAutoStarted, startQuiz]);
 
   useEffect(() => {
     if (phase !== "reveal") {
@@ -294,7 +305,10 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
               </button>
               {traitProfile ? (
                 <div className="mt-4">
-                  <PlugCosmicBridgeCta profile={traitProfile} />
+                  <PlugCosmicBridgeCta
+                    profile={traitProfile}
+                    rubelDiagnosisId={diagnosis.id}
+                  />
                 </div>
               ) : null}
             </div>
@@ -374,7 +388,11 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
                 </p>
               ) : null}
               {traitProfile ? (
-                <PlugCosmicBridgeCta profile={traitProfile} className="mt-3" />
+                <PlugCosmicBridgeCta
+                  profile={traitProfile}
+                  rubelDiagnosisId={diagnosis.id}
+                  className="mt-3"
+                />
               ) : null}
               <button
                 type="button"

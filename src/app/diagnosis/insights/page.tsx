@@ -102,6 +102,70 @@ export default async function DiagnosisInsightsPage() {
           ) : (
             <p className={styles.empty}>検索クエリはまだありません。</p>
           )}
+          {Object.keys(insights.search.backendCounts).length > 0 ? (
+            <ul className={styles.metricList}>
+              {Object.entries(insights.search.backendCounts).map(([backend, count]) => (
+                <li key={backend}>
+                  <span>backend: {backend}</span>
+                  <strong>{count}</strong>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </section>
+
+        <section className={styles.panel} aria-labelledby="bridge-heading">
+          <h2 id="bridge-heading" className={styles.panelTitle}>
+            Rubel → Plug ブリッジ
+          </h2>
+          <ul className={styles.kpiGrid}>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Impression</span>
+              <strong className={styles.kpiValue}>{insights.bridge.impressions}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Click</span>
+              <strong className={styles.kpiValue}>{insights.bridge.clicks}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Handoff</span>
+              <strong className={styles.kpiValue}>{insights.bridge.handoffsReceived}</strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Plug 開始</span>
+              <strong className={styles.kpiValue}>
+                {insights.bridge.plugStartsFromBridge}
+              </strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Click→Play 率</span>
+              <strong className={styles.kpiValue}>
+                {insights.bridge.clickToPlayRate !== null
+                  ? `${insights.bridge.clickToPlayRate}%`
+                  : "—"}
+              </strong>
+            </li>
+          </ul>
+        </section>
+
+        <section className={styles.panel} aria-labelledby="ref-heading">
+          <h2 id="ref-heading" className={styles.panelTitle}>
+            Ref 別トラフィック
+          </h2>
+          {Object.keys(insights.byRef).length === 0 ? (
+            <p className={styles.empty}>ref データはまだありません。</p>
+          ) : (
+            <ul className={styles.metricList}>
+              {Object.entries(insights.byRef)
+                .sort((left, right) => right[1] - left[1])
+                .map(([ref, count]) => (
+                  <li key={ref}>
+                    <span>{ref}</span>
+                    <strong>{count}</strong>
+                  </li>
+                ))}
+            </ul>
+          )}
         </section>
 
         <section className={styles.panel} aria-labelledby="totals-heading">

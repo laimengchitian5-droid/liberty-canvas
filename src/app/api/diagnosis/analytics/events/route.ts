@@ -7,6 +7,7 @@ import {
   summarizeAnalyticsBySlug,
   summarizeAnalyticsEvents,
 } from "@/lib/diagnosis/analyticsServer";
+import { logStructured, withTraceId } from "@/lib/observability/observabilityPort";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -38,7 +39,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid analytics payload" }, { status: 400 });
   }
 
-  await appendAnalyticsEvent(parsed.data);
+  const traced = withTraceId(parsed.data);
+  await appendAnalyticsEvent(traced);
 
-  return NextResponse.json({ ok: true });
+  logStructured({
+    level: "info",
+    message: "analytics_event_ingested",
+    traceId: traced.traceId,
+    context: {
+      event: traced.event,
+      slug: typeof traced.slug === "string" ? traced.slug : null,
+      ref: typeof traced.ref === "string" ? traced.ref : null,
+    },
+  });
+
+  return NextResponse.json({ ok: true, traceId: traced.traceId });
 }

@@ -23,6 +23,8 @@ const analyticsEventSchema = z.object({
   variant: z.string().optional(),
   source: z.string().optional(),
   target: z.string().optional(),
+  rubelDiagnosisId: z.string().optional(),
+  traceId: z.string().optional(),
 });
 
 export type StoredAnalyticsEvent = z.infer<typeof analyticsEventSchema> &

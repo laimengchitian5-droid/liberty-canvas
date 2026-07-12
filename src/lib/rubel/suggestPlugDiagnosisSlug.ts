@@ -1,4 +1,5 @@
 import type { TraitVector } from "@/types/rubel";
+import { encodeRubelBridgeFactorParam } from "@/lib/rubel/rubelBridgeHandoff";
 
 const PLUG_SLUGS = [
   "personality-spectrum",
@@ -10,6 +11,11 @@ const PLUG_SLUGS = [
 ] as const;
 
 export type SuggestedPlugSlug = (typeof PLUG_SLUGS)[number];
+
+export interface PlugPlayHrefOptions {
+  ref?: string;
+  profile?: TraitVector;
+}
 
 function normalizeRubelTrait(value: number): number {
   return Math.max(0, Math.min(1, (value + 5) / 10));
@@ -44,6 +50,19 @@ export function suggestPlugDiagnosisSlug(profile: TraitVector): SuggestedPlugSlu
   return "personality-spectrum";
 }
 
-export function buildPlugPlayHref(slug: SuggestedPlugSlug, ref = "rubel-bridge"): string {
-  return `/diagnosis/play/${slug}?ref=${encodeURIComponent(ref)}`;
+export function buildPlugPlayHref(
+  slug: SuggestedPlugSlug,
+  refOrOptions: string | PlugPlayHrefOptions = "rubel-bridge",
+): string {
+  const options: PlugPlayHrefOptions =
+    typeof refOrOptions === "string" ? { ref: refOrOptions } : refOrOptions;
+  const ref = options.ref ?? "rubel-bridge";
+  const params = new URLSearchParams();
+  params.set("ref", ref);
+
+  if (options.profile) {
+    params.set("f", encodeRubelBridgeFactorParam(options.profile));
+  }
+
+  return `/diagnosis/play/${slug}?${params.toString()}`;
 }

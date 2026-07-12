@@ -26,4 +26,22 @@ test.describe("LibertyCanvas critical paths", () => {
       page.getByRole("button", { name: /診断をはじめる|Start/i }),
     ).toBeVisible();
   });
+
+  test("rubel play result links to plug bridge", async ({ page }) => {
+    await page.goto("/play/rubel-introvert-level-v1");
+
+    const option = page.getByRole("button").filter({ hasText: /.+/ }).first();
+    await option.click();
+
+    await expect(
+      page.getByRole("link", { name: /宇宙|Cosmic|Plug|診断/i }),
+    ).toBeVisible({ timeout: 15_000 });
+
+    const bridgeLink = page.getByRole("link", { name: /宇宙|Cosmic|Plug|診断/i }).first();
+    const href = await bridgeLink.getAttribute("href");
+
+    expect(href).toContain("/diagnosis/play/");
+    expect(href).toContain("ref=rubel-bridge");
+    expect(href).toContain("f=");
+  });
 });

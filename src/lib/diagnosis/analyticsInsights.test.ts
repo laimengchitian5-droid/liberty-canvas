@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { buildShareFunnelReport } from "@/lib/diagnosis/analyticsInsights";
+import {
+  buildRubelBridgeReport,
+  buildShareFunnelReport,
+} from "@/lib/diagnosis/analyticsInsights";
+import { encodeRubelBridgeFactorParam } from "@/lib/rubel/rubelBridgeHandoff";
+import { buildPlugPlayHref } from "@/lib/rubel/suggestPlugDiagnosisSlug";
+import { resolveRubelPlugRedirectPath } from "@/lib/rubel/rubelPlugConvergence";
+import { withTraceId } from "@/lib/observability/observabilityPort";
 import type { StoredAnalyticsEvent } from "@/lib/diagnosis/analyticsServer";
 
 describe("buildShareFunnelReport", () => {
@@ -20,5 +27,70 @@ describe("buildShareFunnelReport", () => {
     expect(report.shareEvents).toBe(1);
     expect(report.refToPlayRate).toBe(50);
     expect(report.shareRate).toBe(100);
+  });
+});
+
+describe("buildRubelBridgeReport", () => {
+  it("computes bridge click-to-play conversion", () => {
+    const events: StoredAnalyticsEvent[] = [
+      { event: "rubel_bridge_impression", at: "2026-01-01T00:00:00Z" },
+      { event: "rubel_bridge_impression", at: "2026-01-01T00:00:01Z" },
+      { event: "rubel_bridge_click", at: "2026-01-01T00:00:02Z", ref: "rubel-bridge" },
+      { event: "rubel_bridge_handoff_received", at: "2026-01-01T00:00:03Z", ref: "rubel-bridge" },
+      {
+        event: "diagnosis_started",
+        at: "2026-01-01T00:00:04Z",
+        ref: "rubel-bridge",
+        slug: "romance",
+      },
+    ];
+
+    const report = buildRubelBridgeReport(events);
+
+    expect(report.impressions).toBe(2);
+    expect(report.clicks).toBe(1);
+    expect(report.handoffsReceived).toBe(1);
+    expect(report.plugStartsFromBridge).toBe(1);
+    expect(report.clickToPlayRate).toBe(100);
+  });
+});
+
+describe("rubel bridge handoff", () => {
+  it("encodes five-factor blob and appends to play href", () => {
+    const factors = encodeRubelBridgeFactorParam({
+      openness: 4,
+      empathy_need: 4.5,
+      ego: 0,
+    });
+
+    expect(factors.split("-")).toHaveLength(5);
+
+    const href = buildPlugPlayHref("romance", {
+      ref: "rubel-bridge",
+      profile: { openness: 4, empathy_need: 4.5, ego: 0 },
+    });
+
+    expect(href).toContain("ref=rubel-bridge");
+    expect(href).toContain(`f=${factors}`);
+  });
+});
+
+describe("rubel plug convergence", () => {
+  it("maps known rubel play ids to plug slugs", () => {
+    const path = resolveRubelPlugRedirectPath(
+      "rubel-neko-ja-v1",
+      new URLSearchParams("lang=ja"),
+    );
+
+    expect(path).toBe("/diagnosis/play/romance?lang=ja&ref=rubel-converge");
+  });
+});
+
+describe("observabilityPort", () => {
+  it("adds traceId to payloads", () => {
+    const traced = withTraceId({ event: "catalog_search", at: "2026-01-01T00:00:00Z" });
+
+    expect(traced.traceId).toMatch(/^[0-9a-f-]{36}$|^trace-/);
+    expect(traced.event).toBe("catalog_search");
   });
 });

@@ -51,4 +51,17 @@ describe("suggestPlugDiagnosisSlug", () => {
       "/diagnosis/play/big-five?ref=rubel-bridge",
     );
   });
+
+  it("accepts rubel bridge analytics payloads", () => {
+    const parsed = analyticsEventSchema.safeParse({
+      event: "rubel_bridge_click",
+      at: new Date().toISOString(),
+      slug: "romance",
+      ref: "rubel-bridge",
+      rubelDiagnosisId: "rubel-neko-ja-v1",
+      traceId: "trace-123",
+    });
+
+    expect(parsed.success).toBe(true);
+  });
 });

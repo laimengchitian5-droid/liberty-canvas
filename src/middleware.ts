@@ -10,6 +10,11 @@ import {
   resolveAppLocaleFromRequest,
 } from "@/lib/i18n/resolveAppLocale";
 import { applyEdgeSeoHeaders, isSearchCrawler, normalizeRefParam } from "@/lib/seo/edgeSeo";
+import { postCrawlerVisitFromEdge } from "@/lib/catalog/crawlerAnalyticsEdge";
+import {
+  isRubelConvergeRedirectEnabled,
+  resolveRubelPlugRedirectPath,
+} from "@/lib/rubel/rubelPlugConvergence";
 
 
 function applySecurityHeaders(response: NextResponse, csp: string): NextResponse {
@@ -93,6 +98,21 @@ export async function middleware(request: NextRequest) {
     return handleUserApiGate(request);
   }
 
+  if (isRubelConvergeRedirectEnabled()) {
+    const playMatch = request.nextUrl.pathname.match(/^\/play\/([^/]+)$/);
+
+    if (playMatch?.[1]) {
+      const redirectPath = resolveRubelPlugRedirectPath(
+        playMatch[1],
+        request.nextUrl.searchParams,
+      );
+
+      if (redirectPath) {
+        return NextResponse.redirect(new URL(redirectPath, request.url), 307);
+      }
+    }
+  }
+
   const csp = buildContentSecurityPolicy();
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("Content-Security-Policy", csp);
@@ -122,19 +142,10 @@ export async function middleware(request: NextRequest) {
 
   if (isSearchCrawler(userAgent)) {
     const ref = normalizeRefParam(request.nextUrl.searchParams.get("ref"));
-    void fetch(`${request.nextUrl.origin}/api/diagnosis/analytics/events`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        event: "crawler_visit",
-        at: new Date().toISOString(),
-        pathname: request.nextUrl.pathname,
-        ref,
-        userAgent: userAgent?.slice(0, 180) ?? null,
-        funnelStep: "discover_ref",
-      }),
-    }).catch(() => {
-      // ignore
+    postCrawlerVisitFromEdge(request.nextUrl.origin, {
+      pathname: request.nextUrl.pathname,
+      ref,
+      userAgent,
     });
   }
 
