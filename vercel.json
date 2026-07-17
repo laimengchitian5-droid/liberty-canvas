@@ -23,6 +23,15 @@
   ],
   "headers": [
     {
+      "source": "/station/:locale(en|ja|ko|zh|fr|de|ar|he)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    },
+    {
       "source": "/station/:locale(en|ja|ko|zh|fr|de|ar|he)/dashboard",
       "headers": [
         {

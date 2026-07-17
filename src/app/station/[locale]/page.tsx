@@ -3,26 +3,27 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { UserAttributeDashboard } from "@/components/station/UserAttributeDashboard";
+import { CentralTerminalHub } from "@/components/station/CentralTerminalHub";
+import { PRODUCT_NAME } from "@/lib/brand/constants";
 import {
   deserializeGameMatrixCookie,
   GAME_MATRIX_COOKIE_NAME,
 } from "@/lib/edge/crossDomainCookieBridge";
+import { emptyUserGameProfile } from "@/lib/gamification/userGameProfileSchema";
 import {
   getDirection,
   isLocale,
   SUPPORTED_LOCALES,
   type Locale,
 } from "@/lib/i18n/config";
-import { resolveStationDashboardCopy } from "@/lib/station/stationDashboardCopy";
-import { emptyUserGameProfile } from "@/lib/gamification/userGameProfileSchema";
+import { getSiteUrl } from "@/lib/site/url";
+import { resolveStationHubCopy } from "@/lib/station/stationHubCopy";
 import type { UserGameProfile } from "@/types/userGameProfile";
-import { PRODUCT_NAME } from "@/lib/brand/constants";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
 
-interface DashboardPageProps {
+interface StationHubPageProps {
   readonly params: Promise<{
     readonly locale: string;
   }>;
@@ -34,32 +35,33 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: DashboardPageProps): Promise<Metadata> {
+}: StationHubPageProps): Promise<Metadata> {
   const { locale: localeRaw } = await params;
   if (!isLocale(localeRaw)) {
     return { title: `Terminal | ${PRODUCT_NAME}` };
   }
 
-  const copy = resolveStationDashboardCopy(localeRaw);
+  const copy = resolveStationHubCopy(localeRaw);
+  const canonical = `${getSiteUrl()}/station/${localeRaw}`;
+
   return {
-    title: `${copy.title} | ${PRODUCT_NAME}`,
-    description: copy.subtitle,
-    robots: { index: false, follow: false },
+    title: `${copy.hubTitle} | ${PRODUCT_NAME}`,
+    description: copy.hubSubtitle.slice(0, 160),
+    alternates: { canonical },
+    openGraph: {
+      title: `${copy.hubTitle} | ${PRODUCT_NAME}`,
+      description: copy.hubSubtitle.slice(0, 160),
+      url: canonical,
+      type: "website",
+    },
   };
 }
 
 /**
- * /station/[locale]/dashboard — server decrypt only; client never sees the secret.
- *
- * Stack truth (sketch corrections):
- * - deserializeGameMatrixCookie ← `@/lib/edge/crossDomainCookieBridge`
- * - SUPPORTED_LOCALES / isLocale ← `@/lib/i18n/config`
- * - cookie name ← GAME_MATRIX_COOKIE_NAME (`lc_game_matrix`)
- * - skeleton CSS ← `./page.module.css` (not a parallel DashboardSkeleton file)
+ * /station/[locale] — public central terminal (15 routes + dashboard transfer).
+ * Profile decrypt stays on the server; client never receives encryption secrets.
  */
-export default async function StationDashboardPage({
-  params,
-}: DashboardPageProps) {
+export default async function StationHubPage({ params }: StationHubPageProps) {
   const { locale: localeRaw } = await params;
 
   if (!isLocale(localeRaw)) {
@@ -68,40 +70,29 @@ export default async function StationDashboardPage({
 
   const locale = localeRaw;
   const direction = getDirection(locale);
+  const copy = resolveStationHubCopy(locale);
 
   return (
     <main className={styles.shell} lang={locale} dir={direction}>
       <div className={styles.nav}>
-        <Link href={`/station/${locale}`} className={styles.navLink}>
-          {locale === "ja"
-            ? "セントラル・ターミナルへ戻る"
-            : "Back to central terminal"}
+        <Link href={`/station/${locale}/dashboard`} className={styles.navLink}>
+          {copy.dashLink}
         </Link>
         <Link href="/play" className={styles.navLink}>
           {locale === "ja" ? "プレイ一覧" : "Play hub"}
         </Link>
       </div>
 
-      <Suspense fallback={<DashboardSkeleton locale={locale} />}>
-        <DashboardTerminal locale={locale} />
+      <Suspense fallback={<HubSkeleton locale={locale} />}>
+        <HubTerminal locale={locale} />
       </Suspense>
-
-      <p className={styles.footnote}>
-        {locale === "ja"
-          ? "乗車履歴は暗号化クッキーに保存されます（httpOnly・サーバー復号）。"
-          : "Boarding history is stored in an encrypted httpOnly cookie."}
-      </p>
     </main>
   );
 }
 
-async function DashboardTerminal({
-  locale,
-}: {
-  readonly locale: Locale;
-}) {
+async function HubTerminal({ locale }: { readonly locale: Locale }) {
   const profile = await loadGameMatrixProfile();
-  return <UserAttributeDashboard profile={profile} locale={locale} />;
+  return <CentralTerminalHub locale={locale} userProfile={profile} />;
 }
 
 async function loadGameMatrixProfile(): Promise<UserGameProfile> {
@@ -109,18 +100,16 @@ async function loadGameMatrixProfile(): Promise<UserGameProfile> {
   try {
     return await deserializeGameMatrixCookie(encrypted);
   } catch (error) {
-    console.warn("[station/dashboard] matrix decode fallback:", error);
+    console.warn("[station/hub] matrix decode fallback:", error);
     return emptyUserGameProfile();
   }
 }
 
-const DashboardSkeleton = ({
-  locale,
-}: {
-  readonly locale: Locale;
-}) => {
+const HubSkeleton = ({ locale }: { readonly locale: Locale }) => {
   const label =
-    locale === "ja" ? "ターミナルを開いています…" : "Opening your terminal…";
+    locale === "ja"
+      ? "セントラル・ターミナルを開いています…"
+      : "Opening the central terminal…";
 
   return (
     <div
@@ -130,8 +119,9 @@ const DashboardSkeleton = ({
       aria-busy="true"
     >
       <div className={styles.skeletonTitle} />
-      <div className={styles.skeletonProgress} />
+      <div className={styles.skeletonTransfer} />
       <div className={styles.skeletonGrid}>
+        <div className={styles.skeletonPanel} />
         <div className={styles.skeletonPanel} />
         <div className={styles.skeletonPanel} />
       </div>

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   computeStationCompletionRate,
+  countClearedStationRoutes,
+  isStationRouteCleared,
   STATION_ROUTE_TOTAL,
 } from "@/lib/station/stationDashboardStats";
 import { emptyUserGameProfile, recordGameCompletion } from "@/lib/gamification/userGameProfileSchema";
@@ -15,6 +17,9 @@ describe("stationDashboardStats", () => {
     profile = recordGameCompletion(profile, "big-five", "Visited_Official");
     profile = recordGameCompletion(profile, "rubel-cat-dog-v1", "Cat");
 
+    expect(countClearedStationRoutes(profile)).toBe(1);
+    expect(isStationRouteCleared(profile, "big-five")).toBe(true);
+    expect(isStationRouteCleared(profile, "disc")).toBe(false);
     expect(computeStationCompletionRate(profile)).toBe(
       Math.round((1 / 15) * 100),
     );
@@ -25,6 +30,7 @@ describe("stationDashboardStats", () => {
     for (const id of DIAGNOSTIC_PLATFORM_IDS) {
       profile = recordGameCompletion(profile, id, "Visited_Studio");
     }
+    expect(countClearedStationRoutes(profile)).toBe(15);
     expect(computeStationCompletionRate(profile)).toBe(100);
   });
 });

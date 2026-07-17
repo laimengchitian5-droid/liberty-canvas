@@ -4,14 +4,19 @@ import { buildStationSitemapEntries } from "@/lib/station/buildStationSitemapEnt
 import { DIAGNOSTIC_PLATFORM_IDS } from "@/types/diagnosticStation";
 
 describe("buildStationSitemapEntries", () => {
-  it("emits the full locale×platform matrix with canonical station paths", () => {
+  it("emits hubs + locale×platform matrix with canonical station paths", () => {
     const entries = buildStationSitemapEntries("https://liberty-canvas.vercel.app/");
     expect(entries).toHaveLength(
-      SUPPORTED_LOCALES.length * DIAGNOSTIC_PLATFORM_IDS.length,
+      SUPPORTED_LOCALES.length +
+        SUPPORTED_LOCALES.length * DIAGNOSTIC_PLATFORM_IDS.length,
     );
-    expect(entries[0]?.url).toBe(
-      "https://liberty-canvas.vercel.app/station/en/16personalities",
-    );
+    expect(entries[0]?.url).toBe("https://liberty-canvas.vercel.app/station/en");
+    expect(
+      entries.some(
+        (e) =>
+          e.url === "https://liberty-canvas.vercel.app/station/en/16personalities",
+      ),
+    ).toBe(true);
     expect(entries.every((e) => e.url.includes("/station/"))).toBe(true);
     expect(entries.some((e) => /\/[a-z]{2}\/station\//.test(e.url))).toBe(false);
     expect(entries.some((e) => e.url.includes("vercel.app{"))).toBe(false);
