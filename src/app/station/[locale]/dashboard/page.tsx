@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -9,7 +8,6 @@ import {
   GAME_MATRIX_COOKIE_NAME,
 } from "@/lib/edge/crossDomainCookieBridge";
 import {
-  getDirection,
   isLocale,
   SUPPORTED_LOCALES,
   type Locale,
@@ -67,21 +65,9 @@ export default async function StationDashboardPage({
   }
 
   const locale = localeRaw;
-  const direction = getDirection(locale);
 
   return (
-    <main className={styles.shell} lang={locale} dir={direction}>
-      <div className={styles.nav}>
-        <Link href={`/station/${locale}`} className={styles.navLink}>
-          {locale === "ja"
-            ? "セントラル・ターミナルへ戻る"
-            : "Back to central terminal"}
-        </Link>
-        <Link href="/play" className={styles.navLink}>
-          {locale === "ja" ? "プレイ一覧" : "Play hub"}
-        </Link>
-      </div>
-
+    <main className={styles.shell}>
       <Suspense fallback={<DashboardSkeleton locale={locale} />}>
         <DashboardTerminal locale={locale} />
       </Suspense>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   DiagnosticStationMaster,
+  buildAvailableRouteView,
   generateStationSEO,
   getAvailableRoutes,
 } from "@/lib/station/diagnosticStationMaster";
@@ -17,6 +18,15 @@ describe("diagnosticStationMaster", () => {
     const bigFive = routes.find((r) => r.id === "big-five");
     expect(bigFive?.libertyPath).toBe("/diagnosis/play/big-five");
     expect(bigFive?.lineName).toContain("Big Five");
+  });
+
+  it("buildAvailableRouteView is O(1) fail-closed and sanitizes libertyPath", () => {
+    expect(buildAvailableRouteView("not-real", "ja")).toBeNull();
+
+    const view = buildAvailableRouteView("big-five", "ja");
+    expect(view?.lineName.length).toBeGreaterThan(0);
+    expect(view?.libertyPath).toBe("/diagnosis/play/big-five");
+    expect(view?.isNativeLocale).toBe(true);
   });
 
   it("with_english_fallback includes strengths-finder for ar when not native", () => {

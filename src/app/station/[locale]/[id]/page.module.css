@@ -1,31 +1,38 @@
 .shell {
   --station-page-accent: #c9a09a;
 
-  min-block-size: 100dvh;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 4vw, 2rem);
+  min-block-size: 100dvh;
+  padding-block: clamp(1rem, 4vw, 2rem);
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-block-end: calc(
+    clamp(1rem, 4vw, 2rem) + env(safe-area-inset-bottom, 0px)
+  );
   background:
     radial-gradient(
       120% 80% at 12% 0%,
       color-mix(in srgb, var(--station-page-accent) 16%, transparent),
       transparent 55%
     ),
-    linear-gradient(165deg, #fffaf7 0%, #f1f5f9 100%);
+    linear-gradient(165deg, #fffaf7 0%, #fcf9f8 100%);
 }
 
 .card {
-  inline-size: min(100%, 36rem);
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  box-sizing: border-box;
+  inline-size: min(100%, 36rem);
   padding: clamp(1.25rem, 4vw, 1.85rem);
+  border: 1px solid color-mix(in srgb, var(--station-page-accent) 40%, #e6ddd8);
   border-radius: 1.35rem;
-  border: 1px solid color-mix(in srgb, var(--station-page-accent) 40%, #cbd5e1);
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   text-align: center;
+  box-shadow: 0 8px 24px rgba(154, 107, 99, 0.06);
 }
 
 .eyebrow {
@@ -33,7 +40,7 @@
   align-self: center;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--station-page-accent) 88%, #0f172a);
+  background: color-mix(in srgb, var(--station-page-accent) 88%, #3d342f);
   color: #fff;
   font-size: 0.72rem;
   font-weight: 700;
@@ -42,18 +49,19 @@
 
 .welcome {
   margin: 0;
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-family:
+    "Noto Serif JP", "Playfair Display", "Hiragino Mincho ProN", Georgia, serif;
   font-size: clamp(1.55rem, 4.5vw, 2rem);
   font-weight: 700;
   line-height: 1.3;
-  color: #1e293b;
+  color: #3d342f;
 }
 
 .lead {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.7;
-  color: #64748b;
+  color: #6b5e57;
 }
 
 .gate {
@@ -64,19 +72,20 @@
 .footerNav {
   margin-block-start: 0.35rem;
   padding-block-start: 1rem;
-  border-block-start: 1px solid rgba(148, 163, 184, 0.35);
+  border-block-start: 1px solid color-mix(in srgb, #9a6b63 18%, transparent);
 }
 
 .internalLink {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: 2.75rem;
+  min-block-size: 44px;
   padding: 0.5rem 0.75rem;
-  color: #475569;
+  color: #6b4540;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
+  border-radius: 0.5rem;
 }
 
 .internalLink:focus-visible {
@@ -84,6 +93,14 @@
   outline-offset: 2px;
 }
 
-.internalLink:hover {
-  color: #0f172a;
+@media (hover: hover) and (pointer: fine) {
+  .internalLink:hover {
+    color: #9a6b63;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    box-shadow: none;
+  }
 }

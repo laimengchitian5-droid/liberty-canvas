@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -11,7 +10,6 @@ import {
 } from "@/lib/edge/crossDomainCookieBridge";
 import { emptyUserGameProfile } from "@/lib/gamification/userGameProfileSchema";
 import {
-  getDirection,
   isLocale,
   SUPPORTED_LOCALES,
   type Locale,
@@ -69,20 +67,9 @@ export default async function StationHubPage({ params }: StationHubPageProps) {
   }
 
   const locale = localeRaw;
-  const direction = getDirection(locale);
-  const copy = resolveStationHubCopy(locale);
 
   return (
-    <main className={styles.shell} lang={locale} dir={direction}>
-      <div className={styles.nav}>
-        <Link href={`/station/${locale}/dashboard`} className={styles.navLink}>
-          {copy.dashLink}
-        </Link>
-        <Link href="/play" className={styles.navLink}>
-          {locale === "ja" ? "プレイ一覧" : "Play hub"}
-        </Link>
-      </div>
-
+    <main className={styles.shell}>
       <Suspense fallback={<HubSkeleton locale={locale} />}>
         <HubTerminal locale={locale} />
       </Suspense>

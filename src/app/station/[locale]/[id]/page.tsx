@@ -3,14 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 import { DiagnosticStationGateClient } from "@/components/station/DiagnosticStationGateClient";
+import { PRODUCT_NAME } from "@/lib/brand/constants";
 import { getDirection, isLocale, SUPPORTED_LOCALES } from "@/lib/i18n/config";
 import {
+  buildAvailableRouteView,
   buildStationHreflangLanguages,
   generateStationSEO,
-  getAvailableRoutes,
   getRouteManifest,
 } from "@/lib/station/diagnosticStationMaster";
-import { resolveLineName } from "@/lib/station/diagnosticStationRegistry";
 import { resolveStationPageCopy } from "@/lib/station/stationPageCopy";
 import { DIAGNOSTIC_PLATFORM_IDS } from "@/types/diagnosticStation";
 import styles from "./page.module.css";
@@ -22,9 +22,11 @@ interface StationPageProps {
   }>;
 }
 
+const GATE_HEX = /^#[0-9A-Fa-f]{6}$/;
+
 /**
- * Build-time matrix: locales × platforms (fixed 8×4 = 32).
- * Prefer explicit IDs over per-locale filter for deterministic SSG.
+ * Build-time matrix: SUPPORTED_LOCALES × DIAGNOSTIC_PLATFORM_IDS (8×15 = 120).
+ * Never hardcode platform id lists or invent “197 locales”.
  */
 export function generateStaticParams() {
   return SUPPORTED_LOCALES.flatMap((locale) =>
@@ -38,12 +40,12 @@ export async function generateMetadata({
   const { locale: localeRaw, id } = await params;
 
   if (!isLocale(localeRaw) || !getRouteManifest(id)) {
-    return { title: "Station | Liberty Canvas" };
+    return { title: `Station | ${PRODUCT_NAME}` };
   }
 
   const seo = generateStationSEO(id, localeRaw);
   if (!seo) {
-    return { title: "Station | Liberty Canvas" };
+    return { title: `Station | ${PRODUCT_NAME}` };
   }
 
   const languages = buildStationHreflangLanguages(id);
@@ -64,44 +66,47 @@ export async function generateMetadata({
   };
 }
 
-export default async function DiagnosticStationPage({ params }: StationPageProps) {
+/**
+ * /station/[locale]/[id] — pSEO gate shell.
+ *
+ * Rejected sketch defects (do not reintroduce):
+ * - `@/src/...` / `isLocale` from diagnosticStation types
+ * - hardcoded id array / “197 countries”
+ * - `resolveLineName(route)` arity error
+ * - inline fr/LLM locale dictionaries on the page
+ * - raw `officialUrl` without https fail-closed (use DiagnosticStationGateClient)
+ * - duplicate gate UI / `DiagnosticStationPage.module.css` parallel file
+ */
+export default async function DiagnosticStationPage({
+  params,
+}: StationPageProps) {
   const { locale: localeRaw, id } = await params;
 
   if (!isLocale(localeRaw)) {
     notFound();
   }
 
-  const route = getRouteManifest(id);
-  if (!route) {
+  const view = buildAvailableRouteView(id, localeRaw);
+  if (!view) {
     notFound();
   }
 
   const locale = localeRaw;
-  const copy = resolveStationPageCopy(locale);
-  const lineName = resolveLineName(route.id, locale);
-  const view = getAvailableRoutes(locale, "with_english_fallback").find(
-    (entry) => entry.id === route.id,
-  ) ?? {
-    ...route,
-    isNativeLocale: route.supportedLocales.includes(locale),
-    lineName,
-  };
-
+  const copy = resolveStationPageCopy(locale, view.lineName);
   const direction = getDirection(locale);
+  const accent = GATE_HEX.test(view.stationTheme.gateColor)
+    ? view.stationTheme.gateColor
+    : "#9a6b63";
 
   return (
     <div
       className={styles.shell}
       lang={locale}
       dir={direction}
-      style={
-        {
-          "--station-page-accent": route.stationTheme.gateColor,
-        } as CSSProperties
-      }
+      style={{ "--station-page-accent": accent } as CSSProperties}
     >
       <div className={styles.card}>
-        <p className={styles.eyebrow}>{lineName}</p>
+        <p className={styles.eyebrow}>{view.lineName}</p>
         <h1 className={styles.welcome}>{copy.welcome}</h1>
         <p className={styles.lead}>{copy.sub}</p>
 
@@ -110,7 +115,10 @@ export default async function DiagnosticStationPage({ params }: StationPageProps
         </div>
 
         <div className={styles.footerNav}>
-          <Link href="/play" className={styles.internalLink}>
+          <Link
+            href={`/station/${locale}`}
+            className={styles.internalLink}
+          >
             {copy.internalNav}
           </Link>
         </div>

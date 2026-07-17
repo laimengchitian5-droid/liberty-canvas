@@ -45,19 +45,39 @@ export function getAvailableRoutes(
       continue;
     }
 
-    const libertyPath = sanitizeLibertyPath(route.libertyPath);
+    const view = buildAvailableRouteView(route.id, locale);
+    if (!view) {
+      continue;
+    }
 
-    out[count] = {
-      ...route,
-      isNativeLocale,
-      lineName: resolveLineName(route.id, locale),
-      libertyPath,
-    };
+    out[count] = view;
     count += 1;
   }
 
   out.length = count;
   return out;
+}
+
+/**
+ * O(1) single-route view — prefer over scanning {@link getAvailableRoutes}.
+ * Returns null when id is unknown (fail-closed).
+ */
+export function buildAvailableRouteView(
+  platformId: string,
+  userLocale: string,
+): AvailableRouteView | null {
+  const route = getDiagnosticRoute(platformId);
+  if (!route) {
+    return null;
+  }
+
+  const locale = resolveGameLocale(userLocale);
+  return {
+    ...route,
+    isNativeLocale: route.supportedLocales.includes(locale),
+    lineName: resolveLineName(route.id, locale),
+    libertyPath: sanitizeLibertyPath(route.libertyPath),
+  };
 }
 
 /** Fail-closed: only whitelisted play/app/diagnosis/play paths; else omit. */
@@ -144,6 +164,7 @@ export const getRouteManifest = getRouteById;
 /** Sketch-compatible facade. */
 export const DiagnosticStationMaster = {
   getAvailableRoutes,
+  buildAvailableRouteView,
   generateStationSEO,
   getRouteById,
   getRouteManifest,

@@ -1,0 +1,96 @@
+/* Station chrome — Adult-Cute, 44px targets, safe-area */
+
+.header {
+  box-sizing: border-box;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+  border-block-end: 1px solid #e8d5d0;
+  background-color: rgba(252, 249, 248, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.headerNav {
+  box-sizing: border-box;
+  inline-size: 100%;
+}
+
+.navContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  box-sizing: border-box;
+  max-inline-size: 1200px;
+  margin-inline: auto;
+  padding-block: 0.5rem;
+  padding-inline: 24px;
+  padding-block-start: calc(0.5rem + env(safe-area-inset-top, 0px));
+}
+
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  font-family:
+    "Noto Serif JP", "Playfair Display", "Hiragino Mincho ProN", Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #3d342f;
+  text-decoration: none;
+}
+
+.navLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+}
+
+.navItemLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  padding-inline: 0.85rem;
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #6b4540;
+  text-decoration: none;
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navItemLink[aria-current="page"] {
+  background-color: color-mix(in srgb, #9a6b63 14%, #ffffff);
+  color: #6b4540;
+}
+
+.logoLink:focus-visible,
+.navItemLink:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logoLink:hover {
+    color: #9a6b63;
+  }
+
+  .navItemLink:hover {
+    background-color: #f3eeeb;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navItemLink {
+    transition: none;
+  }
+
+  .header {
+    backdrop-filter: none;
+    background-color: #fcf9f8;
+  }
+}
