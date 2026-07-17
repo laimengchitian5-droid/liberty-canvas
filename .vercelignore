@@ -1,0 +1,10 @@
+# Local Playwright browser cache (never ship to Vercel)
+.playwright-browsers
+.playwright-browsers/**
+
+# Build / deps (CLI usually skips; belt-and-suspenders)
+node_modules
+.next
+.git
+test-results
+artifacts

@@ -106,8 +106,8 @@ export function CreateQuizForm() {
     <div className={styles.shell}>
       <h1 className={styles.title}>Forge Canvas</h1>
       <p className={styles.lead}>
-        LibertyCanvas 上でオリジナル診断ツールを自由に鍛造・公開できます。作成後は
-        SEO ページとサイトマップに自動登録されます。
+        LibertyCanvas 上でオリジナル診断ツールを自由に鍛造・公開できます。作成後は SEO
+        ページとサイトマップに自動登録されます。
       </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -203,7 +203,9 @@ export function CreateQuizForm() {
           type="button"
           className={styles.buttonSecondary}
           aria-label="Add another question"
-          onClick={() => setQuestions((current) => [...current, createQuestion(current.length)])}
+          onClick={() =>
+            setQuestions((current) => [...current, createQuestion(current.length)])
+          }
         >
           質問を追加
         </button>
@@ -267,7 +269,9 @@ export function CreateQuizForm() {
           type="button"
           className={styles.buttonSecondary}
           aria-label="Add another result type"
-          onClick={() => setResults((current) => [...current, createResult(current.length)])}
+          onClick={() =>
+            setResults((current) => [...current, createResult(current.length)])
+          }
         >
           結果タイプを追加
         </button>

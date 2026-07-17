@@ -12,8 +12,7 @@ import {
 } from "@/lib/seo/generateUserAwareMetadata";
 
 const PAGE_TITLE = "心の色診断";
-const PAGE_DESCRIPTION =
-  `${DIAGNOSTIC_QUESTION_COUNT}問のやさしい多肢選択で、あなたらしい心の色を見つけます。診断後は AI がパーソナルアドバイスをお届け。大人可愛い、洗練された日本語体験。`;
+const PAGE_DESCRIPTION = `${DIAGNOSTIC_QUESTION_COUNT}問のやさしい多肢選択で、あなたらしい心の色を見つけます。診断後は AI がパーソナルアドバイスをお届け。大人可愛い、洗練された日本語体験。`;
 
 const BASE_DIAGNOSIS_METADATA: Metadata = {
   title: PAGE_TITLE,

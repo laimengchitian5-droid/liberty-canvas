@@ -1,13 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type KeyboardEvent,
-} from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { getHorizontalStepDelta } from "@/lib/i18n/motion";
 import { getLikertLabel } from "@/lib/i18n/messages";
@@ -110,14 +104,14 @@ export function LikertScale({
     optionRefs.current[nextIndex]?.focus();
   }, [defaultFocusIndex, questionId]);
 
-  const moveFocus = useCallback((nextIndex: number) => {
-    const clampedIndex = Math.max(
-      0,
-      Math.min(likertOptions.length - 1, nextIndex),
-    );
-    setFocusedIndex(clampedIndex);
-    optionRefs.current[clampedIndex]?.focus();
-  }, [likertOptions.length]);
+  const moveFocus = useCallback(
+    (nextIndex: number) => {
+      const clampedIndex = Math.max(0, Math.min(likertOptions.length - 1, nextIndex));
+      setFocusedIndex(clampedIndex);
+      optionRefs.current[clampedIndex]?.focus();
+    },
+    [likertOptions.length],
+  );
 
   const handleOptionKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -222,14 +216,10 @@ export function LikertScale({
               }}
               onKeyDown={(event) => handleOptionKeyDown(event, index)}
               whileHover={
-                isExiting
-                  ? undefined
-                  : { scale: 1.08, transition: BUTTON_SPRING }
+                isExiting ? undefined : { scale: 1.08, transition: BUTTON_SPRING }
               }
               whileTap={
-                isExiting
-                  ? undefined
-                  : { scale: 0.94, transition: BUTTON_SPRING }
+                isExiting ? undefined : { scale: 0.94, transition: BUTTON_SPRING }
               }
               animate={{
                 scale: isSelected ? 1.06 : 1,

@@ -14,7 +14,7 @@ export const TRANSLATION_REGISTRY: Record<string, TranslationTable> = {
     ko: "당신은 어떤 고양이 타입?",
     fr: "Quel type de chat es-tu ?",
   },
-  "あなたのネコ度診断": {
+  あなたのネコ度診断: {
     en: "How Cat Are You? (Neko Diagnosis)",
     es: "¿Qué tan gato eres? (Diagnóstico Neko)",
     ko: "당신의 고양이 정도 진단",
@@ -82,13 +82,13 @@ export const TRANSLATION_REGISTRY: Record<string, TranslationTable> = {
   },
 
   // --- JA cat diagnosis results ---
-  "マイペース黒猫タイプ": {
+  マイペース黒猫タイプ: {
     en: "My-Pace Black Cat Type",
     es: "Tipo Gato Negro a Mi Ritmo",
     ko: "마이페이스 흑묘 타입",
     fr: "Type Chat Noir à Son Rythme",
   },
-  "社交的犬タイプ": {
+  社交的犬タイプ: {
     en: "Social Dog Type",
     es: "Tipo Perro Social",
     ko: "사교적 강아지 타입",
@@ -214,19 +214,19 @@ export const TRANSLATION_REGISTRY: Record<string, TranslationTable> = {
     ko: "집에서 쉴 때의 단골 포즈는?",
     fr: "Ta pose habituelle pour te détendre chez toi ?",
   },
-  "マイペースで本を読む": {
+  マイペースで本を読む: {
     en: "Read a book at my own pace",
     es: "Leer a mi ritmo",
     ko: "마이페이스로 책 읽기",
     fr: "Lire à mon rythme",
   },
-  "誰かを誘って外出する": {
+  誰かを誘って外出する: {
     en: "Invite someone and go out",
     es: "Invitar a alguien y salir",
     ko: "누군가를 초대해 외출",
     fr: "Inviter quelqu'un et sortir",
   },
-  "窓辺で日向ぼっこ": {
+  窓辺で日向ぼっこ: {
     en: "Sunbathe by the window",
     es: "Tomar el sol junto a la ventana",
     ko: "창가에서 햇볕 쬐기",
@@ -238,25 +238,25 @@ export const TRANSLATION_REGISTRY: Record<string, TranslationTable> = {
     ko: "할 일 목록 확인",
     fr: "Vérifier ma to-do list",
   },
-  "週に1回くらいで十分": {
+  週に1回くらいで十分: {
     en: "Once a week is enough",
     es: "Una vez por semana es suficiente",
     ko: "주 1회면 충분",
     fr: "Une fois par semaine suffit",
   },
-  "毎日やり取りしたい": {
+  毎日やり取りしたい: {
     en: "I want daily back-and-forth",
     es: "Quiero charlar a diario",
     ko: "매일 연락하고 싶다",
     fr: "Je veux échanger chaque jour",
   },
-  "丸くなってソファでゴロゴロ": {
+  丸くなってソファでゴロゴロ: {
     en: "Curl up and lounge on the sofa",
     es: "Enrollarme en el sofá",
     ko: "동그랗게 말아 소파에서 뒹굴",
     fr: "Me rouler en boule sur le canapé",
   },
-  "ストレッチしてから活動開始": {
+  ストレッチしてから活動開始: {
     en: "Stretch, then start moving",
     es: "Estirar y luego activarme",
     ko: "스트레칭 후 활동 시작",

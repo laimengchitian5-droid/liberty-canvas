@@ -1,15 +1,13 @@
 import { cookies, headers } from "next/headers";
 import { Providers } from "@/components/Providers";
-import {
-  getDirection,
-  type Locale,
-} from "@/lib/i18n/config";
+import { getDirection, type Locale } from "@/lib/i18n/config";
 import {
   EDGE_LOCALE_HEADER,
   LOCALE_STORAGE_KEY,
   normalizeLocaleCandidate,
   resolveAppLocaleFromRequest,
 } from "@/lib/i18n/resolveAppLocale";
+import { PWA_THEME_COLOR } from "@/lib/brand/constants";
 import { buildRootMetadata } from "@/lib/seo/siteMetadata";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
@@ -17,8 +15,8 @@ import "./globals.css";
 export const metadata: Metadata = buildRootMetadata();
 
 export const viewport: Viewport = {
-  themeColor: "#6366F1",
-  colorScheme: "dark",
+  themeColor: PWA_THEME_COLOR,
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -47,11 +45,7 @@ export default function RootLayout({
   const locale = resolveServerLocale();
 
   return (
-    <html
-      lang={locale}
-      dir={getDirection(locale)}
-      suppressHydrationWarning
-    >
+    <html lang={locale} dir={getDirection(locale)} suppressHydrationWarning>
       <body>
         <Providers initialLocale={locale}>{children}</Providers>
       </body>

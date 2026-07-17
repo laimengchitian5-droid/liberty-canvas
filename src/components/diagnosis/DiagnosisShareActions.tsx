@@ -78,7 +78,14 @@ export function DiagnosisShareActions({ result }: DiagnosisShareActionsProps) {
     } catch {
       // user cancelled
     }
-  }, [handleCopyText, result.dominantCategory, result.title, shareText, shareUrl, variant]);
+  }, [
+    handleCopyText,
+    result.dominantCategory,
+    result.title,
+    shareText,
+    shareUrl,
+    variant,
+  ]);
 
   const handlePrint = useCallback(() => {
     trackDiagnosisEvent("diagnosis_share_print", {

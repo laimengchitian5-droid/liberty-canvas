@@ -10,9 +10,9 @@ describe("hfChatGuard", () => {
   it("sanitizes control characters and clamps length", () => {
     const dirty = "hello\u0000world";
     expect(sanitizeHfText(dirty, 100)).toBe("helloworld");
-    expect(sanitizeHfText("x".repeat(HF_MAX_PROMPT_CHARS + 50), HF_MAX_PROMPT_CHARS).length).toBe(
-      HF_MAX_PROMPT_CHARS,
-    );
+    expect(
+      sanitizeHfText("x".repeat(HF_MAX_PROMPT_CHARS + 50), HF_MAX_PROMPT_CHARS).length,
+    ).toBe(HF_MAX_PROMPT_CHARS);
   });
 
   it("validates raw prompt requests", () => {

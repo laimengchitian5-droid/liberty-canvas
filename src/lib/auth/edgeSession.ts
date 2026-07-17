@@ -1,4 +1,5 @@
 import { LC_SESSION, LC_SESSION_COOKIE } from "@/lib/auth/constants";
+import { resolveSessionSecret } from "@/lib/env/serverSecrets";
 import { USER_ID_PATTERN } from "@/lib/user/constants";
 
 interface SessionPayload {
@@ -7,10 +8,12 @@ interface SessionPayload {
 }
 
 function getSessionSecret(): string {
-  const secret = process.env.LC_SESSION_SECRET?.trim();
+  const secret = resolveSessionSecret();
 
   if (!secret && process.env.NODE_ENV === "production") {
-    throw new Error("LC_SESSION_SECRET is required in production");
+    throw new Error(
+      "LC_SESSION_SECRET (or ENCRYPTION_SECRET_KEY) is required in production",
+    );
   }
 
   return secret ?? "dev-only-lc-session-secret-change-me";
@@ -32,10 +35,7 @@ function encodeBase64Url(value: string): string {
     binary += String.fromCharCode(byte);
   }
 
-  return btoa(binary)
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/g, "");
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
 function decodeBase64Url(value: string): string {

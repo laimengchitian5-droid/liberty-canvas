@@ -35,7 +35,9 @@ export function expandQueryTokens(query: string): Set<string> {
     for (const cluster of SEMANTIC_CLUSTERS) {
       const normalizedCluster = cluster.map(normalizeSearchToken);
 
-      if (normalizedCluster.some((entry) => entry.includes(token) || token.includes(entry))) {
+      if (
+        normalizedCluster.some((entry) => entry.includes(token) || token.includes(entry))
+      ) {
         for (const clusterToken of normalizedCluster) {
           expanded.add(clusterToken);
         }
@@ -65,10 +67,7 @@ export function tokenMatchesCandidate(
   return false;
 }
 
-export function inferCrossLingualKeywords(
-  title: string,
-  language: LocaleCode,
-): string[] {
+export function inferCrossLingualKeywords(title: string, language: LocaleCode): string[] {
   const keywords = new Set<string>();
   const titleTokens = title.split(/[\s、。]+/).map(normalizeSearchToken);
 
@@ -83,9 +82,7 @@ export function inferCrossLingualKeywords(
   for (const cluster of SEMANTIC_CLUSTERS) {
     const normalizedCluster = cluster.map(normalizeSearchToken);
     const hit = normalizedCluster.some((entry) =>
-      titleTokens.some(
-        (token) => entry.includes(token) || token.includes(entry),
-      ),
+      titleTokens.some((token) => entry.includes(token) || token.includes(entry)),
     );
 
     if (hit) {

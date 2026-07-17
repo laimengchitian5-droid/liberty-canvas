@@ -146,7 +146,6 @@ export interface PlugBridgeMessages {
   cta: string;
 }
 
-
 export interface DiscoverFunnelMessages {
   skipToQuiz: string;
   handoffEyebrow: string;
@@ -198,11 +197,11 @@ const NAV_JA: NavMessages = {
 };
 
 const PLUG_BRIDGE_EN: PlugBridgeMessages = {
-  ariaLabel: "Deep cosmic diagnosis recommendation",
-  eyebrow: "LibertyCanvas · Freedom",
+  ariaLabel: "Liberty Plug cosmic diagnosis recommendation",
+  eyebrow: "Liberty Plug · Freedom",
   title: "Discover your cosmic character",
-  lead: "Take a full Plug diagnosis — cosmic planet results, AI advice, and share cards await.",
-  cta: "Try the cosmic diagnosis →",
+  lead: "Take a full Liberty Plug diagnosis — cosmic planet results, AI advice, and share cards await.",
+  cta: "Try Liberty Plug →",
 };
 
 const DISCOVER_FUNNEL_EN: DiscoverFunnelMessages = {
@@ -220,11 +219,11 @@ const COMPILER_INTRO_EN: CompilerIntroMessages = {
 };
 
 const PLUG_BRIDGE_JA: PlugBridgeMessages = {
-  ariaLabel: "本格宇宙診断へのおすすめ",
-  eyebrow: "LibertyCanvas · 自由",
+  ariaLabel: "Liberty Plug 本格宇宙診断へのおすすめ",
+  eyebrow: "Liberty Plug · 自由",
   title: "あなたの宇宙キャラクターを見つけよう",
-  lead: "会話型Plug診断なら、宇宙キャラ結果・AIアドバイス・シェアカードが楽しめます。",
-  cta: "宇宙診断をはじめる →",
+  lead: "会話型 Liberty Plug なら、宇宙キャラ結果・AIアドバイス・シェアカードが楽しめます。",
+  cta: "Liberty Plug をはじめる →",
 };
 
 const DISCOVER_FUNNEL_JA: DiscoverFunnelMessages = {
@@ -326,7 +325,7 @@ const COMPILER_INTRO_ZH: CompilerIntroMessages = {
 };
 
 const PLAY_EN: RubelPlayMessages = {
-  brandTitle: "LibertyCanvas",
+  brandTitle: "Liberty Play",
   hub: "Hub",
   typing: "Typing…",
   send: "Send",
@@ -334,14 +333,14 @@ const PLAY_EN: RubelPlayMessages = {
   customPromptLabel: "🎨 Paint Your Own Persona (Custom prompt for the AI)",
   customPromptPlaceholder:
     'e.g. "Act like an anime ninja" or "Talk like a supportive mother"',
-  chatPlaceholder: "Message your Rubel Canvas companion…",
+  chatPlaceholder: "Message your Liberty Play companion…",
   questionOf: "Question",
   optionA: "Option A",
   optionB: "Option B",
   revealTitle: "Analyzing your soul…",
-  resultLabel: "Your Rubel Canvas Type",
+  resultLabel: "Your Liberty Play Type",
   brandStoryHeading: "Brand Story · E-E-A-T",
-  trendingLabel: "Trending on liberty-canvas",
+  trendingLabel: "Trending on Liberty Canvas",
   canvasNotFound: "Diagnosis not found",
   canvasNotFoundHint:
     "This quiz may have been removed or is only available on the device where it was created.",
@@ -353,11 +352,11 @@ const PLAY_EN: RubelPlayMessages = {
   tabCareer: "Career",
   tabEntertainment: "Fandom",
   introChat: (name, summary) =>
-    `You're "${name}" — ${summary} Let's talk on Rubel Canvas.`,
+    `You're "${name}" — ${summary} Let's talk on Liberty Play.`,
 };
 
 const PLAY_JA: RubelPlayMessages = {
-  brandTitle: "ルベルキャンバス",
+  brandTitle: "リバティ・プレイ",
   hub: "Hub",
   typing: "入力中…",
   send: "送信",
@@ -365,17 +364,16 @@ const PLAY_JA: RubelPlayMessages = {
   customPromptLabel: "🎨 Paint Your Own Persona（AIへのカスタムプロンプト）",
   customPromptPlaceholder:
     "例：「アニメの忍者みたいに話して」「寄り添うお母さんトーンで」",
-  chatPlaceholder: "ルベルキャンバス AI にメッセージ…",
+  chatPlaceholder: "リバティ・プレイ AI にメッセージ…",
   questionOf: "質問",
   optionA: "選択肢 A",
   optionB: "選択肢 B",
   revealTitle: "あなたの魂を解析中…",
-  resultLabel: "あなたの Rubel Canvas タイプ",
+  resultLabel: "あなたの Liberty Play タイプ",
   brandStoryHeading: "ブランドストーリー · E-E-A-T",
-  trendingLabel: "liberty-canvas で急上昇",
+  trendingLabel: "Liberty Canvas で急上昇",
   canvasNotFound: "診断が見つかりません",
-  canvasNotFoundHint:
-    "この診断は削除されたか、作成した端末でのみ利用可能です。",
+  canvasNotFoundHint: "この診断は削除されたか、作成した端末でのみ利用可能です。",
   backToHub: "診断一覧に戻る",
   loading: "診断を読み込み中…",
   retake: "もう一度診断する",
@@ -384,12 +382,12 @@ const PLAY_JA: RubelPlayMessages = {
   tabCareer: "職業・ガチ診断",
   tabEntertainment: "推し活・エンタメ",
   introChat: (name, summary) =>
-    `結果は「${name}」！${summary} ルベルキャンバスで語り合お？`,
+    `結果は「${name}」！${summary} リバティ・プレイで語り合お？`,
 };
 
 const PLAY_KO: RubelPlayMessages = {
   ...PLAY_EN,
-  brandTitle: "LibertyCanvas",
+  brandTitle: "Liberty Play",
   hub: "허브",
   revealTitle: "결과 분석 중…",
   customPromptPlaceholder: "캐릭터 톤 (예: 츤데레)",
@@ -400,7 +398,7 @@ const PLAY_KO: RubelPlayMessages = {
 
 const PLAY_ZH: RubelPlayMessages = {
   ...PLAY_EN,
-  brandTitle: "LibertyCanvas",
+  brandTitle: "Liberty Play",
   hub: "首页",
   revealTitle: "正在解析结果…",
   customPromptPlaceholder: "角色语气（例：傲娇）",
@@ -428,13 +426,13 @@ const FEED_JA: FeedMessages = {
 };
 
 const HEADER_EN: HeaderMessages = {
-  brandTitle: "Rubel Canvas",
+  brandTitle: "Liberty Canvas",
   create: "Create",
   displayLanguage: "Display language",
 };
 
 const HEADER_JA: HeaderMessages = {
-  brandTitle: "ルベルキャンバス",
+  brandTitle: "リバティ・キャンバス",
   create: "作成",
   displayLanguage: "表示言語",
 };
@@ -569,19 +567,19 @@ const CREATOR_JA: CreatorMessages = {
 
 const PLAY_FR: RubelPlayMessages = {
   ...PLAY_EN,
-  brandTitle: "Rubel Canvas",
+  brandTitle: "Liberty Play",
   typing: "Saisie…",
   send: "Envoyer",
   sendAria: "Envoyer le message",
   customPromptLabel: "🎨 Personnalisez votre persona (prompt IA)",
-  chatPlaceholder: "Message à votre companion Rubel Canvas…",
+  chatPlaceholder: "Message à votre companion Liberty Play…",
   questionOf: "Question",
   optionA: "Option A",
   optionB: "Option B",
   revealTitle: "Analyse de l'âme…",
-  resultLabel: "Votre type Rubel Canvas",
+  resultLabel: "Votre type Liberty Play",
   brandStoryHeading: "Histoire de marque · E-E-A-T",
-  trendingLabel: "Tendances sur liberty-canvas",
+  trendingLabel: "Tendances sur Liberty Canvas",
   canvasNotFound: "Diagnostic introuvable",
   canvasNotFoundHint: "Ce quiz a peut-être été supprimé.",
   backToHub: "Retour au hub",
@@ -592,7 +590,7 @@ const PLAY_FR: RubelPlayMessages = {
   tabCareer: "Carrière",
   tabEntertainment: "Fandom",
   introChat: (name, summary) =>
-    `Résultat : « ${name} » — ${summary} Discutons sur Rubel Canvas.`,
+    `Résultat : « ${name} » — ${summary} Discutons sur Liberty Play.`,
 };
 
 const MESSAGES: Record<Locale, LocaleMessages> = {
@@ -830,10 +828,7 @@ export function getMessages(locale: Locale): LocaleMessages {
   return MESSAGES[locale];
 }
 
-export function getLikertLabel(
-  locale: Locale,
-  value: number,
-): string {
+export function getLikertLabel(locale: Locale, value: number): string {
   const likert = getMessages(locale).likert;
 
   switch (value) {

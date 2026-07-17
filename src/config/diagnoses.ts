@@ -1,5 +1,10 @@
 import { LEGAL_TRAIT_KEYS } from "@/lib/diagnosis/academicTraitVector";
 import {
+  buildCountrySpecialtyDefinition,
+  buildWorldSpecialtySoulDefinition,
+} from "@/lib/specialty/buildSpecialtyDiagnosis";
+import { listSpecialtyCountries } from "@/lib/specialty/globalSpecialtyTaxonomy";
+import {
   buildGenzQuestionBank,
   buildOshikatsuQuestionBank,
   buildRomanceQuestionBank,
@@ -24,7 +29,15 @@ export const PLUG_DIAGNOSIS_IDS = {
   academicSpectrum: "lc-academic-spectrum",
   motivationSpectrum: "lc-motivation-spectrum",
   personalitySpectrum: "lc-personality-spectrum",
+  worldSpecialtySoul: "lc-world-specialty-soul",
+  jpSakamaiCraft: "lc-specialty-country-jp",
 } as const;
+
+function buildLiveCountrySpecialtyDefinitions(): PlugDiagnosisDefinition[] {
+  return listSpecialtyCountries()
+    .filter((country) => country.releasePhase === "live")
+    .map((country) => buildCountrySpecialtyDefinition(country.id));
+}
 
 function buildOshikatsuElements(): DiagnosisElement[] {
   return [
@@ -34,9 +47,9 @@ function buildOshikatsuElements(): DiagnosisElement[] {
       targetDemographics: ["10代", "20代", "推し活女子", "ファン文化"],
       desireTags: ["推し活", "ファンタイプ", "推しへの愛し方", "推し活スタイル"],
       landingPath: "/diagnosis/play/oshikatsu",
-      titleTemplate: "推し活スタイル診断 — あなたの応援タイプ | Rubel Canvas",
+      titleTemplate: "推し活スタイル診断 — あなたの応援タイプ | Liberty Plug",
       descriptionTemplate:
-        "推し活の愛し方を24問で診断。LibertyCanvas 独自の性格アーキタイプで、あなたらしい推し活スタイルがわかる無料診断。",
+        "推し活の愛し方を24問で診断。Liberty Canvas 独自の性格アーキタイプで、あなたらしい推し活スタイルがわかる無料診断。",
     },
     ...buildOshikatsuQuestionBank(),
     {
@@ -47,7 +60,7 @@ function buildOshikatsuElements(): DiagnosisElement[] {
         {
           id: "lc-oshi-master",
           title: "推し活マスター",
-          subtitle: "推しの魅力を広げる、LibertyCanvas 認定エナジャイザー",
+          subtitle: "推しの魅力を広げる、Liberty Canvas 認定エナジャイザー",
           analysis:
             "あなたは推しへの想いを行動に変える力が強く、周囲にも良い刺激を届けやすいタイプです。",
           themeColor: "#8B5CF6",
@@ -107,7 +120,7 @@ function buildOshikatsuElements(): DiagnosisElement[] {
           label: "Xでシェア",
           hashtag: "#推し活診断",
           cardTitle: "推し活スタイル診断結果",
-          cardDescription: "LibertyCanvas 独自診断、やってみて！",
+          cardDescription: "Liberty Canvas 独自診断、やってみて！",
         },
         {
           id: "img-oshikatsu",
@@ -115,7 +128,7 @@ function buildOshikatsuElements(): DiagnosisElement[] {
           label: "結果画像を保存",
           hashtag: "#推し活診断",
           cardTitle: "推し活スタイル",
-          cardDescription: "Rubel Canvas 推し活診断",
+          cardDescription: "Liberty Plug 推し活診断",
         },
       ],
     },
@@ -130,9 +143,9 @@ function buildRomanceElements(): DiagnosisElement[] {
       targetDemographics: ["10代", "20代", "30代", "恋愛に関心がある方"],
       desireTags: ["恋愛", "恋愛タイプ", "コミュニケーション", "パートナーシップ"],
       landingPath: "/diagnosis/play/romance",
-      titleTemplate: "恋愛コミュニケーション診断 — 無料 | Rubel Canvas",
+      titleTemplate: "恋愛コミュニケーション診断 — 無料 | Liberty Plug",
       descriptionTemplate:
-        "恋愛のコミュニケーションスタイルを24問で診断。LibertyCanvas 独自アーキタイプで、あなたの恋愛プロフィールがわかります。",
+        "恋愛のコミュニケーションスタイルを24問で診断。Liberty Canvas 独自アーキタイプで、あなたの恋愛プロフィールがわかります。",
     },
     ...buildRomanceQuestionBank(),
     {
@@ -143,7 +156,7 @@ function buildRomanceElements(): DiagnosisElement[] {
         {
           id: "lc-love-healing",
           title: "全肯定癒やしタイプ",
-          subtitle: "LibertyCanvas 認定・やさしさで関係を育むパートナー",
+          subtitle: "Liberty Canvas 認定・やさしさで関係を育むパートナー",
           analysis:
             "あなたは温かさと共感力を軸に、相手が安心できる関係を築きやすいタイプです。",
           themeColor: "#F472B6",
@@ -177,7 +190,7 @@ function buildRomanceElements(): DiagnosisElement[] {
         {
           id: "lc-love-free",
           title: "凛とした自由恋愛型",
-          subtitle: "自立と信頼でつながる、LibertyCanvas 独自プロフィール",
+          subtitle: "自立と信頼でつながる、Liberty Canvas 独自プロフィール",
           analysis:
             "あなたはお互いのペースを尊重し、束縛より信頼を選ぶ恋愛スタイルを大切にします。",
           themeColor: "#A78BFA",
@@ -203,7 +216,7 @@ function buildRomanceElements(): DiagnosisElement[] {
           label: "Xでシェア",
           hashtag: "#恋愛診断",
           cardTitle: "恋愛コミュニケーション診断結果",
-          cardDescription: "24問・LibertyCanvas 独自診断、やってみて！",
+          cardDescription: "24問・Liberty Canvas 独自診断、やってみて！",
         },
         {
           id: "native-romance",
@@ -226,9 +239,9 @@ function buildGenZElements(): DiagnosisElement[] {
       targetDemographics: ["高校生", "10代", "学生", "若者"],
       desireTags: ["高校生向け", "短時間", "友達関係", "SNS", "コミュ力"],
       landingPath: "/diagnosis/play/genz",
-      titleTemplate: "高校生向け・ソーシャルタイプ診断 | Rubel Canvas",
+      titleTemplate: "高校生向け・ソーシャルタイプ診断 | Liberty Plug",
       descriptionTemplate:
-        "高校生向けソーシャル診断24問。LibertyCanvas 独自アーキタイプで、友達関係スタイルと5因子プロフィールがわかります。",
+        "高校生向けソーシャル診断24問。Liberty Canvas 独自アーキタイプで、友達関係スタイルと5因子プロフィールがわかります。",
     },
     ...buildGenzQuestionBank(),
     {
@@ -239,7 +252,7 @@ function buildGenZElements(): DiagnosisElement[] {
         {
           id: "lc-genz-sun",
           title: "教室サンシャイン型",
-          subtitle: "LibertyCanvas 認定・場をあたたかくする存在",
+          subtitle: "Liberty Canvas 認定・場をあたたかくする存在",
           analysis:
             "あなたは人との距離を自然に縮め、短時間でも仲良くなれる明るさを持っています。",
           themeColor: "#FBBF24",
@@ -273,7 +286,7 @@ function buildGenZElements(): DiagnosisElement[] {
         {
           id: "lc-genz-shelter",
           title: "誠実シェルター型",
-          subtitle: "本音で深くつながる、LibertyCanvas 独自の少数派タイプ",
+          subtitle: "本音で深くつながる、Liberty Canvas 独自の少数派タイプ",
           analysis:
             "あなたは量より質を大切にし、誠実さで長く続く友情を築きやすいプロフィールです。",
           themeColor: "#34D399",
@@ -307,7 +320,7 @@ function buildGenZElements(): DiagnosisElement[] {
           label: "リンクをコピー",
           hashtag: "#短時間診断",
           cardTitle: "高校生向け診断",
-          cardDescription: "Rubel Canvas",
+          cardDescription: "Liberty Plug",
         },
       ],
     },
@@ -322,9 +335,9 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
       targetDemographics: ["10代", "20代", "30代", "40代", "自己理解に関心がある方"],
       desireTags: ["性格診断", "学術特性", "5因子", "自己分析", "無料診断"],
       landingPath: "/diagnosis/play/big-five",
-      titleTemplate: "学術5因子性格診断 — LibertyCanvas 独自 | Rubel Canvas",
+      titleTemplate: "学術5因子性格診断 — Liberty Canvas 独自 | Liberty Plug",
       descriptionTemplate:
-        "開放性・誠実性・外向性・協調性・感情変動性の24問診断。LibertyCanvas 独自アーキタイプで、あなたの学術特性プロフィールがわかります。",
+        "開放性・誠実性・外向性・協調性・感情変動性の24問診断。Liberty Canvas 独自アーキタイプで、あなたの学術特性プロフィールがわかります。",
     },
     ...buildAcademicSpectrumQuestionBank(),
     {
@@ -335,8 +348,9 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-acad-open",
           title: "好奇心クリエイター",
-          subtitle: "LibertyCanvas 認定・開放性が際立つ探究タイプ",
-          analysis: "あなたは新しい視点と発想を大切にし、変化の中でも学びを見出しやすいタイプです。",
+          subtitle: "Liberty Canvas 認定・開放性が際立つ探究タイプ",
+          analysis:
+            "あなたは新しい視点と発想を大切にし、変化の中でも学びを見出しやすいタイプです。",
           themeColor: "#6366F1",
           traitProfile: t({
             trait_openness: 0.9,
@@ -351,8 +365,9 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-acad-steady",
           title: "丁寧積み上げ型",
-          subtitle: "LibertyCanvas 認定・誠実性が光る安定タイプ",
-          analysis: "あなたは計画性と継続力を武器に、信頼される成果を積み上げやすいタイプです。",
+          subtitle: "Liberty Canvas 認定・誠実性が光る安定タイプ",
+          analysis:
+            "あなたは計画性と継続力を武器に、信頼される成果を積み上げやすいタイプです。",
           themeColor: "#0D9488",
           traitProfile: t({
             trait_conscientiousness: 0.9,
@@ -367,8 +382,9 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-acad-social",
           title: "社交エナジー型",
-          subtitle: "LibertyCanvas 認定・外向性が際立つつながりタイプ",
-          analysis: "あなたは人との交流からエネルギーを得て、場を明るくする力を持っています。",
+          subtitle: "Liberty Canvas 認定・外向性が際立つつながりタイプ",
+          analysis:
+            "あなたは人との交流からエネルギーを得て、場を明るくする力を持っています。",
           themeColor: "#F59E0B",
           traitProfile: t({
             trait_extraversion: 0.9,
@@ -383,8 +399,9 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-acad-healing",
           title: "全肯定癒やしタイプ",
-          subtitle: "LibertyCanvas 認定・協調性と共感力の高いタイプ",
-          analysis: "あなたは相手の気持ちに寄り添い、やさしい関係性を育てやすいプロフィールです。",
+          subtitle: "Liberty Canvas 認定・協調性と共感力の高いタイプ",
+          analysis:
+            "あなたは相手の気持ちに寄り添い、やさしい関係性を育てやすいプロフィールです。",
           themeColor: "#F472B6",
           traitProfile: t({
             trait_agreeableness: 0.9,
@@ -399,8 +416,9 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-acad-deep",
           title: "繊細共感ディープ型",
-          subtitle: "LibertyCanvas 認定・感受性が豊かな内省タイプ",
-          analysis: "あなたは感情の機微に気づく力が強く、深い理解と洞察につながりやすいタイプです。",
+          subtitle: "Liberty Canvas 認定・感受性が豊かな内省タイプ",
+          analysis:
+            "あなたは感情の機微に気づく力が強く、深い理解と洞察につながりやすいタイプです。",
           themeColor: "#8B5CF6",
           traitProfile: t({
             trait_neuroticism: 0.7,
@@ -424,7 +442,7 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
           label: "Xでシェア",
           hashtag: "#性格診断",
           cardTitle: "学術5因子診断結果",
-          cardDescription: "24問・LibertyCanvas 独自診断、やってみて！",
+          cardDescription: "24問・Liberty Canvas 独自診断、やってみて！",
         },
         {
           id: "copy-academic",
@@ -432,7 +450,7 @@ function buildAcademicSpectrumElements(): DiagnosisElement[] {
           label: "リンクをコピー",
           hashtag: "#自己分析",
           cardTitle: "学術特性診断",
-          cardDescription: "Rubel Canvas",
+          cardDescription: "Liberty Plug",
         },
       ],
     },
@@ -447,9 +465,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
       targetDemographics: ["10代", "20代", "30代", "動機づけに関心がある方"],
       desireTags: ["動機タイプ", "性格診断", "自己理解", "モチベーション", "無料診断"],
       landingPath: "/diagnosis/play/motivation-spectrum",
-      titleTemplate: "動機スペクトラム診断 — LibertyCanvas 独自 | Rubel Canvas",
+      titleTemplate: "動機スペクトラム診断 — Liberty Canvas 独自 | Liberty Plug",
       descriptionTemplate:
-        "内発的動機を24問で診断。LibertyCanvas 独自の9アーキタイプで、あなたの行動スタイルがわかる無料診断。",
+        "内発的動機を24問で診断。Liberty Canvas 独自の9アーキタイプで、あなたの行動スタイルがわかる無料診断。",
     },
     ...buildMotivationSpectrumQuestionBank(),
     {
@@ -460,8 +478,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-ideal",
           title: "理想整備タイプ",
-          subtitle: "LibertyCanvas 認定・改善と整える力のあるタイプ",
-          analysis: "あなたは物事をより良い状態へ整える志向が強く、丁寧な積み上げが得意です。",
+          subtitle: "Liberty Canvas 認定・改善と整える力のあるタイプ",
+          analysis:
+            "あなたは物事をより良い状態へ整える志向が強く、丁寧な積み上げが得意です。",
           themeColor: "#64748B",
           traitProfile: t({
             trait_conscientiousness: 0.8,
@@ -476,8 +495,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-warmth",
           title: "ぬくもり支援タイプ",
-          subtitle: "LibertyCanvas 認定・思いやりでつながるタイプ",
-          analysis: "あなたは他者への配慮を自然に行い、温かい関係を育てやすいプロフィールです。",
+          subtitle: "Liberty Canvas 認定・思いやりでつながるタイプ",
+          analysis:
+            "あなたは他者への配慮を自然に行い、温かい関係を育てやすいプロフィールです。",
           themeColor: "#FB7185",
           traitProfile: t({
             trait_empathy: 0.9,
@@ -492,8 +512,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-drive",
           title: "成果加速タイプ",
-          subtitle: "LibertyCanvas 認定・前進エネルギーが強いタイプ",
-          analysis: "あなたは目標に向かう推進力が高く、結果を出すプロセスに喜びを感じやすいタイプです。",
+          subtitle: "Liberty Canvas 認定・前進エネルギーが強いタイプ",
+          analysis:
+            "あなたは目標に向かう推進力が高く、結果を出すプロセスに喜びを感じやすいタイプです。",
           themeColor: "#F59E0B",
           traitProfile: t({
             trait_extraversion: 0.7,
@@ -508,8 +529,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-solo",
           title: "独自感性タイプ",
-          subtitle: "LibertyCanvas 認定・深い感受性と独自性のタイプ",
-          analysis: "あなたは自分らしい感性を大切にし、表面的ではない深い表現を好みます。",
+          subtitle: "Liberty Canvas 認定・深い感受性と独自性のタイプ",
+          analysis:
+            "あなたは自分らしい感性を大切にし、表面的ではない深い表現を好みます。",
           themeColor: "#A78BFA",
           traitProfile: t({
             trait_openness: 0.8,
@@ -524,8 +546,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-observe",
           title: "静観分析タイプ",
-          subtitle: "LibertyCanvas 認定・観察と理解を深めるタイプ",
-          analysis: "あなたは距離を保ちながら本質を見抜く力があり、深い洞察につながりやすいタイプです。",
+          subtitle: "Liberty Canvas 認定・観察と理解を深めるタイプ",
+          analysis:
+            "あなたは距離を保ちながら本質を見抜く力があり、深い洞察につながりやすいタイプです。",
           themeColor: "#38BDF8",
           traitProfile: t({
             trait_openness: 0.8,
@@ -540,8 +563,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-trust",
           title: "信頼安心タイプ",
-          subtitle: "LibertyCanvas 認定・安定と信頼を築くタイプ",
-          analysis: "あなたは安心感を大切にし、長く続く信頼関係を育てやすいプロフィールです。",
+          subtitle: "Liberty Canvas 認定・安定と信頼を築くタイプ",
+          analysis:
+            "あなたは安心感を大切にし、長く続く信頼関係を育てやすいプロフィールです。",
           themeColor: "#34D399",
           traitProfile: t({
             trait_agreeableness: 0.7,
@@ -556,8 +580,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-joy",
           title: "自由探索タイプ",
-          subtitle: "LibertyCanvas 認定・可能性を追いかけるタイプ",
-          analysis: "あなたは新しい体験と自由を愛し、楽しさの中に学びを見出すタイプです。",
+          subtitle: "Liberty Canvas 認定・可能性を追いかけるタイプ",
+          analysis:
+            "あなたは新しい体験と自由を愛し、楽しさの中に学びを見出すタイプです。",
           themeColor: "#FBBF24",
           traitProfile: t({
             trait_openness: 0.8,
@@ -572,7 +597,7 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-bold",
           title: "決断先導タイプ",
-          subtitle: "LibertyCanvas 認定・率直に道を切り開くタイプ",
+          subtitle: "Liberty Canvas 認定・率直に道を切り開くタイプ",
           analysis: "あなたは決断力と推進力を持ち、必要なときに先頭に立てるタイプです。",
           themeColor: "#EF4444",
           traitProfile: t({
@@ -588,8 +613,9 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-motif-peace",
           title: "調和調整タイプ",
-          subtitle: "LibertyCanvas 認定・穏やかに場をまとめるタイプ",
-          analysis: "あなたは争いより調和を選び、人と人の間をやわらかくつなぐ力があります。",
+          subtitle: "Liberty Canvas 認定・穏やかに場をまとめるタイプ",
+          analysis:
+            "あなたは争いより調和を選び、人と人の間をやわらかくつなぐ力があります。",
           themeColor: "#6EE7B7",
           traitProfile: t({
             trait_agreeableness: 0.8,
@@ -613,7 +639,7 @@ function buildMotivationSpectrumElements(): DiagnosisElement[] {
           label: "Xでシェア",
           hashtag: "#動機診断",
           cardTitle: "動機スペクトラム診断結果",
-          cardDescription: "LibertyCanvas 独自診断を試してみて！",
+          cardDescription: "Liberty Canvas 独自診断を試してみて！",
         },
         {
           id: "native-motivation",
@@ -636,9 +662,9 @@ function buildPersonalitySpectrumElements(): DiagnosisElement[] {
       targetDemographics: ["10代", "20代", "30代", "性格診断に関心がある方"],
       desireTags: ["性格診断", "24問診断", "自己理解", "パーソナリティ", "無料診断"],
       landingPath: "/diagnosis/play/personality-spectrum",
-      titleTemplate: "24問パーソナリティスペクトラム診断 | Rubel Canvas",
+      titleTemplate: "24問パーソナリティスペクトラム診断 | Liberty Plug",
       descriptionTemplate:
-        "24問の性格診断で学術特性ベクトルを解析。LibertyCanvas 独自アーキタイプで、あなたのパーソナリティがわかります。",
+        "24問の性格診断で学術特性ベクトルを解析。Liberty Canvas 独自アーキタイプで、あなたのパーソナリティがわかります。",
     },
     ...buildPersonalitySpectrumQuestionBank(),
     {
@@ -649,8 +675,9 @@ function buildPersonalitySpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-spec-introvert-creator",
           title: "内省クリエイター",
-          subtitle: "LibertyCanvas 認定・静かな探究心を持つタイプ",
-          analysis: "あなたは内側で考えを深め、独自の視点からアイデアを生み出しやすいタイプです。",
+          subtitle: "Liberty Canvas 認定・静かな探究心を持つタイプ",
+          analysis:
+            "あなたは内側で考えを深め、独自の視点からアイデアを生み出しやすいタイプです。",
           themeColor: "#6366F1",
           traitProfile: t({
             trait_openness: 0.8,
@@ -665,8 +692,9 @@ function buildPersonalitySpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-spec-action-leader",
           title: "実行リーダー",
-          subtitle: "LibertyCanvas 認定・推進力と計画性のタイプ",
-          analysis: "あなたは計画を行動に移す力が強く、チームを前に進めやすいプロフィールです。",
+          subtitle: "Liberty Canvas 認定・推進力と計画性のタイプ",
+          analysis:
+            "あなたは計画を行動に移す力が強く、チームを前に進めやすいプロフィールです。",
           themeColor: "#0D9488",
           traitProfile: t({
             trait_conscientiousness: 0.8,
@@ -681,7 +709,7 @@ function buildPersonalitySpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-spec-empathy",
           title: "共感サポーター",
-          subtitle: "LibertyCanvas 認定・やさしさで支えるタイプ",
+          subtitle: "Liberty Canvas 認定・やさしさで支えるタイプ",
           analysis: "あなたは人への配慮を大切にし、関係の温度を保ちやすいタイプです。",
           themeColor: "#F472B6",
           traitProfile: t({
@@ -697,8 +725,9 @@ function buildPersonalitySpectrumElements(): DiagnosisElement[] {
         {
           id: "lc-spec-strategist",
           title: "探究ストラテジスト",
-          subtitle: "LibertyCanvas 認定・発想と構想を両立するタイプ",
-          analysis: "あなたは新しい視点と計画性を組み合わせ、戦略的に物事を進めやすいタイプです。",
+          subtitle: "Liberty Canvas 認定・発想と構想を両立するタイプ",
+          analysis:
+            "あなたは新しい視点と計画性を組み合わせ、戦略的に物事を進めやすいタイプです。",
           themeColor: "#F59E0B",
           traitProfile: t({
             trait_openness: 0.8,
@@ -722,7 +751,7 @@ function buildPersonalitySpectrumElements(): DiagnosisElement[] {
           label: "Xでシェア",
           hashtag: "#性格診断",
           cardTitle: "パーソナリティスペクトラム結果",
-          cardDescription: "8問・LibertyCanvas 独自診断！",
+          cardDescription: "8問・Liberty Canvas 独自診断！",
         },
         {
           id: "img-personality",
@@ -730,7 +759,7 @@ function buildPersonalitySpectrumElements(): DiagnosisElement[] {
           label: "結果を保存",
           hashtag: "#自己理解",
           cardTitle: "パーソナリティ診断",
-          cardDescription: "Rubel Canvas",
+          cardDescription: "Liberty Plug",
         },
       ],
     },
@@ -743,7 +772,7 @@ export const PLUG_DIAGNOSIS_CATALOG: readonly PlugDiagnosisDefinition[] = [
     slug: "oshikatsu",
     eyebrow: "推し活診断",
     title: "推し活スタイル診断",
-    subtitle: "LibertyCanvas 独自アーキタイプで、あなたの推し活タイプを見つける",
+    subtitle: "Liberty Canvas 独自アーキタイプで、あなたの推し活タイプを見つける",
     estimatedMinutes: 12,
     themeColor: "#8B5CF6",
     traitIds: LEGAL_TRAIT_KEYS,
@@ -754,7 +783,7 @@ export const PLUG_DIAGNOSIS_CATALOG: readonly PlugDiagnosisDefinition[] = [
     slug: "romance",
     eyebrow: "恋愛診断",
     title: "恋愛コミュニケーション診断",
-    subtitle: "24問で読み解く、LibertyCanvas 独自の恋愛プロフィール",
+    subtitle: "24問で読み解く、Liberty Canvas 独自の恋愛プロフィール",
     estimatedMinutes: 12,
     themeColor: "#F472B6",
     traitIds: LEGAL_TRAIT_KEYS,
@@ -765,7 +794,7 @@ export const PLUG_DIAGNOSIS_CATALOG: readonly PlugDiagnosisDefinition[] = [
     slug: "genz",
     eyebrow: "高校生向け",
     title: "ソーシャルタイプ診断",
-    subtitle: "24問でわかる、LibertyCanvas 独自の友達関係スタイル",
+    subtitle: "24問でわかる、Liberty Canvas 独自の友達関係スタイル",
     estimatedMinutes: 12,
     themeColor: "#FBBF24",
     traitIds: LEGAL_TRAIT_KEYS,
@@ -776,7 +805,7 @@ export const PLUG_DIAGNOSIS_CATALOG: readonly PlugDiagnosisDefinition[] = [
     slug: "big-five",
     eyebrow: "学術5因子診断",
     title: "学術5因子性格診断",
-    subtitle: "24問で読み解く、LibertyCanvas 独自の学術特性プロフィール",
+    subtitle: "24問で読み解く、Liberty Canvas 独自の学術特性プロフィール",
     estimatedMinutes: 12,
     themeColor: "#6366F1",
     traitIds: LEGAL_TRAIT_KEYS,
@@ -787,7 +816,7 @@ export const PLUG_DIAGNOSIS_CATALOG: readonly PlugDiagnosisDefinition[] = [
     slug: "motivation-spectrum",
     eyebrow: "動機スペクトラム",
     title: "動機スペクトラム診断",
-    subtitle: "24問でわかる、LibertyCanvas 独自の行動動機タイプ",
+    subtitle: "24問でわかる、Liberty Canvas 独自の行動動機タイプ",
     estimatedMinutes: 12,
     themeColor: "#34D399",
     traitIds: LEGAL_TRAIT_KEYS,
@@ -798,23 +827,21 @@ export const PLUG_DIAGNOSIS_CATALOG: readonly PlugDiagnosisDefinition[] = [
     slug: "personality-spectrum",
     eyebrow: "24問診断",
     title: "パーソナリティスペクトラム診断",
-    subtitle: "24問でわかる、LibertyCanvas 独自のパーソナリティタイプ",
+    subtitle: "24問でわかる、Liberty Canvas 独自のパーソナリティタイプ",
     estimatedMinutes: 12,
     themeColor: "#0D9488",
     traitIds: LEGAL_TRAIT_KEYS,
     elements: buildPersonalitySpectrumElements(),
   },
+  buildWorldSpecialtySoulDefinition(),
+  ...buildLiveCountrySpecialtyDefinitions(),
 ] as const;
 
-export function getPlugDiagnosisBySlug(
-  slug: string,
-): PlugDiagnosisDefinition | null {
+export function getPlugDiagnosisBySlug(slug: string): PlugDiagnosisDefinition | null {
   return PLUG_DIAGNOSIS_CATALOG.find((entry) => entry.slug === slug) ?? null;
 }
 
-export function getPlugDiagnosisById(
-  id: string,
-): PlugDiagnosisDefinition | null {
+export function getPlugDiagnosisById(id: string): PlugDiagnosisDefinition | null {
   return PLUG_DIAGNOSIS_CATALOG.find((entry) => entry.id === id) ?? null;
 }
 

@@ -1,8 +1,5 @@
 import type { z } from "zod";
-import {
-  AUTH_ERROR_CODES,
-  type AuthErrorCode,
-} from "@/lib/auth/constants";
+import { AUTH_ERROR_CODES, type AuthErrorCode } from "@/lib/auth/constants";
 
 interface AuthErrorInit {
   message: string;

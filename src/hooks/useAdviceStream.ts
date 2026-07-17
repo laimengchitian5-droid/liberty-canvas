@@ -12,8 +12,7 @@ import type {
 import type { PlugDiagnosisAdviceRequestBody } from "@/types/diagnosisCompiler";
 
 export type AdviceStreamPayload =
-  | DiagnosisAdviceRequestBody
-  | PlugDiagnosisAdviceRequestBody;
+  DiagnosisAdviceRequestBody | PlugDiagnosisAdviceRequestBody;
 
 function resolveAdviceStreamTitle(payload: AdviceStreamPayload): string {
   if ("mode" in payload) {

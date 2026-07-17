@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { LandingLocale } from "@/lib/landing/landingLocales";
 import { LANDING_LOCALE_META } from "@/lib/landing/landingLocales";
-import { PRODUCT_NAME } from "@/lib/brand/constants";
+import { PRODUCT_NAME, PRODUCT_NAME_JA } from "@/lib/brand/constants";
 import { buildHreflangAlternates } from "@/lib/seo/hreflang";
 import { buildPlugOgImageUrl } from "@/lib/seo/ogUrls";
 import { getSiteUrl } from "@/lib/site/url";
@@ -31,11 +31,17 @@ function resolveCopy(topic: PsychTopicSlug, locale: LandingLocale) {
   return topic === "big-five" ? getBigFiveCopy(locale) : getEnneagramCopy(locale);
 }
 
-export function buildPsychPageTitle(topic: PsychTopicSlug, locale: LandingLocale = "ja"): string {
+export function buildPsychPageTitle(
+  topic: PsychTopicSlug,
+  locale: LandingLocale = "ja",
+): string {
   const copy = resolveCopy(topic, locale);
   return `${copy.headline} — ${copy.keyword} | ${PRODUCT_NAME}`;
 }
-export function buildPsychPageDescription(topic: PsychTopicSlug, locale: LandingLocale = "ja"): string {
+export function buildPsychPageDescription(
+  topic: PsychTopicSlug,
+  locale: LandingLocale = "ja",
+): string {
   const copy = resolveCopy(topic, locale);
   return `${copy.subhead} ${BRAND_NARRATIVE}`;
 }
@@ -48,7 +54,7 @@ export function buildPsychPageKeywords(topic: PsychTopicSlug): string[] {
     "No-Login Personality Diagnosis",
     "AI 性格診断",
     "全肯定 AI チャット",
-    "Rubel Canvas",
+    PRODUCT_NAME,
     "liberty-canvas.vercel.app",
   ];
 
@@ -83,13 +89,16 @@ export function buildPsychPageMetadata(topic: PsychTopicSlug): Metadata {
       type: "website",
       images: [
         {
-          url: buildPlugOgImageUrl(topic === "big-five" ? "big-five" : "motivation-spectrum"),
+          url: buildPlugOgImageUrl(
+            topic === "big-five" ? "big-five" : "motivation-spectrum",
+          ),
           width: 1200,
           height: 630,
           alt: title,
         },
       ],
-    },    twitter: {
+    },
+    twitter: {
       card: "summary_large_image",
       title,
       description,
@@ -98,7 +107,10 @@ export function buildPsychPageMetadata(topic: PsychTopicSlug): Metadata {
   };
 }
 
-export function buildPsychPageJsonLd(topic: PsychTopicSlug, locale: LandingLocale = "ja") {
+export function buildPsychPageJsonLd(
+  topic: PsychTopicSlug,
+  locale: LandingLocale = "ja",
+) {
   const siteUrl = getSiteUrl();
   const path = TOPIC_PATH[topic];
   const copy = resolveCopy(topic, locale);
@@ -127,7 +139,8 @@ export function buildPsychPageJsonLd(topic: PsychTopicSlug, locale: LandingLocal
         "@type": "Organization",
         "@id": `${siteUrl}#organization`,
         name: PRODUCT_NAME,
-        alternateName: ["LibertyCanvas", "Rubel Canvas"],        url: siteUrl,
+        alternateName: [PRODUCT_NAME_JA, "LibertyCanvas"],
+        url: siteUrl,
         description: BRAND_NARRATIVE,
       },
       {

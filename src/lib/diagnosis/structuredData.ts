@@ -14,8 +14,7 @@ export function buildDiagnosisQuizJsonLd(result: DiagnosisResult) {
     "@context": "https://schema.org",
     "@type": "Quiz",
     name: "心の色診断",
-    description:
-      `${DIAGNOSTIC_QUESTION_COUNT}問のやさしい多肢選択で、あなたらしい心の色を見つける大人可愛い性格診断。`,
+    description: `${DIAGNOSTIC_QUESTION_COUNT}問のやさしい多肢選択で、あなたらしい心の色を見つける大人可愛い性格診断。`,
     url: buildDiagnosisPageUrl(),
     educationalLevel: "General",
     inLanguage: "ja",

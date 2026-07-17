@@ -1,0 +1,49 @@
+.wrap {
+  width: 100%;
+}
+
+.status {
+  min-height: 40dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+  color: #6f6258;
+  font-size: 0.95rem;
+}
+
+.retry {
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(201, 160, 154, 0.45);
+  background: #fffaf5;
+  color: #4a4038;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.devCot {
+  width: min(100%, 64rem);
+  margin: 1.5rem auto 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: #1a1f2b;
+  color: #86efac;
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.devCot summary {
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.devCot pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

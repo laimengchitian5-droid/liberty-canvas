@@ -11,7 +11,10 @@ describe("schemaGraph", () => {
   it("builds Organization with stable @id", () => {
     const org = buildOrganizationEntity("https://liberty-canvas.vercel.app");
     expect(org["@id"]).toBe("https://liberty-canvas.vercel.app#organization");
-    expect(org.name).toBe("LibertyCanvas");
+    expect(org.name).toBe("Liberty Canvas");
+    expect(org.alternateName).toEqual(
+      expect.arrayContaining(["LibertyCanvas", "AI personality test"]),
+    );
   });
 
   it("builds Quiz entity for official plug diagnosis", () => {

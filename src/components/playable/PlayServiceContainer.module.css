@@ -1,0 +1,22 @@
+.root {
+  /* Isolation boundary — brand tokens do not leak to :root */
+  --lc-service-primary: #c9a09a;
+  --lc-service-bg: #faf9f6;
+  --lc-service-surface: transparent;
+
+  isolation: isolate;
+  min-block-size: 100%;
+  min-block-size: 100dvh;
+  background-color: var(--lc-service-bg);
+  color: inherit;
+}
+
+.canvas {
+  min-block-size: inherit;
+  background-color: var(--lc-service-surface, transparent);
+}
+
+.root :focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}

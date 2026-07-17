@@ -2,11 +2,7 @@ import type { Diagnosis } from "@/types/rubel";
 import { inferCrossLingualKeywords } from "@/lib/rubel/i18n/constants";
 import { normalizeSeedCatalog } from "@/lib/rubel/normalizeSingleQuestion";
 
-function traitModifiers(
-  openness: number,
-  empathyNeed: number,
-  ego: number,
-) {
+function traitModifiers(openness: number, empathyNeed: number, ego: number) {
   return [
     { trait: "openness" as const, value: openness },
     { trait: "empathy_need" as const, value: empathyNeed },
@@ -19,7 +15,10 @@ export const JA_NEKO_DIAGNOSIS: Diagnosis = {
   title: "あなたのネコ度診断",
   creatorName: "@neko_studio",
   language: "ja",
-  searchKeywords: inferCrossLingualKeywords("あなたのネコ度診断 cat neko ネコ gato", "ja"),
+  searchKeywords: inferCrossLingualKeywords(
+    "あなたのネコ度診断 cat neko ネコ gato",
+    "ja",
+  ),
   totalSubmissions: 15600,
   results: [
     {
@@ -114,7 +113,10 @@ export const SAMPLE_CAT_DOG_DIAGNOSIS: Diagnosis = {
   title: "What kind of cat are you?",
   creatorName: "@rubel_official",
   language: "en",
-  searchKeywords: inferCrossLingualKeywords("What kind of cat are you cat dog personality", "en"),
+  searchKeywords: inferCrossLingualKeywords(
+    "What kind of cat are you cat dog personality",
+    "en",
+  ),
   totalSubmissions: 8420,
   results: [
     {
@@ -225,7 +227,10 @@ export const INTROVERT_LEVEL_DIAGNOSIS: Diagnosis = {
   title: "What Level of Introvert Are You?",
   creatorName: "@airfriend_labs",
   language: "en",
-  searchKeywords: inferCrossLingualKeywords("What Level of Introvert Are You introvert shy personality", "en"),
+  searchKeywords: inferCrossLingualKeywords(
+    "What Level of Introvert Are You introvert shy personality",
+    "en",
+  ),
   totalSubmissions: 12000,
   results: [
     {
@@ -329,7 +334,10 @@ export const BURNOUT_RISK_DIAGNOSIS: Diagnosis = {
   title: "What's Your Burnout Archetype?",
   creatorName: "@wellness_canvas",
   language: "en",
-  searchKeywords: inferCrossLingualKeywords("What's Your Burnout Archetype burnout stress exhausted", "en"),
+  searchKeywords: inferCrossLingualKeywords(
+    "What's Your Burnout Archetype burnout stress exhausted",
+    "en",
+  ),
   totalSubmissions: 6800,
   results: [
     {

@@ -13,10 +13,7 @@ export function writeSatelliteIntake(payload: SatelliteIntakeWritePayload): void
 
   const record: SatelliteIntakeRecord = { ...payload, source: "satellite" };
 
-  window.sessionStorage.setItem(
-    SATELLITE_INTAKE_STORAGE_KEY,
-    JSON.stringify(record),
-  );
+  window.sessionStorage.setItem(SATELLITE_INTAKE_STORAGE_KEY, JSON.stringify(record));
 }
 
 export function peekSatelliteIntake(): SatelliteIntakeRecord | null {

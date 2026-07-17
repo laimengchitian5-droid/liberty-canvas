@@ -14,9 +14,7 @@ const OCEAN_TO_LEGAL: Readonly<Record<OceanTraitKey, LegalTraitKey>> = {
  * Maps creator-facing OCEAN payload → internal academic trait weights.
  * Creators never see LegalTraitKey or normalization math.
  */
-export function mapScoringPayloadToTraitWeights(
-  payload: ScoringPayload,
-): TraitWeightMap {
+export function mapScoringPayloadToTraitWeights(payload: ScoringPayload): TraitWeightMap {
   const weights: Partial<Record<LegalTraitKey, number>> = {};
 
   for (const [oceanKey, value] of Object.entries(payload)) {

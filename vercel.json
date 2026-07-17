@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "play.libertycanvas.jp" }],
+      "destination": "/play"
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "play.libertycanvas.jp" }],
+      "destination": "/play/:path*"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "discover.libertycanvas.jp" }],
+      "destination": "/discover"
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "discover.libertycanvas.jp" }],
+      "destination": "/discover/:path*"
+    }
+  ]
+}

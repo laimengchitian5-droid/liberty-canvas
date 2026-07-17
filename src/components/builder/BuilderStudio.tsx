@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DiagnosisCompiler } from "@/components/diagnosis/DiagnosisCompiler";
-import { saveBuilderDiagnosisRemote, listCreatorBuilderRecords, unpublishBuilderDiagnosisRemote } from "@/lib/builder/builderApiClient";
+import {
+  saveBuilderDiagnosisRemote,
+  listCreatorBuilderRecords,
+  unpublishBuilderDiagnosisRemote,
+} from "@/lib/builder/builderApiClient";
 import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 import { readStoredUserId } from "@/lib/user/readStoredUserId";
 import {
@@ -101,9 +105,7 @@ const BuilderStudio = () => {
     [definition],
   );
 
-  const selectedBlock = definition.blocks.find(
-    (block) => block.id === selectedBlockId,
-  );
+  const selectedBlock = definition.blocks.find((block) => block.id === selectedBlockId);
 
   const updateDefinition = useCallback(
     (updater: (current: BuilderDiagnosisDefinition) => BuilderDiagnosisDefinition) => {
@@ -154,9 +156,7 @@ const BuilderStudio = () => {
         status: "published",
       });
     } catch (error) {
-      setSyncMessage(
-        error instanceof Error ? error.message : "公開に失敗しました",
-      );
+      setSyncMessage(error instanceof Error ? error.message : "公開に失敗しました");
     }
   }, [creatorId, definition, validationErrors.length]);
 
@@ -168,9 +168,7 @@ const BuilderStudio = () => {
       });
       setSyncMessage(`非公開にしました: ${record.slug}`);
     } catch (error) {
-      setSyncMessage(
-        error instanceof Error ? error.message : "非公開に失敗しました",
-      );
+      setSyncMessage(error instanceof Error ? error.message : "非公開に失敗しました");
     }
   }, [creatorId, definition.id]);
 
@@ -287,7 +285,8 @@ const BuilderStudio = () => {
 
   const handleAddFeedback = useCallback(() => {
     const questionBlocks = definition.blocks.filter(isConversationalQuestionBlock);
-    const trigger = questionBlocks[questionBlocks.length - 1]?.id ?? definition.startBlockId;
+    const trigger =
+      questionBlocks[questionBlocks.length - 1]?.id ?? definition.startBlockId;
     const id = `fb-${crypto.randomUUID().slice(0, 6)}`;
 
     updateDefinition((current) => ({
@@ -309,7 +308,8 @@ const BuilderStudio = () => {
 
   const handleAddBranch = useCallback(() => {
     const questionBlocks = definition.blocks.filter(isConversationalQuestionBlock);
-    const after = questionBlocks[questionBlocks.length - 1]?.id ?? definition.startBlockId;
+    const after =
+      questionBlocks[questionBlocks.length - 1]?.id ?? definition.startBlockId;
     const nextQuestion = questionBlocks[0]?.id ?? definition.startBlockId;
     const id = `br-${crypto.randomUUID().slice(0, 6)}`;
 
@@ -361,7 +361,11 @@ const BuilderStudio = () => {
     return (
       <div className={styles.previewShell}>
         <div className={styles.previewToolbar}>
-          <button type="button" className={styles.secondaryButton} onClick={() => setMode("edit")}>
+          <button
+            type="button"
+            className={styles.secondaryButton}
+            onClick={() => setMode("edit")}
+          >
             編集に戻る
           </button>
         </div>
@@ -413,7 +417,11 @@ const BuilderStudio = () => {
             <h1 className={styles.title}>会話型診断エディタ</h1>
           </div>
           <div className={styles.headerActions}>
-            <button type="button" className={styles.secondaryButton} onClick={() => void handleSave()}>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => void handleSave()}
+            >
               保存
             </button>
             <button
@@ -507,9 +515,7 @@ const BuilderStudio = () => {
               value={definition.frameworkId ?? "ocean"}
               onChange={(event) => {
                 const next = event.target.value as PsychFrameworkId;
-                updateDefinition((current) =>
-                  applyFrameworkTemplate(current, next),
-                );
+                updateDefinition((current) => applyFrameworkTemplate(current, next));
               }}
             >
               {PSYCH_FRAMEWORK_IDS.map((id) => (
@@ -525,353 +531,375 @@ const BuilderStudio = () => {
         </section>
 
         {editorTab === "blocks" ? (
-        <section className={styles.blocksSection}>
-          <div className={styles.blocksToolbar}>
-            <h2 className={styles.sectionTitle}>ブロック</h2>
-            <div className={styles.blocksToolbarActions}>
-              <button type="button" className={styles.secondaryButton} onClick={() => moveSelectedBlock(-1)}>
-                ↑ 上へ
-              </button>
-              <button type="button" className={styles.secondaryButton} onClick={() => moveSelectedBlock(1)}>
-                ↓ 下へ
-              </button>
-              <button type="button" className={styles.secondaryButton} onClick={handleAddQuestion}>
-                質問を追加
-              </button>
-              <button type="button" className={styles.secondaryButton} onClick={handleAddFeedback}>
-                AIフィードバック
-              </button>
-              <button type="button" className={styles.secondaryButton} onClick={handleAddBranch}>
-                分岐
-              </button>
-            </div>
-          </div>
-
-          <ul className={styles.blockList} role="list">
-            {definition.blocks.map((block: BuilderBlock) => (
-              <li
-                key={block.id}
-                draggable
-                onDragStart={() => setDragBlockId(block.id)}
-                onDragOver={(event) => event.preventDefault()}
-                onDrop={() => {
-                  if (dragBlockId) {
-                    reorderBlock(dragBlockId, block.id);
-                  }
-                  setDragBlockId(null);
-                }}
-              >
+          <section className={styles.blocksSection}>
+            <div className={styles.blocksToolbar}>
+              <h2 className={styles.sectionTitle}>ブロック</h2>
+              <div className={styles.blocksToolbarActions}>
                 <button
                   type="button"
-                  className={
-                    block.id === selectedBlockId
-                      ? styles.blockChipActive
-                      : styles.blockChip
-                  }
-                  onClick={() => setSelectedBlockId(block.id)}
+                  className={styles.secondaryButton}
+                  onClick={() => moveSelectedBlock(-1)}
                 >
-                  {block.type === "CONVERSATIONAL_QUESTION"
-                    ? `Q: ${block.prompt.slice(0, 18)}`
-                    : block.type === "AI_INTERMEDIATE_FEEDBACK"
-                      ? "AIフィードバック"
-                      : "分岐"}
+                  ↑ 上へ
                 </button>
-              </li>
-            ))}
-          </ul>
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={() => moveSelectedBlock(1)}
+                >
+                  ↓ 下へ
+                </button>
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={handleAddQuestion}
+                >
+                  質問を追加
+                </button>
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={handleAddFeedback}
+                >
+                  AIフィードバック
+                </button>
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={handleAddBranch}
+                >
+                  分岐
+                </button>
+              </div>
+            </div>
 
-          {selectedBlock?.type === "CONVERSATIONAL_QUESTION" ? (
-            <div className={styles.blockEditor}>
-              <label className={styles.field}>
-                質問文
-                <textarea
-                  className={styles.textarea}
-                  value={selectedBlock.prompt}
-                  onChange={(event) =>
-                    updateQuestionBlock(selectedBlock.id, {
-                      prompt: event.target.value,
-                    })
-                  }
-                />
-              </label>
-              {selectedBlock.choices.map((choice, index) => (
-                <div key={choice.id} className={styles.choiceEditor}>
-                  <label className={styles.field}>
-                    選択肢 {index + 1}
-                    <input
-                      className={styles.input}
-                      value={choice.label}
-                      onChange={(event) =>
-                        updateDefinition((current) => ({
-                          ...current,
-                          blocks: current.blocks.map((block) => {
-                            if (
-                              block.id !== selectedBlock.id ||
-                              block.type !== "CONVERSATIONAL_QUESTION"
-                            ) {
-                              return block;
-                            }
+            <ul className={styles.blockList} role="list">
+              {definition.blocks.map((block: BuilderBlock) => (
+                <li
+                  key={block.id}
+                  draggable
+                  onDragStart={() => setDragBlockId(block.id)}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={() => {
+                    if (dragBlockId) {
+                      reorderBlock(dragBlockId, block.id);
+                    }
+                    setDragBlockId(null);
+                  }}
+                >
+                  <button
+                    type="button"
+                    className={
+                      block.id === selectedBlockId
+                        ? styles.blockChipActive
+                        : styles.blockChip
+                    }
+                    onClick={() => setSelectedBlockId(block.id)}
+                  >
+                    {block.type === "CONVERSATIONAL_QUESTION"
+                      ? `Q: ${block.prompt.slice(0, 18)}`
+                      : block.type === "AI_INTERMEDIATE_FEEDBACK"
+                        ? "AIフィードバック"
+                        : "分岐"}
+                  </button>
+                </li>
+              ))}
+            </ul>
 
-                            return {
-                              ...block,
-                              choices: block.choices.map((entry) =>
-                                entry.id === choice.id
-                                  ? { ...entry, label: event.target.value }
-                                  : entry,
-                              ),
-                            };
-                          }),
-                        }))
-                      }
-                    />
-                  </label>
+            {selectedBlock?.type === "CONVERSATIONAL_QUESTION" ? (
+              <div className={styles.blockEditor}>
+                <label className={styles.field}>
+                  質問文
+                  <textarea
+                    className={styles.textarea}
+                    value={selectedBlock.prompt}
+                    onChange={(event) =>
+                      updateQuestionBlock(selectedBlock.id, {
+                        prompt: event.target.value,
+                      })
+                    }
+                  />
+                </label>
+                {selectedBlock.choices.map((choice, index) => (
+                  <div key={choice.id} className={styles.choiceEditor}>
+                    <label className={styles.field}>
+                      選択肢 {index + 1}
+                      <input
+                        className={styles.input}
+                        value={choice.label}
+                        onChange={(event) =>
+                          updateDefinition((current) => ({
+                            ...current,
+                            blocks: current.blocks.map((block) => {
+                              if (
+                                block.id !== selectedBlock.id ||
+                                block.type !== "CONVERSATIONAL_QUESTION"
+                              ) {
+                                return block;
+                              }
+
+                              return {
+                                ...block,
+                                choices: block.choices.map((entry) =>
+                                  entry.id === choice.id
+                                    ? { ...entry, label: event.target.value }
+                                    : entry,
+                                ),
+                              };
+                            }),
+                          }))
+                        }
+                      />
+                    </label>
+                    <fieldset className={styles.scoreFieldset}>
+                      <legend className={styles.scoreLegend}>OCEAN 重み</legend>
+                      {OCEAN_TRAIT_KEYS.map((traitKey) => (
+                        <label key={traitKey} className={styles.scoreRow}>
+                          <span>{OCEAN_LABELS[traitKey]}</span>
+                          <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.05}
+                            value={choice.scores[traitKey] ?? 0}
+                            onChange={(event) => {
+                              const value = Number.parseFloat(event.target.value);
+                              updateDefinition((current) => ({
+                                ...current,
+                                blocks: current.blocks.map((block) => {
+                                  if (
+                                    block.id !== selectedBlock.id ||
+                                    block.type !== "CONVERSATIONAL_QUESTION"
+                                  ) {
+                                    return block;
+                                  }
+
+                                  return {
+                                    ...block,
+                                    choices: block.choices.map((entry) =>
+                                      entry.id === choice.id
+                                        ? {
+                                            ...entry,
+                                            scores: {
+                                              ...entry.scores,
+                                              [traitKey]: value,
+                                            },
+                                          }
+                                        : entry,
+                                    ),
+                                  };
+                                }),
+                              }));
+                            }}
+                          />
+                          <span className={styles.scoreValue}>
+                            {(choice.scores[traitKey] ?? 0).toFixed(2)}
+                          </span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+
+            {selectedBlock?.type === "AI_INTERMEDIATE_FEEDBACK" ? (
+              <div className={styles.blockEditor}>
+                <label className={styles.field}>
+                  肯定メッセージ（{"{choice}"} で選択肢を挿入）
+                  <textarea
+                    className={styles.textarea}
+                    value={selectedBlock.affirmationTemplate}
+                    onChange={(event) =>
+                      updateDefinition((current) => ({
+                        ...current,
+                        blocks: current.blocks.map((block) =>
+                          block.id === selectedBlock.id &&
+                          block.type === "AI_INTERMEDIATE_FEEDBACK"
+                            ? { ...block, affirmationTemplate: event.target.value }
+                            : block,
+                        ),
+                      }))
+                    }
+                  />
+                </label>
+              </div>
+            ) : null}
+
+            {selectedBlock?.type === "CONDITIONAL_BRANCH" ? (
+              <div className={styles.blockEditor}>
+                <label className={styles.field}>
+                  分岐元ブロック ID
+                  <input
+                    className={styles.input}
+                    value={selectedBlock.afterBlockId}
+                    onChange={(event) =>
+                      updateDefinition((current) => ({
+                        ...current,
+                        blocks: current.blocks.map((block) =>
+                          block.id === selectedBlock.id &&
+                          block.type === "CONDITIONAL_BRANCH"
+                            ? { ...block, afterBlockId: event.target.value }
+                            : block,
+                        ),
+                      }))
+                    }
+                  />
+                </label>
+                <label className={styles.field}>
+                  デフォルト遷移先ブロック ID
+                  <input
+                    className={styles.input}
+                    value={selectedBlock.defaultGotoBlockId}
+                    onChange={(event) =>
+                      updateDefinition((current) => ({
+                        ...current,
+                        blocks: current.blocks.map((block) =>
+                          block.id === selectedBlock.id &&
+                          block.type === "CONDITIONAL_BRANCH"
+                            ? { ...block, defaultGotoBlockId: event.target.value }
+                            : block,
+                        ),
+                      }))
+                    }
+                  />
+                </label>
+              </div>
+            ) : null}
+          </section>
+        ) : (
+          <section className={styles.blocksSection}>
+            <h2 className={styles.sectionTitle}>結果タイプ</h2>
+            <label className={styles.field}>
+              結果レイアウト
+              <select
+                className={styles.input}
+                value={definition.resultConfig.layout}
+                onChange={(event) =>
+                  updateDefinition((current) => ({
+                    ...current,
+                    resultConfig: {
+                      ...current.resultConfig,
+                      layout: event.target.value as ResultLayoutKind,
+                    },
+                  }))
+                }
+              >
+                {(Object.keys(LAYOUT_LABELS) as ResultLayoutKind[]).map((layout) => (
+                  <option key={layout} value={layout}>
+                    {LAYOUT_LABELS[layout]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {definition.resultConfig.results.map((result, index) => (
+              <div key={result.id} className={styles.blockEditor}>
+                <p className={styles.resultIndex}>タイプ {index + 1}</p>
+                <label className={styles.field}>
+                  タイトル
+                  <input
+                    className={styles.input}
+                    value={result.title}
+                    onChange={(event) =>
+                      updateDefinition((current) => ({
+                        ...current,
+                        resultConfig: {
+                          ...current.resultConfig,
+                          results: current.resultConfig.results.map((entry) =>
+                            entry.id === result.id
+                              ? { ...entry, title: event.target.value }
+                              : entry,
+                          ),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+                <label className={styles.field}>
+                  サブタイトル
+                  <input
+                    className={styles.input}
+                    value={result.subtitle}
+                    onChange={(event) =>
+                      updateDefinition((current) => ({
+                        ...current,
+                        resultConfig: {
+                          ...current.resultConfig,
+                          results: current.resultConfig.results.map((entry) =>
+                            entry.id === result.id
+                              ? { ...entry, subtitle: event.target.value }
+                              : entry,
+                          ),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+                <label className={styles.field}>
+                  分析文
+                  <textarea
+                    className={styles.textarea}
+                    value={result.analysis}
+                    onChange={(event) =>
+                      updateDefinition((current) => ({
+                        ...current,
+                        resultConfig: {
+                          ...current.resultConfig,
+                          results: current.resultConfig.results.map((entry) =>
+                            entry.id === result.id
+                              ? { ...entry, analysis: event.target.value }
+                              : entry,
+                          ),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+                {index === 0 ? (
                   <fieldset className={styles.scoreFieldset}>
-                    <legend className={styles.scoreLegend}>OCEAN 重み</legend>
-                    {OCEAN_TRAIT_KEYS.map((traitKey) => (
+                    <legend className={styles.scoreLegend}>
+                      アーキタイプ traitProfile
+                    </legend>
+                    {LEGAL_TRAIT_KEYS.map((traitKey) => (
                       <label key={traitKey} className={styles.scoreRow}>
-                        <span>{OCEAN_LABELS[traitKey]}</span>
+                        <span>{traitKey.replace("trait_", "")}</span>
                         <input
                           type="range"
                           min={0}
                           max={1}
                           step={0.05}
-                          value={choice.scores[traitKey] ?? 0}
+                          value={result.traitProfile[traitKey] ?? 0}
                           onChange={(event) => {
                             const value = Number.parseFloat(event.target.value);
                             updateDefinition((current) => ({
                               ...current,
-                              blocks: current.blocks.map((block) => {
-                                if (
-                                  block.id !== selectedBlock.id ||
-                                  block.type !== "CONVERSATIONAL_QUESTION"
-                                ) {
-                                  return block;
-                                }
-
-                                return {
-                                  ...block,
-                                  choices: block.choices.map((entry) =>
-                                    entry.id === choice.id
-                                      ? {
-                                          ...entry,
-                                          scores: {
-                                            ...entry.scores,
-                                            [traitKey]: value,
-                                          },
-                                        }
-                                      : entry,
-                                  ),
-                                };
-                              }),
+                              resultConfig: {
+                                ...current.resultConfig,
+                                results: current.resultConfig.results.map((entry) =>
+                                  entry.id === result.id
+                                    ? {
+                                        ...entry,
+                                        traitProfile: {
+                                          ...entry.traitProfile,
+                                          [traitKey]: value,
+                                        },
+                                      }
+                                    : entry,
+                                ),
+                              },
                             }));
                           }}
                         />
                         <span className={styles.scoreValue}>
-                          {(choice.scores[traitKey] ?? 0).toFixed(2)}
+                          {(result.traitProfile[traitKey] ?? 0).toFixed(2)}
                         </span>
                       </label>
                     ))}
                   </fieldset>
-                </div>
-              ))}
-            </div>
-          ) : null}
-
-          {selectedBlock?.type === "AI_INTERMEDIATE_FEEDBACK" ? (
-            <div className={styles.blockEditor}>
-              <label className={styles.field}>
-                肯定メッセージ（{"{choice}"} で選択肢を挿入）
-                <textarea
-                  className={styles.textarea}
-                  value={selectedBlock.affirmationTemplate}
-                  onChange={(event) =>
-                    updateDefinition((current) => ({
-                      ...current,
-                      blocks: current.blocks.map((block) =>
-                        block.id === selectedBlock.id &&
-                        block.type === "AI_INTERMEDIATE_FEEDBACK"
-                          ? { ...block, affirmationTemplate: event.target.value }
-                          : block,
-                      ),
-                    }))
-                  }
-                />
-              </label>
-            </div>
-          ) : null}
-
-          {selectedBlock?.type === "CONDITIONAL_BRANCH" ? (
-            <div className={styles.blockEditor}>
-              <label className={styles.field}>
-                分岐元ブロック ID
-                <input
-                  className={styles.input}
-                  value={selectedBlock.afterBlockId}
-                  onChange={(event) =>
-                    updateDefinition((current) => ({
-                      ...current,
-                      blocks: current.blocks.map((block) =>
-                        block.id === selectedBlock.id &&
-                        block.type === "CONDITIONAL_BRANCH"
-                          ? { ...block, afterBlockId: event.target.value }
-                          : block,
-                      ),
-                    }))
-                  }
-                />
-              </label>
-              <label className={styles.field}>
-                デフォルト遷移先ブロック ID
-                <input
-                  className={styles.input}
-                  value={selectedBlock.defaultGotoBlockId}
-                  onChange={(event) =>
-                    updateDefinition((current) => ({
-                      ...current,
-                      blocks: current.blocks.map((block) =>
-                        block.id === selectedBlock.id &&
-                        block.type === "CONDITIONAL_BRANCH"
-                          ? { ...block, defaultGotoBlockId: event.target.value }
-                          : block,
-                      ),
-                    }))
-                  }
-                />
-              </label>
-            </div>
-          ) : null}
-        </section>
-        ) : (
-        <section className={styles.blocksSection}>
-          <h2 className={styles.sectionTitle}>結果タイプ</h2>
-          <label className={styles.field}>
-            結果レイアウト
-            <select
-              className={styles.input}
-              value={definition.resultConfig.layout}
-              onChange={(event) =>
-                updateDefinition((current) => ({
-                  ...current,
-                  resultConfig: {
-                    ...current.resultConfig,
-                    layout: event.target.value as ResultLayoutKind,
-                  },
-                }))
-              }
-            >
-              {(Object.keys(LAYOUT_LABELS) as ResultLayoutKind[]).map((layout) => (
-                <option key={layout} value={layout}>
-                  {LAYOUT_LABELS[layout]}
-                </option>
-              ))}
-            </select>
-          </label>
-          {definition.resultConfig.results.map((result, index) => (
-            <div key={result.id} className={styles.blockEditor}>
-              <p className={styles.resultIndex}>タイプ {index + 1}</p>
-              <label className={styles.field}>
-                タイトル
-                <input
-                  className={styles.input}
-                  value={result.title}
-                  onChange={(event) =>
-                    updateDefinition((current) => ({
-                      ...current,
-                      resultConfig: {
-                        ...current.resultConfig,
-                        results: current.resultConfig.results.map((entry) =>
-                          entry.id === result.id
-                            ? { ...entry, title: event.target.value }
-                            : entry,
-                        ),
-                      },
-                    }))
-                  }
-                />
-              </label>
-              <label className={styles.field}>
-                サブタイトル
-                <input
-                  className={styles.input}
-                  value={result.subtitle}
-                  onChange={(event) =>
-                    updateDefinition((current) => ({
-                      ...current,
-                      resultConfig: {
-                        ...current.resultConfig,
-                        results: current.resultConfig.results.map((entry) =>
-                          entry.id === result.id
-                            ? { ...entry, subtitle: event.target.value }
-                            : entry,
-                        ),
-                      },
-                    }))
-                  }
-                />
-              </label>
-              <label className={styles.field}>
-                分析文
-                <textarea
-                  className={styles.textarea}
-                  value={result.analysis}
-                  onChange={(event) =>
-                    updateDefinition((current) => ({
-                      ...current,
-                      resultConfig: {
-                        ...current.resultConfig,
-                        results: current.resultConfig.results.map((entry) =>
-                          entry.id === result.id
-                            ? { ...entry, analysis: event.target.value }
-                            : entry,
-                        ),
-                      },
-                    }))
-                  }
-                />
-              </label>
-              {index === 0 ? (
-                <fieldset className={styles.scoreFieldset}>
-                  <legend className={styles.scoreLegend}>アーキタイプ traitProfile</legend>
-                  {LEGAL_TRAIT_KEYS.map((traitKey) => (
-                    <label key={traitKey} className={styles.scoreRow}>
-                      <span>{traitKey.replace("trait_", "")}</span>
-                      <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.05}
-                        value={result.traitProfile[traitKey] ?? 0}
-                        onChange={(event) => {
-                          const value = Number.parseFloat(event.target.value);
-                          updateDefinition((current) => ({
-                            ...current,
-                            resultConfig: {
-                              ...current.resultConfig,
-                              results: current.resultConfig.results.map((entry) =>
-                                entry.id === result.id
-                                  ? {
-                                      ...entry,
-                                      traitProfile: {
-                                        ...entry.traitProfile,
-                                        [traitKey]: value,
-                                      },
-                                    }
-                                  : entry,
-                              ),
-                            },
-                          }));
-                        }}
-                      />
-                      <span className={styles.scoreValue}>
-                        {(result.traitProfile[traitKey] ?? 0).toFixed(2)}
-                      </span>
-                    </label>
-                  ))}
-                </fieldset>
-              ) : null}
-            </div>
-          ))}
-        </section>
+                ) : null}
+              </div>
+            ))}
+          </section>
         )}
       </div>
     </div>

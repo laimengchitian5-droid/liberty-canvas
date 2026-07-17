@@ -103,11 +103,11 @@ export function parseBuilderDiagnosisDefinition(
   return definition;
 }
 
-export function parseSaveBuilderPayload(
-  value: unknown,
-):
-  | { definition: BuilderDiagnosisDefinition; status: "draft" | "published"; creatorId: string }
-  | null {
+export function parseSaveBuilderPayload(value: unknown): {
+  definition: BuilderDiagnosisDefinition;
+  status: "draft" | "published";
+  creatorId: string;
+} | null {
   const parsed = saveBuilderDiagnosisSchema.safeParse(value);
 
   if (!parsed.success) {

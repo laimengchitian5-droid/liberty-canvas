@@ -2,8 +2,14 @@ export {
   buildUnifiedScoringView,
   buildUnifiedScoringViewFromVector,
 } from "@/lib/diagnosis/scoring/buildUnifiedScoringView";
-export { scoringComputePort, resolveScoringComputePort } from "@/lib/diagnosis/scoring/scoringPort";
-export type { ScoringComputePort, ScoringComputeBackend } from "@/lib/diagnosis/scoring/scoringPort";
+export {
+  scoringComputePort,
+  resolveScoringComputePort,
+} from "@/lib/diagnosis/scoring/scoringPort";
+export type {
+  ScoringComputePort,
+  ScoringComputeBackend,
+} from "@/lib/diagnosis/scoring/scoringPort";
 export {
   academicVectorToOceanScores,
   oceanScoresToAcademicVector,

@@ -2,19 +2,12 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  findResultDescription,
-  scoreCustomQuiz,
-} from "@/lib/assessment/scoreCustomQuiz";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { findResultDescription, scoreCustomQuiz } from "@/lib/assessment/scoreCustomQuiz";
 import { LikertScale, type LikertOption } from "@/components/personality/LikertScale";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { getSlideOffset } from "@/lib/i18n/motion";
+import { buildQuizResultShareUrl } from "@/lib/seo/ogUrls";
 import { usePlatform } from "@/store/PlatformContext";
 import {
   TestType,
@@ -106,14 +99,7 @@ export function QuizPlayContainer({ quiz, onExit }: QuizPlayContainerProps) {
     setScoringResult(result);
     setHasScored(true);
     setPhase("result");
-  }, [
-    answerLog,
-    hasScored,
-    isQuestionnaireComplete,
-    phase,
-    quiz,
-    setScoringResult,
-  ]);
+  }, [answerLog, hasScored, isQuestionnaireComplete, phase, quiz, setScoringResult]);
 
   const questionIndex = questionnaire?.currentIndex ?? 0;
   const questionCount = questionnaire?.questions.length ?? 0;
@@ -161,6 +147,31 @@ export function QuizPlayContainer({ quiz, onExit }: QuizPlayContainerProps) {
     return findResultDescription(scoringResult.archetype, quiz.resultsMapping);
   }, [quiz.resultsMapping, scoringResult]);
 
+  const handleShareResult = useCallback(async () => {
+    if (!scoringResult) {
+      return;
+    }
+
+    const scoreLabel = `${scoringResult.archetype} · ${scoringResult.scores.total}`;
+    const url = buildQuizResultShareUrl(
+      quiz.id,
+      scoringResult.archetype,
+      scoringResult.scores.total,
+    );
+    const text = `${quiz.title}\n結果: ${scoreLabel}\n${url}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: quiz.title, text, url });
+        return;
+      } catch {
+        /* fall through */
+      }
+    }
+
+    await navigator.clipboard.writeText(text);
+  }, [quiz.id, quiz.title, scoringResult]);
+
   if (!quiz.questions.length) {
     return (
       <div className={styles.resultCard} aria-live="polite">
@@ -176,11 +187,7 @@ export function QuizPlayContainer({ quiz, onExit }: QuizPlayContainerProps) {
 
   if (phase === "result" && scoringResult) {
     return (
-      <section
-        className={styles.resultCard}
-        aria-live="polite"
-        aria-label="Quiz result"
-      >
+      <section className={styles.resultCard} aria-live="polite" aria-label="Quiz result">
         <p className={styles.badge}>診断結果</p>
         <h2 className={styles.resultType}>{scoringResult.archetype}</h2>
         {resultDescription ? (
@@ -194,7 +201,19 @@ export function QuizPlayContainer({ quiz, onExit }: QuizPlayContainerProps) {
         </p>
 
         <div className={styles.actions}>
-          <Link className={styles.buttonPrimary} href="/diagnosis/play/personality-spectrum">
+          <button
+            type="button"
+            className={styles.buttonPrimary}
+            onClick={() => {
+              void handleShareResult();
+            }}
+          >
+            結果をシェア
+          </button>
+          <Link
+            className={styles.buttonSecondary}
+            href="/diagnosis/play/personality-spectrum"
+          >
             AI チャットで深掘り
           </Link>
           <button type="button" className={styles.buttonSecondary} onClick={onExit}>
@@ -237,10 +256,7 @@ export function QuizPlayContainer({ quiz, onExit }: QuizPlayContainerProps) {
             aria-valuenow={progress}
             aria-label="Quiz progress"
           >
-            <div
-              className={styles.progressFill}
-              style={{ width: `${progress}%` }}
-            />
+            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
           </div>
         </header>
 
@@ -261,7 +277,7 @@ export function QuizPlayContainer({ quiz, onExit }: QuizPlayContainerProps) {
           <h2 id="quiz-play-question-title" className={styles.questionText}>
             {currentQuestion.text}
           </h2>
-        <p className={styles.helperText}>{messages.likert.instructions}</p>
+          <p className={styles.helperText}>{messages.likert.instructions}</p>
         </motion.div>
 
         <LikertScale

@@ -1,7 +1,4 @@
-import type {
-  AIPromptBlueprint,
-  DiagnosisAdviceRequestBody,
-} from "@/types/diagnosis";
+import type { AIPromptBlueprint, DiagnosisAdviceRequestBody } from "@/types/diagnosis";
 
 export const DIAGNOSIS_ADVICE_BLUEPRINT: AIPromptBlueprint = {
   systemContext: [

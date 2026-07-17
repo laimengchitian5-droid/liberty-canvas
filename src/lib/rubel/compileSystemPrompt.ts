@@ -8,9 +8,7 @@ import type {
 import { PERSONA_PRESETS } from "@/lib/rubel/personaPresets";
 
 export type EmpathyLevel =
-  | "hyper_supportive"
-  | "direct_accountability"
-  | "reflective_mirroring";
+  "hyper_supportive" | "direct_accountability" | "reflective_mirroring";
 
 const EMPATHY_LEVEL_MAP: Record<
   ActiveTherapyMode,
@@ -64,9 +62,7 @@ function formatProfile(profile: TraitVector): string {
 }
 
 function resolveOpeningDirective(selectedResult: Result): string {
-  const preset = PERSONA_PRESETS.find(
-    (entry) => entry.label === selectedResult.name,
-  );
+  const preset = PERSONA_PRESETS.find((entry) => entry.label === selectedResult.name);
 
   if (preset) {
     return preset.openingDirective;
@@ -130,8 +126,6 @@ export function compileSystemPrompt(
   };
 }
 
-export function resolveEmpathyLevel(
-  mode: ActiveTherapyMode,
-): EmpathyLevel {
+export function resolveEmpathyLevel(mode: ActiveTherapyMode): EmpathyLevel {
   return EMPATHY_LEVEL_MAP[mode].level;
 }

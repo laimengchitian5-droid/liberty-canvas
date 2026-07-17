@@ -1,18 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Rubel Canvas">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Liberty Canvas">
   <defs>
-    <linearGradient id="rubel-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#818CF8" />
-      <stop offset="100%" stop-color="#6366F1" />
+    <linearGradient id="lc-rose" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4B5AF" />
+      <stop offset="100%" stop-color="#C9A09A" />
+    </linearGradient>
+    <linearGradient id="lc-sage" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9CAF88" />
+      <stop offset="100%" stop-color="#B5C9A4" />
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="#020617" />
-  <path
-    fill="url(#rubel-indigo)"
-    d="M256 118c6 78 66 138 138 138-72 6-132 66-138 138-6-72-66-132-138-138 72-6 132-66 138-138z"
-  />
-  <path
-    fill="#A5B4FC"
-    d="M362 142c3 34 27 58 58 58-31 3-55 27-58 58-3-31-27-55-58-58 31-3 55-27 58-58z"
-  />
-  <circle cx="168" cy="348" r="14" fill="#6366F1" opacity="0.85" />
+  <rect width="512" height="512" rx="112" fill="#FAF9F6" />
+  <rect x="96" y="108" width="320" height="240" rx="24" fill="none" stroke="url(#lc-rose)" stroke-width="20" />
+  <path fill="url(#lc-sage)" d="M148 308c28-8 52-32 60-60 8 28 32 52 60 60-28 8-52 32-60 60-8-28-32-52-60-60z" opacity="0.9" />
+  <circle cx="364" cy="168" r="18" fill="#C4A962" opacity="0.85" />
+  <path fill="url(#lc-rose)" d="M200 168h112v16H200z" opacity="0.6" />
 </svg>

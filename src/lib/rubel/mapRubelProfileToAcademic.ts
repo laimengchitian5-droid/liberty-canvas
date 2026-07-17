@@ -20,7 +20,10 @@ export function mapRubelProfileToAcademicVector(
   raw.trait_agreeableness = empathy * 0.85;
   raw.trait_extraversion = normalizeRubelTrait(profile.ego);
   raw.trait_conscientiousness = 0.45 + empathy * 0.2;
-  raw.trait_neuroticism = Math.max(0.15, 0.55 - normalizeRubelTrait(profile.openness) * 0.25);
+  raw.trait_neuroticism = Math.max(
+    0.15,
+    0.55 - normalizeRubelTrait(profile.openness) * 0.25,
+  );
 
   return freezeAcademicVector(raw);
 }

@@ -63,9 +63,7 @@ function extractJsonStringField(
   buffer: string,
   field: keyof AdaptiveChatResponse,
 ): string | null {
-  const pattern = new RegExp(
-    `"${field}"\\s*:\\s*"((?:\\\\.|[^"\\\\])*)(?:"|$)`,
-  );
+  const pattern = new RegExp(`"${field}"\\s*:\\s*"((?:\\\\.|[^"\\\\])*)(?:"|$)`);
   const match = buffer.match(pattern);
 
   if (!match?.[1]) {
@@ -127,10 +125,7 @@ export function parseAdaptiveChatResponse(buffer: string): AdaptiveChatResponse 
   try {
     parsed = JSON.parse(trimmed);
   } catch {
-    throw new AdaptiveChatParseError(
-      "Response is not valid JSON",
-      trimmed.slice(0, 500),
-    );
+    throw new AdaptiveChatParseError("Response is not valid JSON", trimmed.slice(0, 500));
   }
 
   const validated = adaptiveChatResponseSchema.safeParse(parsed);

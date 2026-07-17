@@ -23,7 +23,7 @@ describe("buildInjectionPrompt", () => {
   it("builds ChatML system block with injected context", () => {
     const block = buildInjectionSystemBlock(sampleResultData);
 
-    expect(block).toContain("Platform: Rubel Canvas");
+    expect(block).toContain("Platform: Liberty Canvas");
     expect(block).toContain("あなたの裏性格診断");
     expect(block).toContain("ガラスのハートの芸術家タイプ");
     expect(block).toContain("ギャル（Gal-tone）");

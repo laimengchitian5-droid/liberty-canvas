@@ -1,9 +1,6 @@
 import { z } from "zod";
 import { SUPPORTED_LOCALES } from "@/lib/i18n/config";
-import {
-  USER_ID_PATTERN,
-  USER_DATA_REQUEST,
-} from "@/lib/user/constants";
+import { USER_ID_PATTERN, USER_DATA_REQUEST } from "@/lib/user/constants";
 import { USER_DATA_SCHEMA_VERSION } from "@/types/user";
 
 const localeSchema = z.enum(SUPPORTED_LOCALES);
@@ -34,9 +31,7 @@ export const userProfileSummarySchema = z.object({
 
 export const userActivitySnapshotSchema = z.object({
   appsAuthored: z.number().int().min(0),
-  recentAppIds: z
-    .array(z.string().min(1).max(128))
-    .max(USER_DATA_REQUEST.maxRecentApps),
+  recentAppIds: z.array(z.string().min(1).max(128)).max(USER_DATA_REQUEST.maxRecentApps),
   lastActiveAt: z.string().datetime().nullable(),
 });
 

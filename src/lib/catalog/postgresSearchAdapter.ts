@@ -1,4 +1,7 @@
-import type { UnifiedDiscoveryEntry, UnifiedDiscoveryKind } from "@/lib/catalog/unifiedDiscoveryTypes";
+import type {
+  UnifiedDiscoveryEntry,
+  UnifiedDiscoveryKind,
+} from "@/lib/catalog/unifiedDiscoveryTypes";
 import type { UnifiedSearchHit } from "@/lib/catalog/searchUnifiedCatalog";
 import { embedSearchQuery } from "@/lib/ai/embeddings";
 import { cosineSimilarity } from "@/lib/catalog/localEmbedding";
@@ -99,11 +102,7 @@ export async function searchDiscoveryIndexFts(
   return (result.rows as DiscoveryIndexRow[]).map((row) => {
     const entry = rowToEntry(row);
     const baseScore = Number(row.rank) * 10;
-    const intentBoost = intentRankBoost(
-      entry.searchIntent,
-      queryIntent,
-      entry.kind,
-    );
+    const intentBoost = intentRankBoost(entry.searchIntent, queryIntent, entry.kind);
 
     return {
       entry,
@@ -159,11 +158,7 @@ export async function searchDiscoveryIndexVector(
 
       const similarity = cosineSimilarity(queryEmbedding, embedding);
       const entry = rowToEntry(row);
-      const intentBoost = intentRankBoost(
-        entry.searchIntent,
-        queryIntent,
-        entry.kind,
-      );
+      const intentBoost = intentRankBoost(entry.searchIntent, queryIntent, entry.kind);
 
       return {
         entry,
@@ -202,7 +197,9 @@ export async function searchDiscoveryIndexHybrid(
     merged.set(hit.entry.id, {
       ...existing,
       score: existing.score + hit.score * 0.85,
-      matchedTokens: Array.from(new Set([...existing.matchedTokens, ...hit.matchedTokens])),
+      matchedTokens: Array.from(
+        new Set([...existing.matchedTokens, ...hit.matchedTokens]),
+      ),
     });
   }
 

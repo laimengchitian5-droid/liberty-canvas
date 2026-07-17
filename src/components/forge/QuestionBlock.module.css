@@ -1,0 +1,148 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: clamp(1rem, 3vw, 1.25rem);
+  border-radius: 1rem;
+  background:
+    radial-gradient(120% 80% at 10% 0%, rgba(244, 194, 194, 0.35), transparent 55%),
+    radial-gradient(100% 70% at 90% 10%, rgba(186, 230, 253, 0.4), transparent 50%),
+    linear-gradient(165deg, #fffaf7 0%, #f7f4ff 48%, #f0f9ff 100%);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.questionInput,
+.optionInput {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.72);
+  color: #0f172a;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.questionInput:focus-visible,
+.optionInput:focus-visible,
+.feedbackButton:focus-visible,
+.weightRow input[type="range"]:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.options {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .options {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.optionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(203, 213, 225, 0.7);
+}
+
+.weightList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.weightRow {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr 2.5rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #64748b;
+  font-feature-settings: "tnum";
+}
+
+.weightRow input[type="range"] {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  accent-color: #fb7185;
+}
+
+.weightValue {
+  text-align: end;
+  color: #334155;
+}
+
+.feedbackButton {
+  align-self: start;
+  min-block-size: 2.75rem;
+  min-inline-size: 11rem;
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fb7185 0%, #f472b6 55%, #c084fc 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.feedbackButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.88rem;
+}
+
+.cot {
+  margin-top: 0.25rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: #0b1220;
+  color: #86efac;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+}
+
+.cot summary {
+  cursor: pointer;
+  color: #94a3b8;
+}
+
+.cotBody {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cotBody p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.cotLabel {
+  color: #a7f3d0;
+  font-weight: 700;
+}

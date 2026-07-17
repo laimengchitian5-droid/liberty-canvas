@@ -1,0 +1,27 @@
+.figure {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.canvas {
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 1;
+  height: auto;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(201, 160, 154, 0.35);
+  box-shadow: 0 12px 40px rgba(74, 64, 56, 0.08);
+  background: #faf9f6;
+}
+
+.caption {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #6f6258;
+  text-align: center;
+}

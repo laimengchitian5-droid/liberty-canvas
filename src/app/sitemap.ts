@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { listAllLandingPages } from "@/lib/landing/landingCatalog";
+import { listIndexableLandingPages } from "@/lib/landing/landingCatalog";
 import { LANDING_LOCALES } from "@/lib/landing/landingLocales";
 import { listMergedPlugDiagnosisSlugs } from "@/lib/builder/plugCatalog";
 import { buildDiagnosisResultPageUrl } from "@/lib/diagnosis/share";
@@ -7,6 +7,7 @@ import { listPlugDiagnosisSlugs } from "@/config/diagnoses";
 import { listDiagnoses } from "@/lib/rubel/repository";
 import { PERSONALITY_CATEGORIES } from "@/types/diagnosis";
 import { buildAppPageUrl, buildQuizPageUrl, getSiteUrl } from "@/lib/site/url";
+import { resolveBrandPath } from "@/lib/brand/urlResolver";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
@@ -69,17 +70,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly" as const,
       priority: 0.85,
     })),
-    ...listAllLandingPages().map((page) => ({
+    ...listIndexableLandingPages().map((page) => ({
       url: page.absoluteUrl,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.88,
     })),
     {
+      url: `${siteUrl}${resolveBrandPath("liberty-play", "hub")}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    },
+    {
       url: `${siteUrl}/create`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.95,
+    },
+    {
+      url: `${siteUrl}/chat`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.94,
     },
     {
       url: `${siteUrl}/diagnosis`,
@@ -129,7 +142,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.45,
       }));
 
-    return [...staticRoutes, ...plugPlayRoutes, ...rubelPlayRoutes, ...appRoutes, ...legacyQuizRoutes];
+    return [
+      ...staticRoutes,
+      ...plugPlayRoutes,
+      ...rubelPlayRoutes,
+      ...appRoutes,
+      ...legacyQuizRoutes,
+    ];
   } catch (error) {
     console.error("[sitemap] dynamic app routes skipped:", error);
     return [...staticRoutes, ...plugPlayRoutes, ...rubelPlayRoutes];

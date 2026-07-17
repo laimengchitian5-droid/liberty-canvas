@@ -10,6 +10,7 @@ import {
   parseAdaptiveChatRequest,
 } from "@/lib/ai/parseChatRequestBody";
 import { resolveLanguageModel } from "@/lib/ai/provider";
+import { jsonError } from "@/lib/api/http";
 
 function createFallbackStream(text: string): Response {
   const encoder = new TextEncoder();
@@ -54,21 +55,21 @@ export async function POST(request: Request) {
     const payload = await request.json();
     const body = parseAdaptiveChatRequest(payload);
 
+    if (!body) {
+      return jsonError("Invalid chat request payload", 400);
+    }
+
     if (body.messages.length === 0) {
-      return Response.json({ error: "messages must not be empty" }, { status: 400 });
+      return jsonError("messages must not be empty", 400);
     }
 
     const latestUserMessage = getLatestUserMessage(body.messages);
 
     if (!latestUserMessage.trim()) {
-      return Response.json(
-        { error: "At least one non-empty user message is required" },
-        { status: 400 },
-      );
+      return jsonError("At least one non-empty user message is required", 400);
     }
 
     const resolved = resolveLanguageModel();
-
     const isRubelAgent = body.mode === "rubel";
 
     if (!resolved) {
@@ -106,14 +107,9 @@ export async function POST(request: Request) {
       );
     }
   } catch (error) {
-    return Response.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unexpected chat route failure",
-      },
-      { status: 500 },
+    return jsonError(
+      error instanceof Error ? error.message : "Unexpected chat route failure",
+      500,
     );
   }
 }

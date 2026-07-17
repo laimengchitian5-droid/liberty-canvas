@@ -1,0 +1,24 @@
+.bar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding-block: calc(0.45rem + var(--lc-safe-top)) 0.45rem;
+  padding-inline: clamp(0.75rem, 3vw, 1.25rem);
+  background: rgb(15 23 42 / 0.92);
+  border-block-end: 1px solid rgb(51 65 85 / 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.bar :global(.labelCompact) {
+  color: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .bar {
+    padding-inline: 0.65rem;
+  }
+}

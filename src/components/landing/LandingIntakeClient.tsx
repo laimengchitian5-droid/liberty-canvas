@@ -10,10 +10,7 @@ import {
   buildDiscoverPlayHandoffUrl,
   type DiscoverFunnelSubmitEvent,
 } from "@/lib/landing/discoverFunnel";
-import {
-  LANDING_LOCALE_META,
-  type LandingLocale,
-} from "@/lib/landing/landingLocales";
+import { LANDING_LOCALE_META, type LandingLocale } from "@/lib/landing/landingLocales";
 import { resolveLandingPsychTopic } from "@/lib/landing/resolveLandingPsychTopic";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
@@ -138,9 +135,7 @@ export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
       {clusterLinks.length > 0 ? (
         <nav
           className="mx-auto mt-8 max-w-md"
-          aria-label={
-            page.locale === "ja" ? "関連トピック" : "Related topics"
-          }
+          aria-label={page.locale === "ja" ? "関連トピック" : "Related topics"}
         >
           <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
             {page.locale === "ja" ? "関連トピック" : "Related topics"}
@@ -192,7 +187,9 @@ export function LandingHubClient({ locale, pages }: LandingHubClientProps) {
     >
       <div className="mx-auto max-w-md">
         <h1 className="text-2xl font-bold">{hubTitle}</h1>
-        <p className="mt-2 text-sm text-slate-400">LibertyCanvas · AI × 性格診断 × 自由</p>
+        <p className="mt-2 text-sm text-slate-400">
+          LibertyCanvas · AI × 性格診断 × 自由
+        </p>
         <Link
           href={`/diagnosis?lang=${locale}`}
           className={cn(
@@ -213,7 +210,10 @@ export function LandingHubClient({ locale, pages }: LandingHubClientProps) {
             <li key={entry.slug}>
               <Link
                 href={`/discover/${locale}/${entry.slug}`}
-                className={cn(rubelDs.glassCard, "block px-4 py-3 hover:border-indigo-400/30")}
+                className={cn(
+                  rubelDs.glassCard,
+                  "block px-4 py-3 hover:border-indigo-400/30",
+                )}
               >
                 <p className="text-xs text-indigo-300">{entry.keyword}</p>
                 <p className="mt-1 font-semibold">{entry.headline}</p>

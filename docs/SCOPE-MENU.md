@@ -2,13 +2,13 @@
 
 ## 完了済み
 
-| Phase | 内容 |
-|-------|------|
-| 0–1 | Core + i18n + Discover + SEO Query |
-| 2 | Scoring + Design tokens + Insights + Builder v2 |
-| 3 | SEO v3 + Query + Edge + i18n resultLocales |
-| 4 | SearchPort + Postgres FTS + Vector hybrid + Log analytics + Scoring port |
-| 5 | Rubel→Plug bridge + Observability + mobile locale fix |
+| Phase | 内容                                                                     |
+| ----- | ------------------------------------------------------------------------ |
+| 0–1   | Core + i18n + Discover + SEO Query                                       |
+| 2     | Scoring + Design tokens + Insights + Builder v2                          |
+| 3     | SEO v3 + Query + Edge + i18n resultLocales                               |
+| 4     | SearchPort + Postgres FTS + Vector hybrid + Log analytics + Scoring port |
+| 5     | Rubel→Plug bridge + Observability + mobile locale fix                    |
 
 ---
 
@@ -21,16 +21,16 @@
 
 ### 推奨キュー（優先順）
 
-| タップキーワード | スコープ | 工数目安 | GSC 直結 |
-|------------------|----------|----------|----------|
-| **`6A`** | Legal SEO Shield | 1–2d | ★★★ 商標リスク即時低減 |
-| **`6B`** | Legacy Route Matrix | 0.5–1d | ★★★ `/diagnosis/enneagram?lang=*` 404 防止 |
-| **`6C`** | Lifestyle 30Q | 2–3d | ★★ 滞在・CWV・再訪 |
-| **`6D`** | JA UX Purge | 1–2d | ★★ 混合言語排除 |
-| **`6E`** | Cosmic Planet CSS v2 | 1–2d | ★ 差別化・シェア |
-| **`6F`** | Builder Blocks Zustand | 2–4d | ★ クリエイター成長 |
-| **`Phase 6 全部`** | 6A→6F 一括 | 1–2wk | フルロードマップ |
-| **`6A+6B 緊急`** | 法務+ルーティングのみ | 1–2d | **✅ 完了 `d4ebfe9`** |
+| タップキーワード   | スコープ               | 工数目安 | GSC 直結                                   |
+| ------------------ | ---------------------- | -------- | ------------------------------------------ |
+| **`6A`**           | Legal SEO Shield       | 1–2d     | ★★★ 商標リスク即時低減                     |
+| **`6B`**           | Legacy Route Matrix    | 0.5–1d   | ★★★ `/diagnosis/enneagram?lang=*` 404 防止 |
+| **`6C`**           | Lifestyle 30Q          | 2–3d     | ★★ 滞在・CWV・再訪                         |
+| **`6D`**           | JA UX Purge            | 1–2d     | ★★ 混合言語排除                            |
+| **`6E`**           | Cosmic Planet CSS v2   | 1–2d     | ★ 差別化・シェア                           |
+| **`6F`**           | Builder Blocks Zustand | 2–4d     | ★ クリエイター成長                         |
+| **`Phase 6 全部`** | 6A→6F 一括             | 1–2wk    | フルロードマップ                           |
+| **`6A+6B 緊急`**   | 法務+ルーティングのみ  | 1–2d     | **✅ 完了 `d4ebfe9`**                      |
 
 ### ワンタップ詳細
 
@@ -77,7 +77,7 @@
 
 ---
 
-*Phase 6: **ページ削除禁止** — slug 権威温存 + 文言 Strangler*
+_Phase 6: **ページ削除禁止** — slug 権威温存 + 文言 Strangler_
 
 ---
 
@@ -89,29 +89,29 @@
 
 ### GSC 再検査 — 正しいフル URL（プロパティが `https://liberty-canvas.vercel.app` の場合）
 
-| 用途 | 貼り付ける URL |
-|------|----------------|
-| EN landing（旧 mbti slug） | `https://liberty-canvas.vercel.app/discover/en/mbti-personality-types` |
-| JA landing（旧 enneagram slug） | `https://liberty-canvas.vercel.app/discover/ja/enneagram-nine-types` |
-| Legacy KO 流入 | `https://liberty-canvas.vercel.app/diagnosis/enneagram?lang=ko` |
-| サイトマップ | `https://liberty-canvas.vercel.app/sitemap.xml` |
-| ホーム | `https://liberty-canvas.vercel.app/` |
+| 用途                            | 貼り付ける URL                                                         |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| EN landing（旧 mbti slug）      | `https://liberty-canvas.vercel.app/discover/en/mbti-personality-types` |
+| JA landing（旧 enneagram slug） | `https://liberty-canvas.vercel.app/discover/ja/enneagram-nine-types`   |
+| Legacy KO 流入                  | `https://liberty-canvas.vercel.app/diagnosis/enneagram?lang=ko`        |
+| サイトマップ                    | `https://liberty-canvas.vercel.app/sitemap.xml`                        |
+| ホーム                          | `https://liberty-canvas.vercel.app/`                                   |
 
 **プロパティ不一致チェック:** Search Console 左上のプロパティ名が上記ドメインと一致しているか。`www` 有無・カスタムドメイン・別 Vercel プレビュー URL だと全滅。**ドメインプロパティ**なら `liberty-canvas.vercel.app` 全体が対象（URL はフルで入力）。
 
 ### 推奨キュー（Principal Architect — クリック優先）
 
-| タップキーワード | スコープ | 工数 | クリック直結 |
-|------------------|----------|------|--------------|
-| **`7L 緊急`** | Locale SSR Sync | 0.5–1d | ★★★ Discover `?lang=` → 初回表示が正言語 |
-| **`7G`** | GSC Property & Sitemap Ops | 0.5d | ★★★ インデックス・検査が通る状態に |
-| **`7F`** | Discover→Play Funnel | 1–2d | ★★★ LP から診断開始率 |
-| **`7S`** | SERP Click Pack（4 locale） | 1–2d | ★★ 表示→クリック CTR |
-| **`7I`** | International Discover（+fr/de） | 2–3d | ★★ 新規国の LP 面 |
-| **`6D`** | JA UX Purge | 1–2d | ★★ JA 混合語排除 |
-| **`6C`** | Lifestyle 30Q | 2–3d | ★ 滞在・再訪 |
-| **`7L+7F 緊急`** | 言語同期 + ファネル | 1–2d | **✅ 完了 `1432bd8`** |
-| **`Phase 7 全部`** | 7G→7L→7F→7S→7I→6D | 1–2wk | フル国際化 |
+| タップキーワード   | スコープ                         | 工数   | クリック直結                             |
+| ------------------ | -------------------------------- | ------ | ---------------------------------------- |
+| **`7L 緊急`**      | Locale SSR Sync                  | 0.5–1d | ★★★ Discover `?lang=` → 初回表示が正言語 |
+| **`7G`**           | GSC Property & Sitemap Ops       | 0.5d   | ★★★ インデックス・検査が通る状態に       |
+| **`7F`**           | Discover→Play Funnel             | 1–2d   | ★★★ LP から診断開始率                    |
+| **`7S`**           | SERP Click Pack（4 locale）      | 1–2d   | ★★ 表示→クリック CTR                     |
+| **`7I`**           | International Discover（+fr/de） | 2–3d   | ★★ 新規国の LP 面                        |
+| **`6D`**           | JA UX Purge                      | 1–2d   | ★★ JA 混合語排除                         |
+| **`6C`**           | Lifestyle 30Q                    | 2–3d   | ★ 滞在・再訪                             |
+| **`7L+7F 緊急`**   | 言語同期 + ファネル              | 1–2d   | **✅ 完了 `1432bd8`**                    |
+| **`Phase 7 全部`** | 7G→7L→7F→7S→7I→6D                | 1–2wk  | フル国際化                               |
 
 ### ワンタップ詳細
 
@@ -158,12 +158,12 @@
 
 ## その他
 
-| キーワード | 内容 |
-|------------|------|
+| キーワード                  | 内容                           |
+| --------------------------- | ------------------------------ |
 | **`Postgres プロビジョン`** | Vercel Postgres + 初回 reindex |
-| **`本番デプロイ`** | vercel deploy --prod |
-| **`GSC 再検査`** | Phase 7 表のフル URL を使用 |
+| **`本番デプロイ`**          | vercel deploy --prod           |
+| **`GSC 再検査`**            | Phase 7 表のフル URL を使用    |
 
-*Phase 4: POSTGRES_URL 未設定時 token フォールバック*  
-*Phase 5: LC_RUBEL_CONVERGE 未設定時 /play 非破壊*  
-*Phase 6: **ページ削除禁止** — slug 権威温存 + 文言 Strangler*
+_Phase 4: POSTGRES_URL 未設定時 token フォールバック_  
+_Phase 5: LC_RUBEL_CONVERGE 未設定時 /play 非破壊_  
+_Phase 6: **ページ削除禁止** — slug 権威温存 + 文言 Strangler_

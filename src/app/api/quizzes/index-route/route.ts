@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { jsonError, parseJsonBody } from "@/lib/api/http";
 import { MAX_RETRY_ATTEMPTS } from "@/lib/google/indexingAuditLog";
 import {
   retryFailedIndexingEntries,
@@ -6,6 +7,7 @@ import {
 } from "@/lib/google/indexingService";
 import { getCustomQuizById } from "@/lib/quiz/repository";
 import { buildQuizPageUrl } from "@/lib/site/url";
+import { quizIndexRequestSchema } from "@/lib/validation/builderAndIndexSchema";
 
 export const runtime = "nodejs";
 
@@ -20,35 +22,19 @@ function isAuthorizedInternalRequest(request: Request): boolean {
   return providedSecret === configuredSecret;
 }
 
-function jsonError(message: string, status: number, details?: unknown) {
-  return NextResponse.json(
-    {
-      error: message,
-      ...(details !== undefined ? { details } : {}),
-    },
-    { status },
-  );
-}
-
 export async function POST(request: Request) {
   if (!isAuthorizedInternalRequest(request)) {
     return jsonError("Unauthorized indexing request", 401);
   }
 
   try {
-    const contentType = request.headers.get("content-type") ?? "";
+    const parsed = await parseJsonBody(request, quizIndexRequestSchema);
 
-    if (!contentType.includes("application/json")) {
-      return jsonError("Content-Type must be application/json", 415);
+    if (!parsed.ok) {
+      return parsed.response;
     }
 
-    let body: { quizId?: string; retryFailed?: boolean };
-
-    try {
-      body = (await request.json()) as { quizId?: string; retryFailed?: boolean };
-    } catch {
-      return jsonError("Request body must be valid JSON", 400);
-    }
+    const body = parsed.data;
 
     if (body.retryFailed) {
       const results = await retryFailedIndexingEntries();
@@ -61,11 +47,7 @@ export async function POST(request: Request) {
       });
     }
 
-    if (!body.quizId?.trim()) {
-      return jsonError("quizId is required", 400);
-    }
-
-    const quizId = body.quizId.trim();
+    const quizId = body.quizId!.trim();
     const quiz = await getCustomQuizById(quizId);
 
     if (!quiz) {
@@ -96,9 +78,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     return jsonError(
-      error instanceof Error
-        ? error.message
-        : "Unexpected indexing route failure",
+      error instanceof Error ? error.message : "Unexpected indexing route failure",
       500,
     );
   }

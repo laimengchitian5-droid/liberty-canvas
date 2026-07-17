@@ -7,12 +7,10 @@ import { CosmicPlanetVisual } from "@/components/diagnosis/CosmicPlanetVisual";
 import { CosmicPlanetGallery } from "@/components/diagnosis/CosmicPlanetGallery";
 import { PlugAdvicePanel } from "@/components/diagnosis/PlugAdvicePanel";
 import { ShareGrowthInsights } from "@/components/diagnosis/ShareGrowthInsights";
+import { SpecialtyDeepDiveBridge } from "@/components/diagnosis/SpecialtyDeepDiveBridge";
 import { DiagnosisCompilerTraitChart } from "@/components/diagnosis/DiagnosisCompilerTraitChart";
 import { COMPILER_UI_MESSAGES } from "@/lib/diagnosis/compilerMessages";
-import {
-  readDiagnosisRef,
-  trackDiagnosisEvent,
-} from "@/lib/diagnosis/analytics";
+import { readDiagnosisRef, trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 import { scoringComputePort } from "@/lib/diagnosis/scoring/scoringPort";
 import { buildCosmicCharacterSheet } from "@/lib/diagnosis/cosmicPlanetEngine";
 import type { CosmicPlanetKind } from "@/lib/diagnosis/cosmicPlanetEngine";
@@ -31,6 +29,7 @@ import {
 } from "@/lib/diagnosis/resultLocales";
 import { useDiagnosisCompilerStore } from "@/store/diagnosisCompilerStore";
 import { cn } from "@/lib/utils/cn";
+import { resolveSpecialtyDeepDiveOffer } from "@/lib/specialty/resolveSpecialtyDeepDive";
 import type { BuilderDiagnosisDefinition } from "@/types/builder";
 import type {
   LegallySafeDiagnosisOutcome,
@@ -177,12 +176,20 @@ const ViralSharePanel = ({
     <section className={styles.shareSection} aria-label="結果をシェア">
       <h3 className={styles.sectionTitle}>{COMPILER_UI_MESSAGES.shareLead}</h3>
       <div className={styles.shareActions}>
-        <button type="button" className={styles.shareButtonPrimary} onClick={handleXShare}>
+        <button
+          type="button"
+          className={styles.shareButtonPrimary}
+          onClick={handleXShare}
+        >
           <Share2 className={styles.shareIcon} aria-hidden="true" />
           {COMPILER_UI_MESSAGES.shareXLabel}
         </button>
 
-        <button type="button" className={styles.shareButton} onClick={() => void handleCopy()}>
+        <button
+          type="button"
+          className={styles.shareButton}
+          onClick={() => void handleCopy()}
+        >
           {copiedId === "text" ? (
             <Check className={styles.shareIcon} aria-hidden="true" />
           ) : (
@@ -193,7 +200,11 @@ const ViralSharePanel = ({
             : COMPILER_UI_MESSAGES.shareCopyLabel}
         </button>
 
-        <button type="button" className={styles.shareButton} onClick={() => void handleCopyLink()}>
+        <button
+          type="button"
+          className={styles.shareButton}
+          onClick={() => void handleCopyLink()}
+        >
           {copiedId === "link" ? (
             <Check className={styles.shareIcon} aria-hidden="true" />
           ) : (
@@ -220,14 +231,13 @@ export const DiagnosisResultPage = ({
   outcome,
   onRestart,
 }: DiagnosisResultPageProps) => {
-  const { cosmicSheet, activePlanetKind, planetRenderReady } =
-    useDiagnosisCompilerStore(
-      useShallow((state) => ({
-        cosmicSheet: state.cosmicSheet,
-        activePlanetKind: state.activePlanetKind,
-        planetRenderReady: state.planetRenderReady,
-      })),
-    );
+  const { cosmicSheet, activePlanetKind, planetRenderReady } = useDiagnosisCompilerStore(
+    useShallow((state) => ({
+      cosmicSheet: state.cosmicSheet,
+      activePlanetKind: state.activePlanetKind,
+      planetRenderReady: state.planetRenderReady,
+    })),
+  );
 
   const fallbackSheet = useMemo(
     () => buildCosmicCharacterSheet(outcome.academicVector),
@@ -278,6 +288,10 @@ export const DiagnosisResultPage = ({
 
   const archetype = outcome.winningArchetype;
   const { narrative } = sheet;
+  const specialtyDeepDive = useMemo(
+    () => resolveSpecialtyDeepDiveOffer(definition.slug, archetype.id),
+    [definition.slug, archetype.id],
+  );
 
   return (
     <article
@@ -350,6 +364,8 @@ export const DiagnosisResultPage = ({
           {archetype.compatibilityHint ?? narrative.universalCompatibility}
         </p>
       </section>
+
+      {specialtyDeepDive ? <SpecialtyDeepDiveBridge offer={specialtyDeepDive} /> : null}
 
       <PlugAdvicePanel
         slug={definition.slug}

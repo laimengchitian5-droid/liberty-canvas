@@ -35,7 +35,9 @@ export function SatelliteLandingShell({
   return (
     <div className={cn(rubelTheme.page, meta.fontClass)}>
       <header className={cn("px-4 py-3", rubelDs.glassHeader)}>
-        <div className={cn(rubelTheme.container, "flex items-center justify-between gap-3")}>
+        <div
+          className={cn(rubelTheme.container, "flex items-center justify-between gap-3")}
+        >
           <Link href="/" className="text-sm font-semibold text-indigo-300">
             LibertyCanvas
           </Link>

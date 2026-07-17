@@ -1,6 +1,5 @@
 export type KraepelinTimerWorkerMessage =
-  | { type: "START"; durationMs: number }
-  | { type: "STOP" };
+  { type: "START"; durationMs: number } | { type: "STOP" };
 
 export type KraepelinTimerWorkerEvent =
   | { type: "TICK"; elapsedMs: number; remainingMs: number }

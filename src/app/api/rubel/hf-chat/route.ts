@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import type {
-  HfChatResponseContract,
-  InjectionChatTurn,
-  RubelEnginePayload,
-} from "@/lib/rubel/contracts/pipeline";
+import { jsonError, parseJsonBody } from "@/lib/api/http";
+import type { HfChatResponseContract } from "@/lib/rubel/contracts/pipeline";
 import { generateRubelChatReply } from "@/lib/ai/rubelChatAdapter";
 import {
   clampInjectionHistory,
@@ -15,47 +12,29 @@ import {
   fetchHuggingFaceRawPrompt,
   fetchHuggingFaceReply,
 } from "@/lib/rubel/huggingfaceClient";
-
-interface HfChatRequestBody {
-  prompt?: string;
-  fallbackText?: string;
-  resultData?: RubelEnginePayload;
-  history?: InjectionChatTurn[];
-  userMessage?: string;
-}
-
-function isValidEnginePayload(value: unknown): value is RubelEnginePayload {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  const record = value as Record<string, unknown>;
-
-  return (
-    typeof record.title === "string" &&
-    typeof record.typeName === "string" &&
-    typeof record.tone === "string" &&
-    typeof record.empathyLevel === "string" &&
-    typeof record.compiledSystemPrompt === "string" &&
-    (record.intakeSource === "satellite" || record.intakeSource === "quiz")
-  );
-}
+import { hfChatRequestSchema } from "@/lib/validation/hfChatSchema";
 
 export async function POST(request: Request) {
   try {
     const contentLength = Number(request.headers.get("content-length") ?? "0");
 
     if (contentLength > 32_000) {
-      return NextResponse.json({ error: "Request body too large." }, { status: 413 });
+      return jsonError("Request body too large.", 413);
     }
 
-    const body = (await request.json()) as HfChatRequestBody;
+    const parsed = await parseJsonBody(request, hfChatRequestSchema);
+
+    if (!parsed.ok) {
+      return parsed.response;
+    }
+
+    const body = parsed.data;
 
     if (typeof body.prompt === "string" && body.prompt.trim()) {
       const validated = validateRawPromptRequest(body);
 
       if (!validated.ok) {
-        return NextResponse.json({ error: validated.error }, { status: 400 });
+        return jsonError(validated.error, 400);
       }
 
       const result = await fetchHuggingFaceRawPrompt(
@@ -72,33 +51,17 @@ export async function POST(request: Request) {
       });
     }
 
-    if (!isValidEnginePayload(body.resultData)) {
-      return NextResponse.json(
-        { error: "Provide prompt or valid resultData." },
-        { status: 400 },
-      );
+    if (!body.resultData) {
+      return jsonError("Provide prompt or valid resultData.", 400);
     }
 
     const userMessage = sanitizeHfText(body.userMessage ?? "", HF_MAX_USER_MESSAGE_CHARS);
 
     if (!userMessage) {
-      return NextResponse.json(
-        { error: "userMessage must not be empty." },
-        { status: 400 },
-      );
+      return jsonError("userMessage must not be empty.", 400);
     }
 
-    const history = clampInjectionHistory(
-      Array.isArray(body.history)
-        ? body.history.filter(
-            (turn): turn is InjectionChatTurn =>
-              Boolean(turn) &&
-              typeof turn === "object" &&
-              (turn.role === "user" || turn.role === "assistant") &&
-              typeof turn.content === "string",
-          )
-        : [],
-    );
+    const history = clampInjectionHistory(body.history ?? []);
 
     const sdkResult = await generateRubelChatReply({
       resultData: body.resultData,
@@ -123,14 +86,9 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("[rubel/hf-chat]", error);
 
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unexpected Hugging Face chat failure.",
-      },
-      { status: 500 },
+    return jsonError(
+      error instanceof Error ? error.message : "Unexpected Hugging Face chat failure.",
+      500,
     );
   }
 }

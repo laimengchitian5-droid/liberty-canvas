@@ -43,13 +43,8 @@ function resolveMappedArchetype(
   return sorted[0] ?? resultsMapping[0];
 }
 
-function scoreWeightedTotal(
-  questions: Question[],
-  answerLog: AnswerLogEntry[],
-): number {
-  const questionMap = new Map(
-    questions.map((question) => [question.id, question]),
-  );
+function scoreWeightedTotal(questions: Question[], answerLog: AnswerLogEntry[]): number {
+  const questionMap = new Map(questions.map((question) => [question.id, question]));
 
   let totalScore = 0;
 
@@ -84,9 +79,7 @@ export function scoreCustomQuiz(params: {
     };
   }
 
-  const isAllMbti = questions.every(
-    (question) => question.type === TestType.MBTI,
-  );
+  const isAllMbti = questions.every((question) => question.type === TestType.MBTI);
 
   if (isAllMbti) {
     return scoreMbtiQuestionnaire({ testId, questions, answerLog });
@@ -111,10 +104,7 @@ export function scoreCustomQuiz(params: {
           ? 100
           : Math.max(
               0,
-              100 -
-                Math.abs(
-                  totalScore - (result.minScore + result.maxScore) / 2,
-                ),
+              100 - Math.abs(totalScore - (result.minScore + result.maxScore) / 2),
             ),
     })),
     isReliable,

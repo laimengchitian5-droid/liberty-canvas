@@ -37,13 +37,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: clip;
-  font-family:
-    Inter,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: #ffffff;
   color: #0f172a;
   text-align: start;
@@ -51,12 +45,7 @@ body {
 
 html[dir="rtl"] body {
   font-family:
-    "Segoe UI",
-    Tahoma,
-    "Noto Sans Arabic",
-    "Noto Sans Hebrew",
-    Arial,
-    sans-serif;
+    "Segoe UI", Tahoma, "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif;
 }
 
 html[lang="ja"] body,

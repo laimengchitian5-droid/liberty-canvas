@@ -1,5 +1,6 @@
 import { streamText } from "ai";
 import { resolveLanguageModel } from "@/lib/ai/provider";
+import { parseJsonBody } from "@/lib/api/http";
 import {
   buildAdviceUserPrompt,
   DIAGNOSIS_ADVICE_BLUEPRINT,
@@ -9,50 +10,11 @@ import {
   DIAGNOSIS_ADVICE_BLUEPRINT as PLUG_BLUEPRINT,
 } from "@/lib/diagnosis/buildPlugAdvicePrompt";
 import { buildFallbackAdvice } from "@/lib/diagnosis/parseAdviceResponse";
-import type { DiagnosisAdviceRequestBody } from "@/types/diagnosis";
-import type { PlugDiagnosisAdviceRequestBody } from "@/types/diagnosisCompiler";
-
-type AdviceRequestBody = DiagnosisAdviceRequestBody | PlugDiagnosisAdviceRequestBody;
-
-function isPlugAdviceBody(value: unknown): value is PlugDiagnosisAdviceRequestBody {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  const body = value as PlugDiagnosisAdviceRequestBody;
-
-  return (
-    body.mode === "plug" &&
-    typeof body.slug === "string" &&
-    typeof body.diagnosisTitle === "string" &&
-    typeof body.archetypeTitle === "string" &&
-    typeof body.factorSummary === "object"
-  );
-}
-
-function isLegacyAdviceBody(value: unknown): value is DiagnosisAdviceRequestBody {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  const body = value as DiagnosisAdviceRequestBody;
-
-  return (
-    typeof body.result?.id === "string" &&
-    typeof body.result?.title === "string" &&
-    typeof body.result?.dominantCategory === "string" &&
-    typeof body.scores === "object" &&
-    Array.isArray(body.answers)
-  );
-}
-
-function resolveAdviceTitle(body: AdviceRequestBody): string {
-  if (isPlugAdviceBody(body)) {
-    return body.archetypeTitle;
-  }
-
-  return body.result.title;
-}
+import {
+  asLegacyAdviceBody,
+  diagnosisAdviceRequestSchema,
+  isPlugAdviceInput,
+} from "@/lib/validation/adviceSchema";
 
 function createFallbackStream(title: string): Response {
   const encoder = new TextEncoder();
@@ -75,23 +37,26 @@ function createFallbackStream(title: string): Response {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as unknown;
+    const parsed = await parseJsonBody(request, diagnosisAdviceRequestSchema);
 
-    if (!isPlugAdviceBody(body) && !isLegacyAdviceBody(body)) {
-      return Response.json({ error: "Invalid diagnosis advice payload" }, { status: 400 });
+    if (!parsed.ok) {
+      return parsed.response;
     }
 
+    const body = parsed.data;
     const resolved = resolveLanguageModel();
-    const title = resolveAdviceTitle(body);
+    const title = isPlugAdviceInput(body) ? body.archetypeTitle : body.result.title;
 
     if (!resolved) {
       return createFallbackStream(title);
     }
 
-    const blueprint = isPlugAdviceBody(body) ? PLUG_BLUEPRINT : DIAGNOSIS_ADVICE_BLUEPRINT;
-    const prompt = isPlugAdviceBody(body)
+    const blueprint = isPlugAdviceInput(body)
+      ? PLUG_BLUEPRINT
+      : DIAGNOSIS_ADVICE_BLUEPRINT;
+    const prompt = isPlugAdviceInput(body)
       ? buildPlugAdviceUserPrompt(body)
-      : buildAdviceUserPrompt(body);
+      : buildAdviceUserPrompt(asLegacyAdviceBody(body));
 
     try {
       const result = streamText({
@@ -120,7 +85,10 @@ export async function POST(request: Request) {
             ? error.message
             : "Unexpected diagnosis advice route failure",
       },
-      { status: 500 },
+      {
+        status: 500,
+        headers: { "Cache-Control": "private, no-store" },
+      },
     );
   }
 }

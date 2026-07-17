@@ -25,6 +25,13 @@
   min-inline-size: 0;
 }
 
+.brandSlot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
 .authSlot {
   display: flex;
   align-items: center;

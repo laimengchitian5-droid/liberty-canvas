@@ -88,9 +88,7 @@ export function useRubelQuizSession(
   const questionCount = diagnosis.questions.length;
   const currentQuestion = diagnosis.questions[state.questionIndex] ?? null;
   const progress =
-    questionCount === 0
-      ? 0
-      : Math.round((state.answers.length / questionCount) * 100);
+    questionCount === 0 ? 0 : Math.round((state.answers.length / questionCount) * 100);
 
   const startQuiz = useCallback(() => {
     dispatch({ type: "START" });
@@ -112,9 +110,7 @@ export function useRubelQuizSession(
       };
 
       const nextAnswers = [
-        ...state.answers.filter(
-          (entry) => entry.questionId !== currentQuestion.id,
-        ),
+        ...state.answers.filter((entry) => entry.questionId !== currentQuestion.id),
         answer,
       ];
       const answeredIndex = state.questionIndex;

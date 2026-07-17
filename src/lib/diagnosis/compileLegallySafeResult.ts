@@ -110,9 +110,7 @@ function scoreQuestionBlock(
   }
 }
 
-const SYNTHESIS_FRAGMENTS: Readonly<
-  Record<LegalTraitKey, readonly string[]>
-> = {
+const SYNTHESIS_FRAGMENTS: Readonly<Record<LegalTraitKey, readonly string[]>> = {
   trait_openness: [
     "新しい刺激に心が動く、探究心あふれる傾向があります。",
     "発想の幅が広く、独自の視点を大切にするタイプです。",
@@ -187,9 +185,7 @@ export function compileLegallySafeResult(
     dominantTraits,
     resultLayout: resultBlock?.layout ?? "character_archetype_card",
     viralPresets: extractViralPresets(definition),
-    seoTags: seoBlock
-      ? [...seoBlock.desireTags, ...seoBlock.targetDemographics]
-      : [],
+    seoTags: seoBlock ? [...seoBlock.desireTags, ...seoBlock.targetDemographics] : [],
     isComplete: answeredCount >= questionBlocks.length,
     answeredCount,
     totalQuestions: questionBlocks.length,

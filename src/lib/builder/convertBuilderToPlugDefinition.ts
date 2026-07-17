@@ -19,21 +19,19 @@ import type {
 export function convertBuilderToPlugDefinition(
   definition: BuilderDiagnosisDefinition,
 ): PlugDiagnosisDefinition {
-  const questionBlocks: QuestionBlock[] = extractBuilderQuestionBlocks(
-    definition,
-  ).map((block) => ({
-    kind: "QUESTION_BLOCK" as const,
-    id: block.id,
-    prompt: block.subPrompt
-      ? `${block.prompt}\n${block.subPrompt}`
-      : block.prompt,
-    inputType: "multiple_choice" as const,
-    options: block.choices.map((choice) => ({
-      id: choice.id,
-      label: choice.label,
-      traitWeights: mapScoringPayloadToTraitWeights(choice.scores),
-    })),
-  }));
+  const questionBlocks: QuestionBlock[] = extractBuilderQuestionBlocks(definition).map(
+    (block) => ({
+      kind: "QUESTION_BLOCK" as const,
+      id: block.id,
+      prompt: block.subPrompt ? `${block.prompt}\n${block.subPrompt}` : block.prompt,
+      inputType: "multiple_choice" as const,
+      options: block.choices.map((choice) => ({
+        id: choice.id,
+        label: choice.label,
+        traitWeights: mapScoringPayloadToTraitWeights(choice.scores),
+      })),
+    }),
+  );
 
   const elements: DiagnosisElement[] = [...questionBlocks];
 
@@ -60,9 +58,7 @@ export function convertBuilderToPlugDefinition(
   };
 }
 
-export function countReachableQuestions(
-  definition: BuilderDiagnosisDefinition,
-): number {
+export function countReachableQuestions(definition: BuilderDiagnosisDefinition): number {
   return extractBuilderQuestionBlocks(definition).length;
 }
 
@@ -71,9 +67,7 @@ export function validateBuilderDefinition(
 ): readonly string[] {
   const errors: string[] = [];
   const questionIds = new Set(
-    definition.blocks
-      .filter(isConversationalQuestionBlock)
-      .map((block) => block.id),
+    definition.blocks.filter(isConversationalQuestionBlock).map((block) => block.id),
   );
 
   if (!questionIds.has(definition.startBlockId)) {
@@ -101,9 +95,7 @@ export function validateBuilderDefinition(
       }
 
       if (!questionIds.has(block.defaultGotoBlockId)) {
-        errors.push(
-          `branch block "${block.id}" defaultGotoBlockId is invalid`,
-        );
+        errors.push(`branch block "${block.id}" defaultGotoBlockId is invalid`);
       }
 
       for (const rule of block.rules) {

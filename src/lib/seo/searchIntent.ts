@@ -1,3 +1,5 @@
+import type { UnifiedDiscoveryKind } from "@/lib/catalog/unifiedDiscoveryTypes";
+
 export const SEARCH_INTENTS = [
   "informational",
   "navigational",
@@ -61,15 +63,11 @@ export function inferQueryIntent(query: string): SearchIntent {
     return "navigational";
   }
 
-  if (
-    /(診断|test|quiz|play|開始|start|try|無料|free)/i.test(q)
-  ) {
+  if (/(診断|test|quiz|play|開始|start|try|無料|free)/i.test(q)) {
     return "transactional";
   }
 
-  if (
-    /(16personalities|mbti|big five|enneagram|alternative|比較|vs)/i.test(q)
-  ) {
+  if (/(16personalities|mbti|big five|enneagram|alternative|比較|vs)/i.test(q)) {
     return "commercial";
   }
 
@@ -83,7 +81,7 @@ export function inferQueryIntent(query: string): SearchIntent {
 export function intentRankBoost(
   entryIntent: SearchIntent | undefined,
   queryIntent: SearchIntent,
-  kind: "plug-official" | "plug-community" | "rubel-quick",
+  kind: UnifiedDiscoveryKind,
 ): number {
   let boost = 0;
 
@@ -91,11 +89,17 @@ export function intentRankBoost(
     boost += 2;
   }
 
-  if (queryIntent === "transactional" && kind === "plug-official") {
+  if (
+    queryIntent === "transactional" &&
+    (kind === "plug-official" || kind === "plug-specialty")
+  ) {
     boost += 2;
   }
 
-  if (queryIntent === "commercial" && kind === "plug-official") {
+  if (
+    queryIntent === "commercial" &&
+    (kind === "plug-official" || kind === "plug-specialty")
+  ) {
     boost += 1;
   }
 

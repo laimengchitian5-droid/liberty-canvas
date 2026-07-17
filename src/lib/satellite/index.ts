@@ -11,7 +11,11 @@ export {
 } from "@/lib/landing/landingLocales";
 
 export type { LandingTopicSlug } from "@/lib/landing/landingTopics";
-export { LANDING_TOPIC_SLUGS, LANDING_TOPICS, getLandingTopic } from "@/lib/landing/landingTopics";
+export {
+  LANDING_TOPIC_SLUGS,
+  LANDING_TOPICS,
+  getLandingTopic,
+} from "@/lib/landing/landingTopics";
 
 export type { LandingPageCopy } from "@/lib/landing/landingCopy";
 export { LANDING_COPY, getLandingCopy } from "@/lib/landing/landingCopy";
@@ -39,4 +43,7 @@ export {
   writeSatelliteIntake,
 } from "@/lib/rubel/session/satelliteIntakeStore";
 
-export type { SatelliteIntakeRecord, SatelliteIntakeWritePayload } from "@/lib/rubel/contracts/pipeline";
+export type {
+  SatelliteIntakeRecord,
+  SatelliteIntakeWritePayload,
+} from "@/lib/rubel/contracts/pipeline";

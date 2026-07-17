@@ -41,9 +41,7 @@ export const InsightsAccessGate = () => {
       <form className={styles.panel} onSubmit={(event) => void handleSubmit(event)}>
         <p className={styles.eyebrow}>Insights · Restricted</p>
         <h1 className={styles.title}>運用ダッシュボード</h1>
-        <p className={styles.lead}>
-          シェア計測とBuilder監査ログは運用キーが必要です。
-        </p>
+        <p className={styles.lead}>シェア計測とBuilder監査ログは運用キーが必要です。</p>
         <label className={styles.field}>
           アクセスキー
           <input

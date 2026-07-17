@@ -31,19 +31,13 @@ const RubelPlayPageClient = ({
   const play = messages.rubelPlay;
   const locale = appLocaleToRubel(appLocale);
 
-  const initialDiagnosis = resolveDiagnosisForClient(
-    diagnosisId,
-    serverDiagnosis,
-  );
+  const initialDiagnosis = resolveDiagnosisForClient(diagnosisId, serverDiagnosis);
   const [missing, setMissing] = useState(!initialDiagnosis);
   const [sourceDiagnosis, setSourceDiagnosis] = useState<Diagnosis | null>(
     initialDiagnosis,
   );
-  const [localizedDiagnosis, setLocalizedDiagnosis] = useState<Diagnosis | null>(
-    () =>
-      initialDiagnosis
-        ? translatePayload(initialDiagnosis, locale).diagnosis
-        : null,
+  const [localizedDiagnosis, setLocalizedDiagnosis] = useState<Diagnosis | null>(() =>
+    initialDiagnosis ? translatePayload(initialDiagnosis, locale).diagnosis : null,
   );
   const [displayLanguage, setDisplayLanguage] = useState<LocaleCode>(locale);
 

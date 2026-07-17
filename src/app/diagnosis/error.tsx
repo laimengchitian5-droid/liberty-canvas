@@ -22,7 +22,16 @@ export default function DiagnosisError({
             <button type="button" className={styles.primaryButton} onClick={reset}>
               再試行
             </button>
-            <Link href="/diagnosis" className={styles.secondaryButton} style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <Link
+              href="/diagnosis"
+              className={styles.secondaryButton}
+              style={{
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               診断トップへ
             </Link>
           </div>

@@ -1,9 +1,8 @@
 import type { SearchIntent } from "@/lib/seo/searchIntent";
+import { isSpecialtyPlugSlug } from "@/lib/specialty/specialtyHubCatalog";
 
 export type UnifiedDiscoveryKind =
-  | "plug-official"
-  | "plug-community"
-  | "rubel-quick";
+  "plug-official" | "plug-community" | "plug-specialty" | "rubel-quick";
 
 export interface UnifiedDiscoveryEntry {
   id: string;
@@ -21,15 +20,19 @@ export interface UnifiedDiscoveryEntry {
   searchTags?: readonly string[];
 }
 
-export function groupUnifiedDiscoveryCatalog(
-  entries: readonly UnifiedDiscoveryEntry[],
-): {
+export function groupUnifiedDiscoveryCatalog(entries: readonly UnifiedDiscoveryEntry[]): {
+  specialtySeries: UnifiedDiscoveryEntry[];
   plugOfficial: UnifiedDiscoveryEntry[];
   plugCommunity: UnifiedDiscoveryEntry[];
   rubelQuick: UnifiedDiscoveryEntry[];
 } {
   return {
-    plugOfficial: entries.filter((entry) => entry.kind === "plug-official"),
+    specialtySeries: entries.filter(
+      (entry) => entry.kind === "plug-specialty" || isSpecialtyPlugSlug(entry.slug),
+    ),
+    plugOfficial: entries.filter(
+      (entry) => entry.kind === "plug-official" && !isSpecialtyPlugSlug(entry.slug),
+    ),
     plugCommunity: entries.filter((entry) => entry.kind === "plug-community"),
     rubelQuick: entries.filter((entry) => entry.kind === "rubel-quick"),
   };

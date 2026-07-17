@@ -17,13 +17,11 @@ export function buildInjectionSystemBlock(payload: RubelEnginePayload): string {
       ].join("\n")
     : "";
 
-  const keywordLine = payload.keyword
-    ? `- Discovery Keyword: ${payload.keyword}`
-    : "";
+  const keywordLine = payload.keyword ? `- Discovery Keyword: ${payload.keyword}` : "";
 
   return [
     "[CONTEXT DATA]",
-    "- Platform: Rubel Canvas (Lu + Bel = Liberate Beautiful souls)",
+    "- Platform: Liberty Canvas (Lu + Bel = Liberate Beautiful souls)",
     `- Intake Source: ${payload.intakeSource}`,
     `- Current Quiz: ${payload.title}`,
     `- Archetype Result: ${payload.typeName}`,

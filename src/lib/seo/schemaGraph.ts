@@ -3,8 +3,12 @@ import {
   PRODUCT_NAME,
   PRODUCT_TAGLINE_EN,
 } from "@/lib/brand/constants";
-import { extractQuestionBlocks, extractSeoBlock } from "@/lib/diagnosis/extractDiagnosisElements";
+import {
+  extractQuestionBlocks,
+  extractSeoBlock,
+} from "@/lib/diagnosis/extractDiagnosisElements";
 import { buildBuilderSeoContext } from "@/lib/builder/compileBuilderRuntime";
+import { buildHomeSoftwareAlternateNames } from "@/lib/seo/homeSerp";
 import { getSiteUrl } from "@/lib/site/url";
 import { buildPlugOgImageUrl } from "@/lib/seo/ogUrls";
 import type { BuilderDiagnosisDefinition } from "@/types/builder";
@@ -18,9 +22,7 @@ export interface SchemaGraphDocument {
 
 type DiagnosisSchemaInput = PlugDiagnosisDefinition | BuilderDiagnosisDefinition;
 
-function resolvePlaySeo(
-  definition: DiagnosisSchemaInput,
-): {
+function resolvePlaySeo(definition: DiagnosisSchemaInput): {
   landingPath: string;
   title: string;
   description: string;
@@ -63,6 +65,7 @@ export function buildOrganizationEntity(siteUrl = getSiteUrl()): Record<string, 
     "@type": "Organization",
     "@id": `${siteUrl}#organization`,
     name: PRODUCT_NAME,
+    alternateName: [...buildHomeSoftwareAlternateNames()],
     url: siteUrl,
     description: PRODUCT_DESCRIPTION,
     slogan: PRODUCT_TAGLINE_EN,
@@ -177,6 +180,75 @@ export function buildPlayDiagnosisSchemaGraph(
       buildQuizEntity(definition, seoBlock, siteUrl),
       buildPlayWebPageEntity(definition, siteUrl),
     ],
+  };
+}
+
+export function buildDiscoverWebSiteEntity(
+  siteUrl = getSiteUrl(),
+): Record<string, unknown> {
+  return {
+    "@type": "WebSite",
+    "@id": `${siteUrl}/discover#website`,
+    name: "Liberty Discover",
+    url: `${siteUrl}/discover`,
+    isPartOf: { "@id": `${siteUrl}#website` },
+    publisher: { "@id": `${siteUrl}#organization` },
+    inLanguage: ["ja", "en", "ko", "zh", "fr", "de"],
+  };
+}
+
+export function buildDiscoverHubCollectionPage(
+  siteUrl = getSiteUrl(),
+): Record<string, unknown> {
+  return {
+    "@type": "CollectionPage",
+    "@id": `${siteUrl}/discover#collection`,
+    name: "Liberty Discover",
+    url: `${siteUrl}/discover`,
+    isPartOf: { "@id": `${siteUrl}/discover#website` },
+    publisher: { "@id": `${siteUrl}#organization` },
+  };
+}
+
+export function buildDiscoverLandingAssessmentEntity(input: {
+  absoluteUrl: string;
+  schemaType: string;
+  name: string;
+  description: string;
+  inLanguage: string;
+  siteUrl?: string;
+}): Record<string, unknown> {
+  const siteUrl = input.siteUrl ?? getSiteUrl();
+  return {
+    "@type": input.schemaType,
+    "@id": `${input.absoluteUrl}#assessment`,
+    name: input.name,
+    description: input.description,
+    url: input.absoluteUrl,
+    inLanguage: input.inLanguage,
+    isAccessibleForFree: true,
+    provider: { "@id": `${siteUrl}#organization` },
+    isPartOf: { "@id": `${siteUrl}/discover#website` },
+  };
+}
+
+export function buildDiscoverLandingWebPageEntity(input: {
+  absoluteUrl: string;
+  name: string;
+  description: string;
+  inLanguage: string;
+  siteUrl?: string;
+}): Record<string, unknown> {
+  const siteUrl = input.siteUrl ?? getSiteUrl();
+  return {
+    "@type": "WebPage",
+    "@id": `${input.absoluteUrl}#webpage`,
+    name: input.name,
+    description: input.description,
+    url: input.absoluteUrl,
+    inLanguage: input.inLanguage,
+    isPartOf: { "@id": `${siteUrl}/discover#website` },
+    mainEntity: { "@id": `${input.absoluteUrl}#assessment` },
   };
 }
 

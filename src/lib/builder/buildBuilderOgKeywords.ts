@@ -1,44 +1,22 @@
+import { PRODUCT_NAME } from "@/lib/brand/constants";
+import { getBrand } from "@/lib/brand/registry";
 import type { BuilderCreatorTag } from "@/types/builder";
 import { BUILDER_CREATOR_TAGS } from "@/types/builder";
 
 const TAG_VIRAL_KEYWORDS: Readonly<
   Record<(typeof BUILDER_CREATOR_TAGS)[number], readonly string[]>
 > = {
-  高校生向け: [
-    "高校生向け",
-    "10代",
-    "学生",
-    "無料性格診断",
-    "自分を知る",
-  ],
-  推し活: [
-    "推し活",
-    "推し活診断",
-    "ファンタイプ",
-    "推しへの愛し方",
-    "オタ活",
-  ],
-  恋愛: [
-    "恋愛",
-    "恋愛診断",
-    "相性診断",
-    "恋愛タイプ",
-    "彼氏彼女",
-  ],
-  短時間: [
-    "短時間",
-    "サクッと診断",
-    "5分以内",
-    "気軽に診断",
-    "今すぐ診断",
-  ],
+  高校生向け: ["高校生向け", "10代", "学生", "無料性格診断", "自分を知る"],
+  推し活: ["推し活", "推し活診断", "ファンタイプ", "推しへの愛し方", "オタ活"],
+  恋愛: ["恋愛", "恋愛診断", "相性診断", "恋愛タイプ", "彼氏彼女"],
+  短時間: ["短時間", "サクッと診断", "5分以内", "気軽に診断", "今すぐ診断"],
 };
 
 const BASE_VIRAL_KEYWORDS = [
   "性格診断",
   "無料診断",
-  "LibertyCanvas",
-  "Rubel Canvas",
+  PRODUCT_NAME,
+  getBrand("liberty-forge").nameJa,
 ] as const;
 
 function isKnownCreatorTag(
@@ -73,16 +51,13 @@ export function buildBuilderOgTitle(
   title: string,
   creatorTags: readonly BuilderCreatorTag[],
 ): string {
-  const tagSnippet = creatorTags
-    .filter(isKnownCreatorTag)
-    .slice(0, 2)
-    .join("・");
+  const tagSnippet = creatorTags.filter(isKnownCreatorTag).slice(0, 2).join("・");
 
   if (!tagSnippet) {
     return title;
   }
 
-  return `${title} — ${tagSnippet} | Rubel Canvas`;
+  return `${title} — ${tagSnippet} | ${getBrand("liberty-forge").nameJa}`;
 }
 
 export function buildBuilderOgDescription(

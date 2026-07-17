@@ -55,8 +55,12 @@ const PlanetRings = ({ count }: { count: 0 | 1 | 2 | 3 }) => {
   return (
     <>
       <div className={styles.planetRing} aria-hidden="true" />
-      {count >= 2 ? <div className={styles.planetRingSecondary} aria-hidden="true" /> : null}
-      {count >= 3 ? <div className={styles.planetRingTertiary} aria-hidden="true" /> : null}
+      {count >= 2 ? (
+        <div className={styles.planetRingSecondary} aria-hidden="true" />
+      ) : null}
+      {count >= 3 ? (
+        <div className={styles.planetRingTertiary} aria-hidden="true" />
+      ) : null}
     </>
   );
 };
@@ -73,10 +77,7 @@ export const CosmicPlanetVisual = ({
     [energyLevels],
   );
 
-  const radarAxes = useMemo(
-    () => buildCosmicRadarAxisPoints(100, 100, 72),
-    [],
-  );
+  const radarAxes = useMemo(() => buildCosmicRadarAxisPoints(100, 100, 72), []);
 
   const planetClassName = [
     styles.planetOrb,
@@ -101,7 +102,11 @@ export const CosmicPlanetVisual = ({
       </div>
 
       <div className={styles.planetStageInner}>
-        <div className={styles.planetSystem} role="img" aria-label={`${planet.nickname}のビジュアル`}>
+        <div
+          className={styles.planetSystem}
+          role="img"
+          aria-label={`${planet.nickname}のビジュアル`}
+        >
           <PlanetRings count={planet.ringCount} />
           <div className={planetClassName} />
         </div>
@@ -136,10 +141,7 @@ export const CosmicPlanetVisual = ({
               />
             ))}
 
-            <polygon
-              points={radarPolygon}
-              className={styles.radarPolygon}
-            />
+            <polygon points={radarPolygon} className={styles.radarPolygon} />
 
             {RADAR_LABELS.map((label, index) => {
               const position = RADAR_LABEL_POSITIONS[index];

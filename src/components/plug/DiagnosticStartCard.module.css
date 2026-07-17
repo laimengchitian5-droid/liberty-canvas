@@ -1,0 +1,110 @@
+.root {
+  inline-size: min(100%, 36rem);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  padding: clamp(1.25rem, 4vw, 1.75rem);
+  text-align: center;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background:
+    radial-gradient(120% 80% at 12% 0%, rgba(244, 194, 194, 0.38), transparent 55%),
+    radial-gradient(100% 70% at 90% 8%, rgba(186, 230, 253, 0.42), transparent 52%),
+    linear-gradient(165deg, #fffaf7 0%, #f7f4ff 48%, #f0f9ff 100%);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.title {
+  margin: 0;
+  max-inline-size: 22ch;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: clamp(1.55rem, 4.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #1e293b;
+}
+
+.description {
+  margin: 0;
+  max-inline-size: 34rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #64748b;
+}
+
+.startButton {
+  margin-top: 0.35rem;
+  min-block-size: 2.75rem;
+  min-inline-size: 12rem;
+  padding: 0.65rem 1.35rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fb7185 0%, #f472b6 55%, #c084fc 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.startButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.startButton:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #b91c1c;
+}
+
+.cot {
+  align-self: stretch;
+  margin-top: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  text-align: start;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  background: #0b1220;
+  color: #a5b4fc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+}
+
+.cot summary {
+  cursor: pointer;
+  color: #94a3b8;
+}
+
+.cotBody {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-block-start: 1px solid rgba(49, 46, 129, 0.55);
+  padding-block-start: 0.5rem;
+}
+
+.cotBody p {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.cotLabel {
+  color: #c7d2fe;
+  font-weight: 700;
+}

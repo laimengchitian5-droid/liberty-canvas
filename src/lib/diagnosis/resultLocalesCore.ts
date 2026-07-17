@@ -26,8 +26,7 @@ const MESSAGES: Readonly<Record<ResultLocale, ResultLocaleMessages>> = {
     narrativeLead:
       "5因子の宇宙エネルギーから読み解いた、あなただけの行動傾向レポートです。",
     traitsProfileTitle: "5因子プロファイル",
-    traitsProfileLead:
-      "学術的な5因子モデル（OCEAN）に基づく、あなたの特性バランスです。",
+    traitsProfileLead: "学術的な5因子モデル（OCEAN）に基づく、あなたの特性バランスです。",
     compatibilityTitle: "ユニバーサル・相性（宇宙の相性診断）",
     galleryTitle: "6惑星ギャラリー",
     galleryLead:
@@ -57,8 +56,7 @@ const MESSAGES: Readonly<Record<ResultLocale, ResultLocaleMessages>> = {
     galleryOwned: "This is your cosmic character",
     galleryPreview: "Preview mode — tap to compare other planet types",
     adviceTitle: "AI Cosmic Advice",
-    adviceLead:
-      "Personal guidance based on your planet type and five-factor profile.",
+    adviceLead: "Personal guidance based on your planet type and five-factor profile.",
     adviceTipLabel: "Today's cosmic tip",
     adviceAffirmationLabel: "Message from your star",
     shareInsightsTitle: "Share analytics summary",
@@ -107,9 +105,7 @@ function readCookieLocale(): ResultLocale | null {
     return null;
   }
 
-  const match = document.cookie.match(
-    /(?:^|;\s*)personality-quiz-locale-v1=([^;]+)/,
-  );
+  const match = document.cookie.match(/(?:^|;\s*)personality-quiz-locale-v1=([^;]+)/);
   const value = (match?.[1] ?? "").trim().slice(0, 2);
 
   if (value === "en" || value === "ko" || value === "zh" || value === "ja") {

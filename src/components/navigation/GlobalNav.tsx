@@ -1,11 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import { UserAuthPanel } from "@/components/auth/UserAuthPanel";
 import { LocaleSwitcher } from "@/components/i18n/LocaleSwitcher";
-import { PRODUCT_NAME } from "@/lib/brand/constants";
+import { BrandMegaMenu } from "@/components/brand/BrandMegaMenu";
+import { BrandNavLink } from "@/components/brand/BrandNavLink";
+import { BrandWordmark } from "@/components/brand/BrandWordmark";
+import { PRODUCT_NAME_SLUG } from "@/lib/brand/constants";
+import { resolveBrandId } from "@/lib/brand/resolveBrand";
+import { resolveBrandPath } from "@/lib/brand/urlResolver";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { deriveCreatorAccent } from "@/lib/rubel/creatorDisplay";
 import { DEFAULT_GUEST_USER_ID } from "@/lib/user/constants";
@@ -17,43 +21,59 @@ export function GlobalNav() {
   const pathname = usePathname();
   const { messages } = useI18n();
   const { nav } = messages;
-  const { userId, status, displayName, avatarInitials, appsAuthored } =
-    useUserStore(useShallow(selectNavProfile));
+  const { userId, status, displayName, avatarInitials, appsAuthored } = useUserStore(
+    useShallow(selectNavProfile),
+  );
 
   const accentClass = deriveCreatorAccent(displayName);
   const isGuest = userId === DEFAULT_GUEST_USER_ID;
 
   const NAV_ITEMS = [
     {
-      href: "/",
+      href: resolveBrandPath("liberty-canvas", "hub"),
       label: nav.hub,
       shortLabel: nav.hubShort,
       ariaLabel: nav.hub,
     },
     {
-      href: "/diagnosis/play/personality-spectrum",
+      href: resolveBrandPath("liberty-plug", "engine"),
       label: nav.assessment,
       shortLabel: nav.assessmentShort,
       ariaLabel: nav.assessment,
     },
     {
-      href: "/diagnosis",
+      href: resolveBrandPath("liberty-play", "hub"),
+      label: "Play",
+      shortLabel: "Play",
+      ariaLabel: "Liberty Play",
+    },
+    {
+      href: resolveBrandPath("liberty-plug", "hub"),
       label: nav.diagnosis,
       shortLabel: nav.diagnosisShort,
       ariaLabel: nav.diagnosis,
     },
     {
-      href: "/create",
+      href: resolveBrandPath("liberty-forge", "hub"),
       label: nav.create,
       shortLabel: nav.createShort,
       ariaLabel: nav.create,
     },
   ] as const;
 
+  const brandId = resolveBrandId(pathname);
+
   return (
-    <nav className={`${styles.bar} lc-print-hide`} aria-label={`${PRODUCT_NAME} navigation`}>
+    <nav
+      className={`${styles.bar} lc-print-hide`}
+      aria-label={`${PRODUCT_NAME_SLUG} navigation`}
+    >
       <div className={styles.barInner}>
         <div className={styles.primaryRow}>
+          <div className={styles.brandSlot}>
+            <BrandWordmark brandId={brandId} locale="ja" href="/" compact />
+            <BrandMegaMenu currentPath={pathname ?? "/"} />
+          </div>
           <div
             className={styles.profileSlot}
             role="group"
@@ -77,13 +97,11 @@ export function GlobalNav() {
           <ul className={styles.tabList}>
             {NAV_ITEMS.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+                item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
               return (
                 <li key={item.href} className={styles.tabItem}>
-                  <Link
+                  <BrandNavLink
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
                     aria-label={item.ariaLabel}
@@ -95,7 +113,7 @@ export function GlobalNav() {
                     <span className={styles.tabLabelShort} aria-hidden="true">
                       {item.shortLabel}
                     </span>
-                  </Link>
+                  </BrandNavLink>
                 </li>
               );
             })}

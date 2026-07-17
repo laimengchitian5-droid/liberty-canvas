@@ -1,4 +1,7 @@
 import type { Diagnosis, Result } from "@/types/rubel";
+import { getBrand } from "@/lib/brand/registry";
+import { buildPlayResultOgImageUrl } from "@/lib/seo/ogUrls";
+import { getSiteUrl } from "@/lib/site/url";
 
 export interface ResultEditorial {
   tagline: string;
@@ -6,10 +9,12 @@ export interface ResultEditorial {
   shareLine: string;
 }
 
+const PLAY_BRAND = getBrand("liberty-play").nameJa;
+
 const DEFAULT_EDITORIAL: ResultEditorial = {
   tagline: "あなたらしさが、ここに凝縮されています。",
   strength: "自己理解と共感のバランス",
-  shareLine: "Rubel Canvasで診断したら当たりすぎた…",
+  shareLine: `${PLAY_BRAND}で診断したら当たりすぎた…`,
 };
 
 export function getResultEditorial(result: Result): ResultEditorial {
@@ -19,7 +24,7 @@ export function getResultEditorial(result: Result): ResultEditorial {
     return {
       tagline: "マイペースだけど、心の奥はやわらかい。",
       strength: "独立心とセンスの良さ",
-      shareLine: `Rubel Canvas：${name}だった🐱 当たりすぎ`,
+      shareLine: `${PLAY_BRAND}：${name}だった🐱 当たりすぎ`,
     };
   }
 
@@ -27,7 +32,7 @@ export function getResultEditorial(result: Result): ResultEditorial {
     return {
       tagline: "人を大切にする、エネルギッシュなタイプ。",
       strength: "共感力と行動力",
-      shareLine: `Rubel Canvas：${name}🐶 めっちゃ当たった`,
+      shareLine: `${PLAY_BRAND}：${name}🐶 めっちゃ当たった`,
     };
   }
 
@@ -41,14 +46,35 @@ export function getResultEditorial(result: Result): ResultEditorial {
 
   return {
     ...DEFAULT_EDITORIAL,
-    shareLine: `Rubel Canvas：${name} — 当たりすぎ`,
+    shareLine: `${PLAY_BRAND}：${name} — 当たりすぎ`,
   };
 }
 
-export function buildShareText(
+/** Shareable result deep link — crawlers resolve OG via ?r= */
+export function buildPlayResultShareUrl(diagnosis: Diagnosis, result: Result): string {
+  const params = new URLSearchParams({ r: result.name.slice(0, 80) });
+  return `${getSiteUrl()}/play/${encodeURIComponent(diagnosis.id)}?${params.toString()}`;
+}
+
+export function buildShareText(diagnosis: Diagnosis, result: Result): string {
+  const editorial = getResultEditorial(result);
+  const shareUrl = buildPlayResultShareUrl(diagnosis, result);
+  return `${editorial.shareLine}\n${diagnosis.title}\n${shareUrl}`;
+}
+
+export function buildPlayResultSharePayload(
   diagnosis: Diagnosis,
   result: Result,
-): string {
+): { title: string; text: string; url: string; ogImageUrl: string } {
   const editorial = getResultEditorial(result);
-  return `${editorial.shareLine}\n${diagnosis.title}\nhttps://liberty-canvas.vercel.app/play/${diagnosis.id}`;
+  const url = buildPlayResultShareUrl(diagnosis, result);
+  return {
+    title: `${result.name} — ${diagnosis.title}`,
+    text: buildShareText(diagnosis, result),
+    url,
+    ogImageUrl: buildPlayResultOgImageUrl(
+      result.name,
+      `${diagnosis.title} · ${editorial.tagline}`,
+    ),
+  };
 }

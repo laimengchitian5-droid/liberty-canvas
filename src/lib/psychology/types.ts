@@ -3,11 +3,7 @@ import type { LandingLocale } from "@/lib/landing/landingLocales";
 export type PsychTopicSlug = "big-five" | "enneagram";
 
 export type OceanDimension =
-  | "openness"
-  | "conscientiousness"
-  | "extraversion"
-  | "agreeableness"
-  | "neuroticism";
+  "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism";
 
 export interface OceanScores {
   openness: number;

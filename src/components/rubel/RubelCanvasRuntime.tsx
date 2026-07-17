@@ -8,13 +8,8 @@ interface RubelCanvasRuntimeProps {
   onPlayComplete?: () => void;
 }
 
-const RubelCanvasRuntime = ({
-  diagnosis,
-  onPlayComplete,
-}: RubelCanvasRuntimeProps) => {
-  return (
-    <RubelPlayCore diagnosis={diagnosis} onPlayComplete={onPlayComplete} />
-  );
+const RubelCanvasRuntime = ({ diagnosis, onPlayComplete }: RubelCanvasRuntimeProps) => {
+  return <RubelPlayCore diagnosis={diagnosis} onPlayComplete={onPlayComplete} />;
 };
 
 export { RubelCanvasRuntime };

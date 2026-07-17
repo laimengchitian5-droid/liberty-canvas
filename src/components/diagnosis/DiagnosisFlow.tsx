@@ -5,10 +5,7 @@ import { useEffect } from "react";
 import { DiagnosisAdvicePanel } from "@/components/diagnosis/DiagnosisAdvicePanel";
 import { DiagnosisQuestionCard } from "@/components/diagnosis/DiagnosisQuestionCard";
 import { DiagnosisShareActions } from "@/components/diagnosis/DiagnosisShareActions";
-import {
-  trackDiagnosisCompletion,
-  trackDiagnosisEvent,
-} from "@/lib/diagnosis/analytics";
+import { trackDiagnosisCompletion, trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 import { useDiagnosisEngine } from "@/hooks/useDiagnosisEngine";
 import { cn } from "@/lib/utils/cn";
 import { DIAGNOSTIC_QUESTION_COUNT } from "@/types/diagnosis";
@@ -56,7 +53,10 @@ export function DiagnosisFlow() {
         {phase === "intro" ? (
           <header className={styles.hero}>
             <p className={styles.eyebrow}>
-              <Sparkles className="inline-block h-3.5 w-3.5 align-[-2px] mr-1" aria-hidden="true" />
+              <Sparkles
+                className="inline-block h-3.5 w-3.5 align-[-2px] mr-1"
+                aria-hidden="true"
+              />
               Personality Diagnosis
             </p>
             <h1 className={cn(styles.title, "font-serif")}>あなたの心の色診断</h1>
@@ -100,7 +100,11 @@ export function DiagnosisFlow() {
             <p className={styles.resultAnalysis}>{evaluation.result.baseAnalysis}</p>
             <DiagnosisShareActions result={evaluation.result} />
             <div className={styles.actions}>
-              <button type="button" className={cn(styles.primaryButton, "gap-2")} onClick={handleOpenAdvice}>
+              <button
+                type="button"
+                className={cn(styles.primaryButton, "gap-2")}
+                onClick={handleOpenAdvice}
+              >
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
                 AI アドバイスを見る
               </button>

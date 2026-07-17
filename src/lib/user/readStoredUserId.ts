@@ -1,7 +1,4 @@
-import {
-  DEFAULT_GUEST_USER_ID,
-  USER_ID_PATTERN,
-} from "@/lib/user/constants";
+import { DEFAULT_GUEST_USER_ID, USER_ID_PATTERN } from "@/lib/user/constants";
 
 export const LC_USER_ID_STORAGE_KEY = "lc-user-id-v1" as const;
 

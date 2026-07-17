@@ -3,7 +3,10 @@ import {
   searchUnifiedCatalog,
   type UnifiedSearchHit,
 } from "@/lib/catalog/searchUnifiedCatalog";
-import type { CatalogSearchPort, CatalogSearchResult } from "@/lib/catalog/searchPortTypes";
+import type {
+  CatalogSearchPort,
+  CatalogSearchResult,
+} from "@/lib/catalog/searchPortTypes";
 import { inferQueryIntent } from "@/lib/seo/searchIntent";
 
 export const tokenSearchAdapter: CatalogSearchPort = {

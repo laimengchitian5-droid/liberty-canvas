@@ -1,4 +1,7 @@
-import type { AcademicTraitVector, LegalTraitKey } from "@/lib/diagnosis/academicTraitVector";
+import type {
+  AcademicTraitVector,
+  LegalTraitKey,
+} from "@/lib/diagnosis/academicTraitVector";
 
 export const FIVE_FACTOR_KEYS = [
   "extraversion",
@@ -64,8 +67,7 @@ function toPercentile(score: number): number {
 export function buildFiveFactorRadar(
   vector: AcademicTraitVector,
 ): readonly FiveFactorRadarPoint[] {
-  const empathyAgree =
-    (vector.trait_agreeableness + vector.trait_empathy) / 2;
+  const empathyAgree = (vector.trait_agreeableness + vector.trait_empathy) / 2;
   const emotionalStability = clampScore(1 - vector.trait_neuroticism);
 
   const raw: Readonly<Record<FiveFactorKey, number>> = {

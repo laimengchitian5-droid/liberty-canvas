@@ -1,17 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Rubel Canvas maskable icon">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Liberty Canvas">
   <defs>
-    <linearGradient id="rubel-indigo-mask" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#818CF8" />
-      <stop offset="100%" stop-color="#6366F1" />
+    <linearGradient id="lc-rose-m" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4B5AF" />
+      <stop offset="100%" stop-color="#C9A09A" />
     </linearGradient>
   </defs>
-  <rect width="512" height="512" fill="#020617" />
-  <path
-    fill="url(#rubel-indigo-mask)"
-    d="M256 148c5 62 55 112 112 112-57 5-107 55-112 112-5-57-55-107-112-112 57-5 107-55 112-112z"
-  />
-  <path
-    fill="#A5B4FC"
-    d="M348 168c2 28 22 48 48 48-26 2-46 22-48 48-2-26-22-46-48-48 26-2 46-22 48-48z"
-  />
+  <rect width="512" height="512" rx="112" fill="#FAF9F6" />
+  <rect x="80" y="80" width="352" height="352" rx="48" fill="none" stroke="url(#lc-rose-m)" stroke-width="28" />
+  <circle cx="256" cy="256" r="72" fill="#9CAF88" opacity="0.85" />
+  <circle cx="256" cy="256" r="36" fill="#C9A09A" />
 </svg>

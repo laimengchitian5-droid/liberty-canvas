@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
+import { jsonError } from "@/lib/api/http";
 import { analyticsEventSchema } from "@/lib/diagnosis/analyticsServer";
 import { isReservedBuilderSlug } from "@/lib/builder/auditLog";
 import {
   buildPlugPlayHref,
   suggestPlugDiagnosisSlug,
 } from "@/lib/rubel/suggestPlugDiagnosisSlug";
+
+describe("jsonError contract", () => {
+  it("uses private no-store cache header", () => {
+    const response = jsonError("x", 400);
+    expect(response.headers.get("Cache-Control")).toBe("private, no-store");
+  });
+});
 
 describe("analyticsEventSchema", () => {
   it("accepts valid diagnosis analytics payloads", () => {
@@ -18,9 +26,9 @@ describe("analyticsEventSchema", () => {
     expect(parsed.success).toBe(true);
   });
 
-  it("rejects empty event names", () => {
+  it("rejects unknown event names at the boundary", () => {
     const parsed = analyticsEventSchema.safeParse({
-      event: "",
+      event: "not_a_real_event",
       at: new Date().toISOString(),
     });
 

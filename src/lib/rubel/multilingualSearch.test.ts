@@ -16,9 +16,7 @@ describe("multilingualSearch", () => {
   it('matches "ネコ" query against English cat diagnosis keywords', () => {
     const results = multilingualSearch("ネコ", catalog);
 
-    expect(results.some((entry) => entry.diagnosisId === "rubel-cat-dog-v1")).toBe(
-      true,
-    );
+    expect(results.some((entry) => entry.diagnosisId === "rubel-cat-dog-v1")).toBe(true);
   });
 
   it("returns empty ranked list when nothing matches", () => {

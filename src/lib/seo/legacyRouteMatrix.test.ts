@@ -15,10 +15,7 @@ describe("legacyRouteMatrix", () => {
     const source = new URL(
       "https://liberty-canvas.vercel.app/diagnosis/enneagram?lang=ko",
     );
-    const target = buildLegacyRedirectUrl(
-      source,
-      "/diagnosis/play/motivation-spectrum",
-    );
+    const target = buildLegacyRedirectUrl(source, "/diagnosis/play/motivation-spectrum");
 
     expect(target.pathname).toBe("/diagnosis/play/motivation-spectrum");
     expect(target.searchParams.get("lang")).toBe("ko");

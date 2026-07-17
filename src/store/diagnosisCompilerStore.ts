@@ -161,11 +161,7 @@ function advanceBuilderAfterQuestion(
     };
   }
 
-  const nextBlockId = resolveNextQuestionBlockId(
-    definition,
-    completedBlockId,
-    choiceId,
-  );
+  const nextBlockId = resolveNextQuestionBlockId(definition, completedBlockId, choiceId);
 
   if (!nextBlockId) {
     return finalizeBuilderRun(definition, builderAnswers);
@@ -177,9 +173,7 @@ function advanceBuilderAfterQuestion(
     phase: "questions",
     runtimeStep: nextStep,
     activeBlockId: nextBlockId,
-    questionIndex: nextStep?.questionNumber
-      ? nextStep.questionNumber - 1
-      : 0,
+    questionIndex: nextStep?.questionNumber ? nextStep.questionNumber - 1 : 0,
     isTransitioning: false,
   };
 }
@@ -282,9 +276,7 @@ export const useDiagnosisCompilerStore = create<DiagnosisCompilerStore>()(
         };
 
         const nextBuilderAnswers = [
-          ...state.builderAnswers.filter(
-            (entry) => entry.blockId !== payload.blockId,
-          ),
+          ...state.builderAnswers.filter((entry) => entry.blockId !== payload.blockId),
           nextBuilderAnswer,
         ];
 
@@ -415,10 +407,7 @@ export const useDiagnosisCompilerStore = create<DiagnosisCompilerStore>()(
           return;
         }
 
-        const nextStep = buildQuestionRuntimeStep(
-          latest.builderDefinition,
-          nextBlockId,
-        );
+        const nextStep = buildQuestionRuntimeStep(latest.builderDefinition, nextBlockId);
 
         set({
           phase: "questions",
@@ -506,8 +495,7 @@ export function selectCompilerProgress(state: DiagnosisCompilerStore): {
     ? extractQuestionBlocks(state.definition).length
     : 0;
 
-  const answeredInPhase =
-    state.phase === "result" ? questionCount : state.questionIndex;
+  const answeredInPhase = state.phase === "result" ? questionCount : state.questionIndex;
 
   const questionNumber = Math.min(
     questionCount,

@@ -64,9 +64,7 @@ function buildTimeSlices(
       attempted,
       correct,
       accuracy,
-      medianReactionMs: median(
-        sliceAttempts.map((attempt) => attempt.reactionMs),
-      ),
+      medianReactionMs: median(sliceAttempts.map((attempt) => attempt.reactionMs)),
     };
   });
 }
@@ -90,8 +88,7 @@ function deriveFocusPattern(params: {
 
   if (populatedSlices.length >= 2) {
     const accuracies = populatedSlices.map((slice) => slice.accuracy);
-    const accuracySpread =
-      Math.max(...accuracies) - Math.min(...accuracies);
+    const accuracySpread = Math.max(...accuracies) - Math.min(...accuracies);
 
     if (accuracySpread >= 30) {
       return "fluctuating";
@@ -120,9 +117,7 @@ export function buildKraepelinPerformanceMatrix(params: {
 }): KraepelinPerformanceMatrix {
   const durationMs = TEST_DURATION_MS;
   const totalAttempted = params.attempts.length;
-  const totalCorrect = params.attempts.filter(
-    (attempt) => attempt.isCorrect,
-  ).length;
+  const totalCorrect = params.attempts.filter((attempt) => attempt.isCorrect).length;
   const overallAccuracy =
     totalAttempted === 0 ? 0 : (totalCorrect / totalAttempted) * 100;
   const reactionTimes = params.attempts.map((attempt) => attempt.reactionMs);
@@ -139,20 +134,16 @@ export function buildKraepelinPerformanceMatrix(params: {
   const firstHalfAccuracy =
     firstHalf.length === 0
       ? 0
-      : (firstHalf.filter((attempt) => attempt.isCorrect).length /
-          firstHalf.length) *
+      : (firstHalf.filter((attempt) => attempt.isCorrect).length / firstHalf.length) *
         100;
   const secondHalfAccuracy =
     secondHalf.length === 0
       ? 0
-      : (secondHalf.filter((attempt) => attempt.isCorrect).length /
-          secondHalf.length) *
+      : (secondHalf.filter((attempt) => attempt.isCorrect).length / secondHalf.length) *
         100;
 
   const firstHalfMedian = median(firstHalf.map((attempt) => attempt.reactionMs));
-  const secondHalfMedian = median(
-    secondHalf.map((attempt) => attempt.reactionMs),
-  );
+  const secondHalfMedian = median(secondHalf.map((attempt) => attempt.reactionMs));
 
   const accuracyDrop = Math.max(0, firstHalfAccuracy - secondHalfAccuracy);
   const speedDrop =

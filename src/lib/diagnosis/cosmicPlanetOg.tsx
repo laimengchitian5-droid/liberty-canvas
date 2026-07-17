@@ -1,9 +1,13 @@
+import { buildOgPalette } from "@/lib/brand/ogBrand";
 import type { CosmicPlanetVisualSpec } from "@/lib/diagnosis/cosmicPlanetEngine";
 import {
   buildCosmicRadarAxisPoints,
   buildCosmicRadarPolygonPoints,
 } from "@/lib/diagnosis/cosmicPlanetEngine";
-import { FIVE_FACTOR_LABELS, type FiveFactorRadarPoint } from "@/lib/diagnosis/fiveFactorDisplay";
+import {
+  FIVE_FACTOR_LABELS,
+  type FiveFactorRadarPoint,
+} from "@/lib/diagnosis/fiveFactorDisplay";
 
 interface CosmicPlanetOgProps {
   nickname: string;
@@ -13,6 +17,10 @@ interface CosmicPlanetOgProps {
   planet: CosmicPlanetVisualSpec;
   diagnosisTitle: string;
   radarLevels?: readonly FiveFactorRadarPoint[];
+  specialtyBadge?: {
+    flagEmoji: string;
+    label: string;
+  };
 }
 
 const OG_RADAR_LABELS = [
@@ -42,12 +50,7 @@ function CosmicPlanetRadarOg({
   const axes = buildCosmicRadarAxisPoints(90, 90, 52);
 
   return (
-    <svg
-      width="180"
-      height="160"
-      viewBox="0 0 180 160"
-      style={{ marginTop: 8 }}
-    >
+    <svg width="180" height="160" viewBox="0 0 180 160" style={{ marginTop: 8 }}>
       {[18, 36, 52].map((radius) => (
         <circle
           key={radius}
@@ -147,6 +150,7 @@ export function CosmicPlanetOg({
   planet,
   diagnosisTitle,
   radarLevels,
+  specialtyBadge,
 }: CosmicPlanetOgProps) {
   return (
     <div
@@ -209,8 +213,26 @@ export function CosmicPlanetOg({
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div style={{ fontSize: 20, color: "rgba(255,248,242,0.72)" }}>
-            {diagnosisTitle} · コズミック結果
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ fontSize: 20, color: "rgba(255,248,242,0.72)" }}>
+              {diagnosisTitle} · コズミック結果
+            </div>
+            {specialtyBadge ? (
+              <div
+                style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 22 }}
+              >
+                <span>{specialtyBadge.flagEmoji}</span>
+                <span style={{ color: "rgba(255,248,242,0.82)" }}>
+                  {specialtyBadge.label}
+                </span>
+              </div>
+            ) : null}
           </div>
           <div
             style={{
@@ -223,7 +245,9 @@ export function CosmicPlanetOg({
           >
             {nickname}
           </div>
-          <div style={{ fontSize: 24, lineHeight: 1.45, color: "rgba(255,248,242,0.82)" }}>
+          <div
+            style={{ fontSize: 24, lineHeight: 1.45, color: "rgba(255,248,242,0.82)" }}
+          >
             {archetypeTitle}
           </div>
           <div
@@ -253,7 +277,7 @@ export function CosmicPlanetOg({
             color: "rgba(255,248,242,0.75)",
           }}
         >
-          <span>LibertyCanvas</span>
+          <span>{buildOgPalette("liberty-plug").nameJa}</span>
           <span>{hashtag}</span>
         </div>
       </div>
@@ -265,9 +289,17 @@ interface PlugLandingOgProps {
   title: string;
   subtitle: string;
   eyebrow: string;
+  brandId?: "liberty-plug" | "liberty-play" | "liberty-discover";
 }
 
-export function PlugLandingOg({ title, subtitle, eyebrow }: PlugLandingOgProps) {
+export function PlugLandingOg({
+  title,
+  subtitle,
+  eyebrow,
+  brandId = "liberty-plug",
+}: PlugLandingOgProps) {
+  const palette = buildOgPalette(brandId);
+
   return (
     <div
       style={{
@@ -277,29 +309,26 @@ export function PlugLandingOg({ title, subtitle, eyebrow }: PlugLandingOgProps) 
         flexDirection: "column",
         justifyContent: "space-between",
         padding: "56px 64px",
-        background:
-          "radial-gradient(circle at 85% 15%, #C9A09A33 0%, transparent 42%), radial-gradient(circle at 10% 90%, #9CAF8822 0%, transparent 38%), #12082a",
-        color: "#FFF8F2",
+        background: `radial-gradient(circle at 85% 15%, ${palette.accent}44 0%, transparent 42%), radial-gradient(circle at 10% 90%, ${palette.accent}22 0%, transparent 38%), ${palette.background}`,
+        color: palette.foreground,
         fontFamily: "serif",
       }}
     >
-      <div style={{ fontSize: 22, color: "rgba(255,248,242,0.72)" }}>{eyebrow}</div>
+      <div style={{ fontSize: 22, color: palette.muted }}>{eyebrow}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <div style={{ fontSize: 54, fontWeight: 700, lineHeight: 1.15 }}>{title}</div>
         <div
           style={{
             fontSize: 28,
             lineHeight: 1.5,
-            color: "rgba(255,248,242,0.78)",
+            color: palette.muted,
             maxWidth: 880,
           }}
         >
           {subtitle}
         </div>
       </div>
-      <div style={{ fontSize: 22, color: "rgba(255,248,242,0.72)" }}>
-        Rubel Canvas · 性格診断
-      </div>
+      <div style={{ fontSize: 22, color: palette.muted }}>{palette.eyebrow}</div>
     </div>
   );
 }

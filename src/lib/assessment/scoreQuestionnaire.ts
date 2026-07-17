@@ -1,8 +1,4 @@
-import type {
-  AnswerLogEntry,
-  Question,
-  ScoringResult,
-} from "@/types/platform";
+import type { AnswerLogEntry, Question, ScoringResult } from "@/types/platform";
 
 type MbtiLetter = "E" | "I" | "S" | "N" | "T" | "F" | "J" | "P";
 

@@ -23,7 +23,8 @@ export function buildHreflangAlternates(
           ? `${siteUrl}${normalizedPath}`
           : `${siteUrl}${normalizedPath}?lang=${locale}`;
     } else {
-      languages[locale] = `${siteUrl}/discover/${locale}${normalizedPath === "/" ? "" : normalizedPath}`;
+      languages[locale] =
+        `${siteUrl}/discover/${locale}${normalizedPath === "/" ? "" : normalizedPath}`;
     }
   }
 

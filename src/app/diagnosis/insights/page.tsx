@@ -32,7 +32,8 @@ export default async function DiagnosisInsightsPage() {
           <p className={styles.eyebrow}>Analytics · Audit</p>
           <h1 className={styles.title}>診断インサイト</h1>
           <p className={styles.lead}>
-            サーバー側に集計されたシェアイベントと、Builder 公開監査ログです（開発・運用確認用）。
+            サーバー側に集計されたシェアイベントと、Builder
+            公開監査ログです（開発・運用確認用）。
           </p>
         </header>
 
@@ -116,7 +117,7 @@ export default async function DiagnosisInsightsPage() {
 
         <section className={styles.panel} aria-labelledby="bridge-heading">
           <h2 id="bridge-heading" className={styles.panelTitle}>
-            Rubel → Plug ブリッジ
+            Liberty Play → Liberty Plug ブリッジ
           </h2>
           <ul className={styles.kpiGrid}>
             <li className={styles.kpiCard}>
@@ -129,7 +130,9 @@ export default async function DiagnosisInsightsPage() {
             </li>
             <li className={styles.kpiCard}>
               <span className={styles.kpiLabel}>Handoff</span>
-              <strong className={styles.kpiValue}>{insights.bridge.handoffsReceived}</strong>
+              <strong className={styles.kpiValue}>
+                {insights.bridge.handoffsReceived}
+              </strong>
             </li>
             <li className={styles.kpiCard}>
               <span className={styles.kpiLabel}>Plug 開始</span>
@@ -146,6 +149,53 @@ export default async function DiagnosisInsightsPage() {
               </strong>
             </li>
           </ul>
+        </section>
+
+        <section className={styles.panel} aria-labelledby="specialty-bridge-heading">
+          <h2 id="specialty-bridge-heading" className={styles.panelTitle}>
+            世界名産 B→C ブリッジ
+          </h2>
+          <ul className={styles.kpiGrid}>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Impression</span>
+              <strong className={styles.kpiValue}>
+                {insights.specialtyBridge.impressions}
+              </strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Click</span>
+              <strong className={styles.kpiValue}>
+                {insights.specialtyBridge.clicks}
+              </strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>深掘り Play 開始</span>
+              <strong className={styles.kpiValue}>
+                {insights.specialtyBridge.deepPlayStarts}
+              </strong>
+            </li>
+            <li className={styles.kpiCard}>
+              <span className={styles.kpiLabel}>Click→Play 率</span>
+              <strong className={styles.kpiValue}>
+                {insights.specialtyBridge.clickToPlayRate !== null
+                  ? `${insights.specialtyBridge.clickToPlayRate}%`
+                  : "—"}
+              </strong>
+            </li>
+          </ul>
+          {insights.specialtyBridge.byCountry.length > 0 ? (
+            <ul className={styles.metricList}>
+              {insights.specialtyBridge.byCountry.map((row) => (
+                <li key={row.countryId}>
+                  <span>
+                    {row.countryId} — click {row.clicks} / play {row.deepPlayStarts}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.empty}>国別ブリッジデータはまだありません。</p>
+          )}
         </section>
 
         <section className={styles.panel} aria-labelledby="ref-heading">

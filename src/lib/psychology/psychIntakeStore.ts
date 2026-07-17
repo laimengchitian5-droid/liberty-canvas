@@ -7,10 +7,7 @@ export const PSYCH_INTAKE_STORAGE_KEY = "rubel-psych-intake-v1";
 const MAX_AGE_MS = 30 * 60 * 1000;
 const MAX_USER_TEXT_LENGTH = 2_000;
 
-const PSYCH_TOPIC_SLUGS: ReadonlySet<PsychTopicSlug> = new Set([
-  "big-five",
-  "enneagram",
-]);
+const PSYCH_TOPIC_SLUGS: ReadonlySet<PsychTopicSlug> = new Set(["big-five", "enneagram"]);
 
 export interface PsychIntakeSeed {
   topic: PsychTopicSlug;
@@ -77,9 +74,7 @@ function readStoredSeed(): PsychIntakeSeed | null {
     return null;
   }
 
-  return parsePsychIntakeSeed(
-    window.sessionStorage.getItem(PSYCH_INTAKE_STORAGE_KEY),
-  );
+  return parsePsychIntakeSeed(window.sessionStorage.getItem(PSYCH_INTAKE_STORAGE_KEY));
 }
 
 export function writePsychIntakeSeed(seed: PsychIntakeSeed): void {
@@ -124,14 +119,12 @@ export function consumePsychIntakeSeed(
   return parsed;
 }
 
-export function mergePsychResultWithSeed<T extends {
-  anchorQuestion: string;
-  anchorAnswer: string;
-}>(
-  result: T,
-  seed: PsychIntakeSeed | null,
-  fallbackQuestion: string,
-): T {
+export function mergePsychResultWithSeed<
+  T extends {
+    anchorQuestion: string;
+    anchorAnswer: string;
+  },
+>(result: T, seed: PsychIntakeSeed | null, fallbackQuestion: string): T {
   if (!seed?.userText) {
     return result;
   }

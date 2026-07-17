@@ -9,9 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { kraepelinMatrixToScoringResult } from "@/lib/kraepelin/scoreKraepelinMatrix";
-import {
-  FULL_INCLUSIVE_AI_GUARDRAILS,
-} from "@/lib/i18n/culturalGuardrails";
+import { FULL_INCLUSIVE_AI_GUARDRAILS } from "@/lib/i18n/culturalGuardrails";
 import {
   DEFAULT_SCORING_PRESENTATION,
   INCLUSIVE_OUTPUT_POLICY,
@@ -32,38 +30,22 @@ import {
 const MBTI_ARCHETYPE_PATTERN = /^[IE][NS][FT][JP]$/;
 
 const MBTI_PERSONA_PROMPTS: Record<string, string> = {
-  INTJ:
-    "Respond with strategic clarity. Lead with conclusions, support with concise reasoning, and prioritize long-range implications over small talk.",
-  INTP:
-    "Respond with analytical curiosity. Explore underlying models, acknowledge uncertainty, and invite deeper reasoning without rushing to closure.",
-  ENTJ:
-    "Respond with executive decisiveness. State the goal first, outline actionable steps, and keep language direct and outcome-oriented.",
-  ENTP:
-    "Respond with inventive energy. Present multiple angles, challenge assumptions constructively, and keep the dialogue exploratory.",
-  INFJ:
-    "Respond with thoughtful depth. Connect patterns to meaning, validate emotional context, and offer insight that respects nuance.",
-  INFP:
-    "Respond with high empathy and reflective warmth. Honor values, use gentle language, and prioritize emotional authenticity over blunt efficiency.",
-  ENFJ:
-    "Respond with encouraging leadership. Focus on people impact, motivate with clarity, and balance empathy with practical guidance.",
-  ENFP:
-    "Respond with optimistic creativity. Highlight possibilities, celebrate strengths, and keep tone energizing without losing substance.",
-  ISTJ:
-    "Respond with dependable structure. Use ordered steps, cite concrete facts, and avoid ambiguity in recommendations.",
-  ISFJ:
-    "Respond with steady support. Acknowledge practical needs, provide careful detail, and maintain a reassuring, respectful tone.",
-  ESTJ:
-    "Respond with structured efficiency. Use bullet points, lead with conclusions, and prioritize actionable decisions over open-ended exploration.",
-  ESFJ:
-    "Respond with cooperative practicality. Emphasize shared goals, offer clear next steps, and maintain a warm, community-minded tone.",
-  ISTP:
-    "Respond with pragmatic brevity. Focus on what works, minimize fluff, and explain mechanics only when they change outcomes.",
-  ISFP:
-    "Respond with calm sensitivity. Respect personal boundaries, use soft language, and ground advice in present-moment realism.",
-  ESTP:
-    "Respond with bold directness. Cut to the chase, emphasize immediate options, and keep momentum high.",
-  ESFP:
-    "Respond with lively engagement. Keep tone upbeat, use vivid examples, and connect advice to lived experience.",
+  INTJ: "Respond with strategic clarity. Lead with conclusions, support with concise reasoning, and prioritize long-range implications over small talk.",
+  INTP: "Respond with analytical curiosity. Explore underlying models, acknowledge uncertainty, and invite deeper reasoning without rushing to closure.",
+  ENTJ: "Respond with executive decisiveness. State the goal first, outline actionable steps, and keep language direct and outcome-oriented.",
+  ENTP: "Respond with inventive energy. Present multiple angles, challenge assumptions constructively, and keep the dialogue exploratory.",
+  INFJ: "Respond with thoughtful depth. Connect patterns to meaning, validate emotional context, and offer insight that respects nuance.",
+  INFP: "Respond with high empathy and reflective warmth. Honor values, use gentle language, and prioritize emotional authenticity over blunt efficiency.",
+  ENFJ: "Respond with encouraging leadership. Focus on people impact, motivate with clarity, and balance empathy with practical guidance.",
+  ENFP: "Respond with optimistic creativity. Highlight possibilities, celebrate strengths, and keep tone energizing without losing substance.",
+  ISTJ: "Respond with dependable structure. Use ordered steps, cite concrete facts, and avoid ambiguity in recommendations.",
+  ISFJ: "Respond with steady support. Acknowledge practical needs, provide careful detail, and maintain a reassuring, respectful tone.",
+  ESTJ: "Respond with structured efficiency. Use bullet points, lead with conclusions, and prioritize actionable decisions over open-ended exploration.",
+  ESFJ: "Respond with cooperative practicality. Emphasize shared goals, offer clear next steps, and maintain a warm, community-minded tone.",
+  ISTP: "Respond with pragmatic brevity. Focus on what works, minimize fluff, and explain mechanics only when they change outcomes.",
+  ISFP: "Respond with calm sensitivity. Respect personal boundaries, use soft language, and ground advice in present-moment realism.",
+  ESTP: "Respond with bold directness. Cut to the chase, emphasize immediate options, and keep momentum high.",
+  ESFP: "Respond with lively engagement. Keep tone upbeat, use vivid examples, and connect advice to lived experience.",
 };
 
 export interface PlatformState {
@@ -109,11 +91,7 @@ interface PlatformContextValue {
   currentQuestion: Question | null;
   progress: number;
   isQuestionnaireComplete: boolean;
-  startQuestionnaire: (
-    testId: string,
-    testType: TestType,
-    questions: Question[],
-  ) => void;
+  startQuestionnaire: (testId: string, testType: TestType, questions: Question[]) => void;
   recordAnswer: (questionId: string, value: number) => void;
   advanceQuestion: () => void;
   retreatQuestion: () => void;
@@ -237,26 +215,20 @@ function formatTopDimensions(scores: Record<string, number>, limit = 3): string 
     .join(", ");
 }
 
-function formatRadar(
-  radarData: Array<{ name: string; value: number }>,
-): string {
+function formatRadar(radarData: Array<{ name: string; value: number }>): string {
   if (radarData.length === 0) {
     return "unavailable";
   }
 
-  return radarData
-    .map((entry) => `${entry.name}:${entry.value.toFixed(1)}`)
-    .join(", ");
+  return radarData.map((entry) => `${entry.name}:${entry.value.toFixed(1)}`).join(", ");
 }
 
 function buildBigFivePrompt(result: ScoringResult): string {
   const openness = result.scores.Openness ?? result.scores.openness ?? 0;
   const conscientiousness =
     result.scores.Conscientiousness ?? result.scores.conscientiousness ?? 0;
-  const extraversion =
-    result.scores.Extraversion ?? result.scores.extraversion ?? 0;
-  const agreeableness =
-    result.scores.Agreeableness ?? result.scores.agreeableness ?? 0;
+  const extraversion = result.scores.Extraversion ?? result.scores.extraversion ?? 0;
+  const agreeableness = result.scores.Agreeableness ?? result.scores.agreeableness ?? 0;
   const neuroticism = result.scores.Neuroticism ?? result.scores.neuroticism ?? 0;
 
   const toneDirectives: string[] = [
@@ -345,8 +317,7 @@ function buildDiscPrompt(result: ScoringResult): string {
 
 function buildKraepelinPrompt(result: ScoringResult): string {
   const fatigue = result.scores.fatigue ?? result.scores.Fatigue ?? 0;
-  const consistency =
-    result.scores.consistency ?? result.scores.Consistency ?? 0;
+  const consistency = result.scores.consistency ?? result.scores.Consistency ?? 0;
 
   const directives = [
     "Interpret responses through cognitive endurance and sustained attention patterns.",
@@ -394,10 +365,7 @@ function touchTelemetry(state: PlatformState): PlatformTelemetry {
   };
 }
 
-function platformReducer(
-  state: PlatformState,
-  action: PlatformAction,
-): PlatformState {
+function platformReducer(state: PlatformState, action: PlatformAction): PlatformState {
   switch (action.type) {
     case "START_QUESTIONNAIRE": {
       const { testId, testType, questions } = action.payload;
@@ -620,18 +588,15 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "SET_SCORING_RESULT", payload: result });
   }, []);
 
-  const submitKraepelinPerformance = useCallback(
-    (matrix: KraepelinPerformanceMatrix) => {
-      dispatch({
-        type: "SET_KRAEPELIN_PERFORMANCE",
-        payload: {
-          matrix,
-          scoringResult: kraepelinMatrixToScoringResult(matrix),
-        },
-      });
-    },
-    [],
-  );
+  const submitKraepelinPerformance = useCallback((matrix: KraepelinPerformanceMatrix) => {
+    dispatch({
+      type: "SET_KRAEPELIN_PERFORMANCE",
+      payload: {
+        matrix,
+        scoringResult: kraepelinMatrixToScoringResult(matrix),
+      },
+    });
+  }, []);
 
   const syncAIContext = useCallback((patch?: Partial<AIContextState>) => {
     dispatch({ type: "SYNC_AI_CONTEXT", payload: patch ?? {} });
@@ -706,11 +671,7 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
     ],
   );
 
-  return (
-    <PlatformContext.Provider value={value}>
-      {children}
-    </PlatformContext.Provider>
-  );
+  return <PlatformContext.Provider value={value}>{children}</PlatformContext.Provider>;
 }
 
 export function usePlatform(): PlatformContextValue {

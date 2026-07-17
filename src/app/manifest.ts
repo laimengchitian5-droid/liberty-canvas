@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
+  PWA_BACKGROUND_COLOR,
+  PWA_THEME_COLOR,
   PRODUCT_DESCRIPTION,
   PRODUCT_NAME,
   PRODUCT_SHORT_NAME,
@@ -17,8 +19,8 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: "portrait-primary",
     lang: "ja",
     dir: "ltr",
-    background_color: "#09090B",
-    theme_color: "#6366F1",
+    background_color: PWA_BACKGROUND_COLOR,
+    theme_color: PWA_THEME_COLOR,
     categories: ["entertainment", "lifestyle", "social"],
     prefer_related_applications: false,
     icons: [

@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPlugDiagnosisBySlug } from "@/config/diagnoses";
-import {
-  appendBuilderAuditEntry,
-  isReservedBuilderSlug,
-} from "@/lib/builder/auditLog";
+import { appendBuilderAuditEntry, isReservedBuilderSlug } from "@/lib/builder/auditLog";
 import { parseSaveBuilderPayload } from "@/lib/builder/builderSchema";
 import { buildPublishedBuilderRecord } from "@/lib/builder/publishedRecord";
 import {
@@ -32,7 +29,10 @@ export async function POST(request: Request) {
   const parsed = parseSaveBuilderPayload(body);
 
   if (!parsed) {
-    return NextResponse.json({ error: "Invalid builder diagnosis payload" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid builder diagnosis payload" },
+      { status: 400 },
+    );
   }
 
   if (isReservedBuilderSlug(parsed.definition.slug)) {
@@ -49,8 +49,7 @@ export async function POST(request: Request) {
   }
 
   const staticSlugConflict =
-    parsed.status === "published" &&
-    getPlugDiagnosisBySlug(parsed.definition.slug);
+    parsed.status === "published" && getPlugDiagnosisBySlug(parsed.definition.slug);
 
   if (staticSlugConflict) {
     return NextResponse.json(

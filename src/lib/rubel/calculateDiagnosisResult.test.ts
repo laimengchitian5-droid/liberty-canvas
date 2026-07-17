@@ -53,13 +53,9 @@ describe("calculateDiagnosisResult", () => {
       { questionId: "q-weekend", optionId: "q-weekend-a" },
     ]);
 
-    expect(outcome.compiledPrompt.systemPrompt).toContain(
-      outcome.winningResult.name,
-    );
+    expect(outcome.compiledPrompt.systemPrompt).toContain(outcome.winningResult.name);
     expect(outcome.verbalizationAnchor?.chosenOptionText).toBeTruthy();
-    expect(outcome.compiledPrompt.openingUserMessage).toContain(
-      "[DIAGNOSIS_COMPLETE]",
-    );
+    expect(outcome.compiledPrompt.openingUserMessage).toContain("[DIAGNOSIS_COMPLETE]");
   });
 
   it("instant binary maps option A to first result on single-question diagnosis", () => {

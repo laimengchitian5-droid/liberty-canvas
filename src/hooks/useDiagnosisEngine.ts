@@ -23,9 +23,7 @@ interface DiagnosisEngineState {
 
 const TRANSITION_MS = 280;
 
-export function useDiagnosisEngine(
-  options: UseDiagnosisEngineOptions = {},
-) {
+export function useDiagnosisEngine(options: UseDiagnosisEngineOptions = {}) {
   const questions = options.questions ?? SAMPLE_DIAGNOSTIC_QUESTIONS;
 
   const [state, setState] = useState<DiagnosisEngineState>({

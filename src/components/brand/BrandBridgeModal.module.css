@@ -1,0 +1,95 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  padding-block-end: calc(1rem + var(--lc-safe-bottom));
+  background: rgb(15 23 42 / 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.dialog {
+  inline-size: min(100%, 22rem);
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  background: var(--lc-color-cream-soft, #fffcf7);
+  border: 1px solid rgb(201 160 154 / 0.35);
+  box-shadow: 0 20px 48px rgb(74 64 56 / 0.12);
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-block-end: 0.85rem;
+}
+
+.arrow {
+  font-size: 1.25rem;
+  color: var(--lc-color-ink-muted, #6f6258);
+}
+
+.title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--lc-color-ink, #4a4038);
+  text-align: center;
+}
+
+.desc {
+  margin: 0 0 0.85rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--lc-color-ink-muted, #6f6258);
+  text-align: center;
+}
+
+.dismissLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-block-end: 1rem;
+  font-size: 0.78rem;
+  color: var(--lc-color-ink-muted, #6f6258);
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cancelBtn,
+.confirmBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+}
+
+.confirmBtn {
+  border: none;
+  background: var(--lc-color-dusty-rose, #c9a09a);
+  color: #fff;
+}
+
+.confirmBtn:hover {
+  filter: brightness(1.05);
+}

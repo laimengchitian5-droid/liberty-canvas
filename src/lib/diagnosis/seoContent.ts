@@ -5,13 +5,11 @@ import { DIAGNOSIS_RESULT_CATALOG } from "@/lib/diagnosis/resultCatalog";
 export const DIAGNOSIS_FAQ = [
   {
     question: "心の色診断とは何ですか？",
-    answer:
-      `LibertyCanvas の心の色診断は、${DIAGNOSTIC_QUESTION_COUNT}問のやさしい多肢選択から、共感・論理・感性・導きの4軸であなたの傾向を見つける無料の性格診断です。結果に応じて AI がパーソナルアドバイスをストリーム配信します。`,
+    answer: `LibertyCanvas の心の色診断は、${DIAGNOSTIC_QUESTION_COUNT}問のやさしい多肢選択から、共感・論理・感性・導きの4軸であなたの傾向を見つける無料の性格診断です。結果に応じて AI がパーソナルアドバイスをストリーム配信します。`,
   },
   {
     question: "所要時間はどのくらいですか？",
-    answer:
-      `通常60秒〜90秒程度です。${DIAGNOSTIC_QUESTION_COUNT}問に答えるだけで結果が表示され、希望すれば AI アドバイスまで続けられます。`,
+    answer: `通常60秒〜90秒程度です。${DIAGNOSTIC_QUESTION_COUNT}問に答えるだけで結果が表示され、希望すれば AI アドバイスまで続けられます。`,
   },
   {
     question: "正解や不正解はありますか？",
@@ -100,8 +98,7 @@ export function buildDiagnosisLandingQuizJsonLd() {
     "@context": "https://schema.org",
     "@type": "Quiz",
     name: "心の色診断",
-    description:
-      `${DIAGNOSTIC_QUESTION_COUNT}問の多肢選択で4タイプを判定する、LibertyCanvas 無料性格診断。`,
+    description: `${DIAGNOSTIC_QUESTION_COUNT}問の多肢選択で4タイプを判定する、LibertyCanvas 無料性格診断。`,
     inLanguage: "ja",
     numberOfQuestions: DIAGNOSTIC_QUESTION_COUNT,
     educationalLevel: "General",

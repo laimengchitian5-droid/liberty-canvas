@@ -46,9 +46,7 @@ export function fourAxisScoresToAcademicVector(
   return normalizeAcademicVector(raw);
 }
 
-export function resolveFourAxisDominant(
-  scores: CategoryScoreMap,
-): PersonalityCategory {
+export function resolveFourAxisDominant(scores: CategoryScoreMap): PersonalityCategory {
   const entries = Object.entries(scores) as Array<[PersonalityCategory, number]>;
   entries.sort((left, right) => right[1] - left[1]);
   return entries[0]?.[0] ?? "empathy";

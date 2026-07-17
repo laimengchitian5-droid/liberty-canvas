@@ -32,9 +32,7 @@ export function buildPlugAdviceRequestBody(params: {
   };
 }
 
-export function buildPlugAdviceUserPrompt(
-  body: PlugDiagnosisAdviceRequestBody,
-): string {
+export function buildPlugAdviceUserPrompt(body: PlugDiagnosisAdviceRequestBody): string {
   return [
     `Diagnosis: ${body.diagnosisTitle} (${body.slug})`,
     `Archetype: ${body.archetypeTitle}`,

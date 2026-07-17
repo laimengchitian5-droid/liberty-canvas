@@ -46,14 +46,17 @@ export async function unpublishBuilderDiagnosisRemote(input: {
   recordId: string;
   creatorId: string;
 }): Promise<PublishedBuilderRecord> {
-  const response = await fetch(`/api/builder/diagnoses/${encodeURIComponent(input.recordId)}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      "x-lc-creator-id": input.creatorId,
+  const response = await fetch(
+    `/api/builder/diagnoses/${encodeURIComponent(input.recordId)}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "x-lc-creator-id": input.creatorId,
+      },
+      body: JSON.stringify({ action: "unpublish" }),
     },
-    body: JSON.stringify({ action: "unpublish" }),
-  });
+  );
 
   if (!response.ok) {
     const payload = (await response.json().catch(() => null)) as {

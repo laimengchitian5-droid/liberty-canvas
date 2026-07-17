@@ -6,10 +6,7 @@ function uniqueTestTypes(quiz: StoredUniversalApp): string[] {
 }
 
 function uniqueDimensions(quiz: StoredUniversalApp): string[] {
-  return [...new Set(quiz.questions.map((question) => question.dimension))].slice(
-    0,
-    6,
-  );
+  return [...new Set(quiz.questions.map((question) => question.dimension))].slice(0, 6);
 }
 
 export function buildQuizStructuredData(quiz: StoredUniversalApp) {
@@ -24,8 +21,7 @@ export function buildQuizStructuredData(quiz: StoredUniversalApp) {
       "@type": "AlignmentObject",
       alignmentType: "educationalSubject",
       targetName: "Psychology",
-      targetDescription:
-        "Personality psychology and psychometric trait interpretation",
+      targetDescription: "Personality psychology and psychometric trait interpretation",
     },
     ...testTypes.map((testType) => ({
       "@type": "AlignmentObject",

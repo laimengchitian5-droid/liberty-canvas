@@ -142,9 +142,7 @@ export function ForgeCanvasForm() {
       await commitUserIdentityAfterFormSuccess(authorId);
       setCreatedAppPath(`/app/${body.appId}`);
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unexpected forge error",
-      );
+      setErrorMessage(error instanceof Error ? error.message : "Unexpected forge error");
     } finally {
       setIsSubmitting(false);
     }
@@ -155,8 +153,8 @@ export function ForgeCanvasForm() {
       <header className={styles.hero}>
         <h1 className={styles.title}>Forge Canvas</h1>
         <p className={styles.lead}>
-          Universal No-Code AI Bot &amp; Tool Forge — publish assessments, AI
-          agents, and custom tools to LibertyCanvas with live SEO discovery.
+          Universal No-Code AI Bot &amp; Tool Forge — publish assessments, AI agents, and
+          custom tools to LibertyCanvas with live SEO discovery.
         </p>
       </header>
 

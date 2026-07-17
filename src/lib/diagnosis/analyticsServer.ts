@@ -1,11 +1,13 @@
 import { z } from "zod";
+import { DIAGNOSIS_ANALYTICS_EVENTS } from "@/lib/diagnosis/analyticsEvents";
 import { jsonRepository } from "@/lib/storage/repositoryPort";
 
 const STORE_KEY = "diagnosis-analytics-events";
 const MAX_EVENTS = 2_000;
 
-const analyticsEventSchema = z.object({
-  event: z.string().min(1),
+/** Fail-closed: unknown event names rejected at API boundary. */
+export const analyticsEventSchema = z.object({
+  event: z.enum(DIAGNOSIS_ANALYTICS_EVENTS),
   at: z.string().min(1),
   slug: z.string().optional(),
   ref: z.string().nullable().optional(),
@@ -18,6 +20,7 @@ const analyticsEventSchema = z.object({
       "result_view",
       "share",
       "search",
+      "specialty_bridge",
     ])
     .optional(),
   frameworkId: z.string().optional(),
@@ -32,6 +35,9 @@ const analyticsEventSchema = z.object({
   source: z.string().optional(),
   target: z.string().optional(),
   rubelDiagnosisId: z.string().optional(),
+  targetCountryId: z.string().optional(),
+  targetPath: z.string().optional(),
+  isLive: z.boolean().optional(),
   traceId: z.string().optional(),
 });
 
@@ -42,9 +48,7 @@ async function readEvents(): Promise<StoredAnalyticsEvent[]> {
   return jsonRepository.read<StoredAnalyticsEvent[]>(STORE_KEY, []);
 }
 
-export async function appendAnalyticsEvent(
-  entry: StoredAnalyticsEvent,
-): Promise<void> {
+export async function appendAnalyticsEvent(entry: StoredAnalyticsEvent): Promise<void> {
   const events = await readEvents();
   events.push(entry);
   await jsonRepository.write(STORE_KEY, events.slice(-MAX_EVENTS));
@@ -76,5 +80,3 @@ export async function summarizeAnalyticsBySlug(
 
   return counts;
 }
-
-export { analyticsEventSchema };

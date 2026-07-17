@@ -27,9 +27,8 @@ export async function buildDiagnosisDiscoveryCatalog(): Promise<
     themeColor: entry.themeColor,
     href: `/diagnosis/play/${entry.slug}`,
     source: "official" as const,
-    questionCount: entry.elements.filter(
-      (element) => element.kind === "QUESTION_BLOCK",
-    ).length,
+    questionCount: entry.elements.filter((element) => element.kind === "QUESTION_BLOCK")
+      .length,
   }));
 
   const published = await listPublishedBuilderRecords();

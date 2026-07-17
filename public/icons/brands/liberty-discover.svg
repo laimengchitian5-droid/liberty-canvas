@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Liberty Discover">
+  <rect width="64" height="64" rx="14" fill="#0F172A" />
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#6366F1" stroke-width="3" />
+  <path fill="#818CF8" d="M32 14v6M32 44v6M14 32h6M44 32h6" stroke="#818CF8" stroke-width="2.5" stroke-linecap="round" />
+  <path fill="#A5B4FC" d="M32 32l10-6v12l-10-6z" />
+  <circle cx="32" cy="32" r="3" fill="#6366F1" />
+</svg>

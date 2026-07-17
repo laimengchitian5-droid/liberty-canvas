@@ -1,6 +1,9 @@
 const DEFAULT_DIMENSIONS = 64;
 
-export function cosineSimilarity(left: readonly number[], right: readonly number[]): number {
+export function cosineSimilarity(
+  left: readonly number[],
+  right: readonly number[],
+): number {
   const length = Math.min(left.length, right.length);
   let dot = 0;
   let leftMag = 0;

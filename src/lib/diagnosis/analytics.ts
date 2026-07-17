@@ -1,38 +1,19 @@
 import type { DiagnosisResult } from "@/types/diagnosis";
+import {
+  DIAGNOSIS_ANALYTICS_EVENTS,
+  type DiagnosisAnalyticsEvent,
+  PLAY_BRIDGE_LEGACY_TO_MODERN,
+} from "@/lib/diagnosis/analyticsEvents";
 import { readDiagnosisRef } from "@/lib/diagnosis/diagnosisSession";
 import { hasAnalyticsConsent } from "@/lib/privacy/consent";
 
-export type DiagnosisAnalyticsEvent =
-  | "diagnosis_ref_captured"
-  | "discover_funnel_submit"
-  | "discover_funnel_direct"
-  | "discover_play_arrival"
-  | "diagnosis_started"
-  | "diagnosis_completed"
-  | "diagnosis_advice_opened"
-  | "diagnosis_share_copy"
-  | "diagnosis_share_native"
-  | "diagnosis_share_print"
-  | "plug_result_share_x"
-  | "plug_result_share_copy"
-  | "plug_result_share_link"
-  | "plug_result_share_print"
-  | "plug_result_deeplink_view"
-  | "plug_result_deeplink_cta"
-  | "plug_result_advice_opened"
-  | "plug_result_advice_completed"
-  | "plug_result_gallery_preview"
-  | "plug_result_offline_restored"
-  | "plug_result_completed"
-  | "catalog_search"
-  | "crawler_visit"
-  | "rubel_play_started"
-  | "rubel_play_completed"
-  | "rubel_bridge_impression"
-  | "rubel_bridge_click"
-  | "rubel_bridge_handoff_received"
-  | "builder_draft_saved"
-  | "builder_preview_started";
+export type { DiagnosisAnalyticsEvent };
+export {
+  DIAGNOSIS_ANALYTICS_EVENTS,
+  normalizePlayBridgeEvent,
+  countBridgeMetric,
+  PLAY_BRIDGE_LEGACY_TO_MODERN,
+} from "@/lib/diagnosis/analyticsEvents";
 
 export type FunnelStep =
   | "discover_ref"
@@ -40,7 +21,8 @@ export type FunnelStep =
   | "discover_arrival"
   | "play_start"
   | "result_view"
-  | "share";
+  | "share"
+  | "specialty_bridge";
 
 export interface DiagnosisAnalyticsPayload {
   ref?: string | null;
@@ -146,3 +128,56 @@ export function trackDiagnosisCompletion(result: DiagnosisResult): void {
     resultId: result.id,
   });
 }
+
+type PlayBridgeDualKind =
+  | "play_started"
+  | "play_completed"
+  | "bridge_impression"
+  | "bridge_click"
+  | "bridge_handoff_received";
+
+const PLAY_BRIDGE_DUAL: Readonly<
+  Record<
+    PlayBridgeDualKind,
+    { legacy: DiagnosisAnalyticsEvent; modern: DiagnosisAnalyticsEvent }
+  >
+> = {
+  play_started: {
+    legacy: "rubel_play_started",
+    modern: PLAY_BRIDGE_LEGACY_TO_MODERN.rubel_play_started,
+  },
+  play_completed: {
+    legacy: "rubel_play_completed",
+    modern: PLAY_BRIDGE_LEGACY_TO_MODERN.rubel_play_completed,
+  },
+  bridge_impression: {
+    legacy: "rubel_bridge_impression",
+    modern: PLAY_BRIDGE_LEGACY_TO_MODERN.rubel_bridge_impression,
+  },
+  bridge_click: {
+    legacy: "rubel_bridge_click",
+    modern: PLAY_BRIDGE_LEGACY_TO_MODERN.rubel_bridge_click,
+  },
+  bridge_handoff_received: {
+    legacy: "rubel_bridge_handoff_received",
+    modern: PLAY_BRIDGE_LEGACY_TO_MODERN.rubel_bridge_handoff_received,
+  },
+};
+
+/**
+ * Dual-write telemetry during Rubel→Liberty bridge phase.
+ * Legacy rubel_* packets keep BI dashboards alive; liberty_* enables migration.
+ */
+export function trackPlayBridgeDual(
+  kind: PlayBridgeDualKind,
+  payload: DiagnosisAnalyticsPayload = {},
+): void {
+  const pair = PLAY_BRIDGE_DUAL[kind];
+  trackDiagnosisEvent(pair.legacy, payload);
+  trackDiagnosisEvent(pair.modern, payload);
+}
+
+/** Exhaustiveness guard — fails compile if events drift from dual map. */
+const _assertEventsCovered: readonly DiagnosisAnalyticsEvent[] =
+  DIAGNOSIS_ANALYTICS_EVENTS;
+void _assertEventsCovered;

@@ -1,6 +1,7 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createOpenAI } from "@ai-sdk/openai";
 import type { LanguageModel } from "ai";
+import { resolveInferenceApiKeyFallback } from "@/lib/env/serverSecrets";
 
 export type AiProviderName = "anthropic" | "deepseek" | "openai" | "none";
 
@@ -11,8 +12,9 @@ export interface ResolvedLanguageModel {
 
 /**
  * Resolves the Rubel Canvas agent model.
- * Priority: Claude (Anthropic) → DeepSeek → OpenAI.
- * Groq / xAI Grok are intentionally excluded for youth-safe, standard ChatCompletion APIs.
+ * Priority: Claude (Anthropic) → DeepSeek → OpenAI / AI_INFERENCE_API_KEY.
+ * Keys are server-only — never NEXT_PUBLIC_*.
+ * Groq / xAI Grok are intentionally excluded for youth-safe ChatCompletion APIs.
  */
 export function resolveLanguageModel(): ResolvedLanguageModel | null {
   const anthropicKey = process.env.ANTHROPIC_API_KEY?.trim();
@@ -21,9 +23,7 @@ export function resolveLanguageModel(): ResolvedLanguageModel | null {
     const anthropic = createAnthropic({ apiKey: anthropicKey });
     return {
       provider: "anthropic",
-      model: anthropic(
-        process.env.ANTHROPIC_CHAT_MODEL ?? "claude-sonnet-4-20250514",
-      ),
+      model: anthropic(process.env.ANTHROPIC_CHAT_MODEL ?? "claude-sonnet-4-20250514"),
     };
   }
 
@@ -40,7 +40,7 @@ export function resolveLanguageModel(): ResolvedLanguageModel | null {
     };
   }
 
-  const openAiKey = process.env.OPENAI_API_KEY?.trim();
+  const openAiKey = resolveInferenceApiKeyFallback();
 
   if (openAiKey) {
     const openai = createOpenAI({ apiKey: openAiKey });

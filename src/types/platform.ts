@@ -6,11 +6,7 @@ export enum TestType {
   KRAEPELIN = "KRAEPELIN",
 }
 
-export type AppType =
-  | "assessment"
-  | "ai_agent"
-  | "interactive_media"
-  | "custom_tool";
+export type AppType = "assessment" | "ai_agent" | "interactive_media" | "custom_tool";
 
 export interface Question {
   id: string;
@@ -112,9 +108,7 @@ export const INITIAL_AI_CONTEXT: AIContextState = {
 export const DEFAULT_APP_TYPE: AppType = "assessment";
 
 export type KraepelinFocusPattern =
-  | "highly_consistent"
-  | "fluctuating"
-  | "easily_fatigued";
+  "highly_consistent" | "fluctuating" | "easily_fatigued";
 
 export interface KraepelinAttemptMetric {
   index: number;

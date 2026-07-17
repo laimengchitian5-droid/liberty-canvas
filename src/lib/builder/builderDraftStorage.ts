@@ -152,10 +152,7 @@ export function saveBuilderDraft(
   }
 
   try {
-    localStorage.setItem(
-      `${DRAFT_PREFIX}${definition.id}`,
-      JSON.stringify(record),
-    );
+    localStorage.setItem(`${DRAFT_PREFIX}${definition.id}`, JSON.stringify(record));
 
     const index = readIndex();
 

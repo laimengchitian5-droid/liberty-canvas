@@ -224,23 +224,17 @@ const SHARE_HASHTAG: Readonly<Record<CosmicPlanetKind, string>> = {
   twilight_balance: "#バランス星診断",
 };
 
-function scoreByKey(
-  levels: readonly FiveFactorRadarPoint[],
-  key: FiveFactorKey,
-): number {
+function scoreByKey(levels: readonly FiveFactorRadarPoint[], key: FiveFactorKey): number {
   return levels.find((entry) => entry.key === key)?.score ?? 0;
 }
 
-function resolveDominantKey(
-  levels: readonly FiveFactorRadarPoint[],
-): FiveFactorKey {
-  return [...levels].sort((left, right) => right.score - left.score)[0]?.key ??
-    "extraversion";
+function resolveDominantKey(levels: readonly FiveFactorRadarPoint[]): FiveFactorKey {
+  return (
+    [...levels].sort((left, right) => right.score - left.score)[0]?.key ?? "extraversion"
+  );
 }
 
-export function resolveCosmicPlanetKind(
-  vector: AcademicTraitVector,
-): CosmicPlanetKind {
+export function resolveCosmicPlanetKind(vector: AcademicTraitVector): CosmicPlanetKind {
   const levels = buildFiveFactorRadar(vector);
   const dominant = resolveDominantKey(levels);
 

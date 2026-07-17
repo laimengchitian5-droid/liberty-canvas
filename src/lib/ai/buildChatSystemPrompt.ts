@@ -4,10 +4,7 @@ import {
   NUMERICAL_NEUTRALITY_GUARDRAILS,
   ZERO_TABOO_GUARDRAILS,
 } from "@/lib/i18n/culturalGuardrails";
-import {
-  INCLUSIVE_OUTPUT_POLICY,
-  PERCENTILE_SCORE_RANGE,
-} from "@/types/platform";
+import { INCLUSIVE_OUTPUT_POLICY, PERCENTILE_SCORE_RANGE } from "@/types/platform";
 
 const STRUCTURED_OUTPUT_INSTRUCTION = [
   "You must respond with JSON only, no markdown fences.",
@@ -24,8 +21,7 @@ const MBTI_PERSONA_DIRECTIVES: Record<string, string> = {
   ENTJ: "Adopt executive decisiveness. State goals first and keep language direct.",
   ENTP: "Adopt inventive energy. Present multiple angles constructively.",
   INFJ: "Adopt thoughtful depth. Connect patterns to meaning with nuance.",
-  INFP:
-    "Adopt a deeply empathetic, reflective, and warm persona. Avoid aggressive or analytical jargon.",
+  INFP: "Adopt a deeply empathetic, reflective, and warm persona. Avoid aggressive or analytical jargon.",
   ENFJ: "Adopt encouraging leadership with practical empathy.",
   ENFP: "Adopt optimistic creativity while staying substantive.",
   ISTJ: "Adopt dependable structure with ordered steps and concrete facts.",
@@ -96,29 +92,41 @@ export function buildDynamicSystemPrompt(body: AdaptiveChatRequestBody): string 
       "Respond helpfully while adapting tone to the user's profile.",
   ];
 
-  const normalizedArchetype = body.archetype.trim().toUpperCase();
-  const mbtiDirective = MBTI_PERSONA_DIRECTIVES[normalizedArchetype];
+  const isGuestCompanion =
+    body.appliedPersona === "global-companion" ||
+    body.archetype === "unknown" ||
+    !body.scores;
 
-  if (mbtiDirective) {
-    segments.push(mbtiDirective);
+  if (isGuestCompanion) {
+    segments.push(
+      "No diagnosis profile is required. Act as a welcoming global conversation companion.",
+      "Prioritize language mirroring, emotional safety, and inviting follow-up questions.",
+    );
+  } else {
+    const normalizedArchetype = body.archetype.trim().toUpperCase();
+    const mbtiDirective = MBTI_PERSONA_DIRECTIVES[normalizedArchetype];
+
+    if (mbtiDirective) {
+      segments.push(mbtiDirective);
+    }
+
+    segments.push(`Observed archetype: ${body.archetype}.`);
+    segments.push(`Dimension scores: ${formatScores(body.scores)}.`);
+
+    if (body.kraepelinFatigue !== undefined) {
+      segments.push(`Kraepelin fatigue index: ${body.kraepelinFatigue}.`);
+    }
+
+    if (body.kraepelinConsistency !== undefined) {
+      segments.push(`Kraepelin consistency index: ${body.kraepelinConsistency}.`);
+    }
+
+    if (body.kraepelinFocusPattern) {
+      segments.push(`Kraepelin focus pattern: ${body.kraepelinFocusPattern}.`);
+    }
   }
 
-  segments.push(`Observed archetype: ${body.archetype}.`);
-  segments.push(`Dimension scores: ${formatScores(body.scores)}.`);
-
-  if (body.kraepelinFatigue !== undefined) {
-    segments.push(`Kraepelin fatigue index: ${body.kraepelinFatigue}.`);
-  }
-
-  if (body.kraepelinConsistency !== undefined) {
-    segments.push(`Kraepelin consistency index: ${body.kraepelinConsistency}.`);
-  }
-
-  if (body.kraepelinFocusPattern) {
-    segments.push(`Kraepelin focus pattern: ${body.kraepelinFocusPattern}.`);
-  }
-
-  if (!body.isReliable) {
+  if (!body.isReliable && !isGuestCompanion) {
     segments.push(
       "The user's inputs are highly contradictory. Adopt a gently corrective, truth-seeking tone to uncover their authentic view. Avoid overconfident labeling.",
     );
@@ -144,9 +152,7 @@ export function buildFallbackChatResponse(
   body: AdaptiveChatRequestBody,
   latestUserMessage: string,
 ): string {
-  const personaLabel = body.isReliable
-    ? body.appliedPersona
-    : "Analytical Truth-Seeker";
+  const personaLabel = body.isReliable ? body.appliedPersona : "Analytical Truth-Seeker";
 
   const intro = body.isReliable
     ? `I am adapting to your ${body.archetype} profile with a personalized tone.`

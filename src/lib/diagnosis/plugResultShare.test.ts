@@ -19,11 +19,13 @@ describe("plugResultShare", () => {
     const definition = getPlugDiagnosisBySlug("oshikatsu");
     expect(definition).not.toBeNull();
 
-    const answers = extractQuestionBlocks(definition!).slice(0, 12).map((block, index) => ({
-      blockId: block.id,
-      optionId: block.options?.[0]?.id ?? `${block.id}-a`,
-      recordedAt: index,
-    }));
+    const answers = extractQuestionBlocks(definition!)
+      .slice(0, 12)
+      .map((block, index) => ({
+        blockId: block.id,
+        optionId: block.options?.[0]?.id ?? `${block.id}-a`,
+        recordedAt: index,
+      }));
 
     const outcome = compileLegallySafeResult(definition!, answers);
     const factors = extractFactorPercentiles(outcome);
@@ -46,18 +48,16 @@ describe("plugResultShare", () => {
     const definition = getPlugDiagnosisBySlug("romance");
     expect(definition).not.toBeNull();
 
-    const answers = extractQuestionBlocks(definition!).slice(0, 8).map((block, index) => ({
-      blockId: block.id,
-      optionId: block.options?.[0]?.id ?? `${block.id}-a`,
-      recordedAt: index,
-    }));
+    const answers = extractQuestionBlocks(definition!)
+      .slice(0, 8)
+      .map((block, index) => ({
+        blockId: block.id,
+        optionId: block.options?.[0]?.id ?? `${block.id}-a`,
+        recordedAt: index,
+      }));
 
     const outcome = compileLegallySafeResult(definition!, answers);
-    const shareUrl = buildPlugResultShareUrl(
-      definition!.slug,
-      outcome,
-      "nebula_dream",
-    );
+    const shareUrl = buildPlugResultShareUrl(definition!.slug, outcome, "nebula_dream");
 
     expect(shareUrl).toContain("/diagnosis/play/romance/result");
     expect(shareUrl).toContain("planet=nebula_dream");

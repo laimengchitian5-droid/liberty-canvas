@@ -30,13 +30,13 @@ CREATE INDEX IF NOT EXISTS discovery_index_slug
 
 ## Env
 
-| Variable | Default | Purpose |
-|----------|---------|---------|
-| `POSTGRES_URL` | — | Vercel Postgres / Neon connection |
-| `LC_SEARCH_BACKEND` | `token` | `token` / `postgres` / `hybrid` |
-| `LC_SEARCH_VECTOR_ENABLED` | auto | Vector leg for hybrid |
-| `OPENAI_API_KEY` | — | OpenAI embeddings (falls back to local hash vectors) |
-| `LC_SCORING_BACKEND` | `typescript` | Future Wasm scoring port |
+| Variable                   | Default      | Purpose                                              |
+| -------------------------- | ------------ | ---------------------------------------------------- |
+| `POSTGRES_URL`             | —            | Vercel Postgres / Neon connection                    |
+| `LC_SEARCH_BACKEND`        | `token`      | `token` / `postgres` / `hybrid`                      |
+| `LC_SEARCH_VECTOR_ENABLED` | auto         | Vector leg for hybrid                                |
+| `OPENAI_API_KEY`           | —            | OpenAI embeddings (falls back to local hash vectors) |
+| `LC_SCORING_BACKEND`       | `typescript` | Future Wasm scoring port                             |
 
 ## Reindex
 

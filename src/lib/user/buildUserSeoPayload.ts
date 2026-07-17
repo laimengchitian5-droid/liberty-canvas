@@ -24,7 +24,9 @@ function buildClusterKeywords(clusters: readonly SemanticQueryCluster[]): string
   return [...keywords];
 }
 
-function buildPrimaryCluster(clusters: readonly SemanticQueryCluster[]): SemanticQueryCluster {
+function buildPrimaryCluster(
+  clusters: readonly SemanticQueryCluster[],
+): SemanticQueryCluster {
   return clusters[0] ?? resolveSemanticClustersForLocale("ja")[0]!;
 }
 
@@ -66,7 +68,7 @@ function buildProfilePageJsonLd(
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    name: `${userData.profile.displayName} — Rubel Canvas`,
+    name: `${userData.profile.displayName} — Liberty Canvas`,
     url: `${siteUrl}/api/users/${encodeURIComponent(userData.profile.userId)}`,
     inLanguage: userData.profile.locale,
     mainEntity: {
@@ -94,7 +96,9 @@ export function mapUserDataToSeoContext(
 
   return Object.freeze({
     locale,
-    activeClusterIds: Object.freeze(activeClusterIds) as readonly SemanticQueryClusterId[],
+    activeClusterIds: Object.freeze(
+      activeClusterIds,
+    ) as readonly SemanticQueryClusterId[],
     primaryTitle: primary.title,
     primaryDescription: primary.description,
     keywords: Object.freeze(keywords),

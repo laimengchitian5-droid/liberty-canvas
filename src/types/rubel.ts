@@ -1,6 +1,12 @@
 import type { LocaleCode } from "@/types/rubel-i18n";
 
-export type { LocaleCode, LocalizedDiagnosisMeta, PlayLocalizationPhase, PlayLocalizationState, SearchResult } from "@/types/rubel-i18n";
+export type {
+  LocaleCode,
+  LocalizedDiagnosisMeta,
+  PlayLocalizationPhase,
+  PlayLocalizationState,
+  SearchResult,
+} from "@/types/rubel-i18n";
 export {
   DEFAULT_LOCALE,
   LOCALE_FLAGS,
@@ -17,9 +23,7 @@ export type PersonalityTrait = "openness" | "empathy_need" | "ego";
 export type AiTone = "gal" | "mentor" | "tsundere" | "princess";
 
 export type ActiveTherapyMode =
-  | "unconditional_praise"
-  | "strict_coaching"
-  | "emotional_mirror";
+  "unconditional_praise" | "strict_coaching" | "emotional_mirror";
 
 export interface TraitVector {
   openness: number;

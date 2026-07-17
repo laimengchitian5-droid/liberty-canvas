@@ -33,9 +33,9 @@ test.describe("LibertyCanvas critical paths", () => {
     const option = page.getByRole("button").filter({ hasText: /.+/ }).first();
     await option.click();
 
-    await expect(
-      page.getByRole("link", { name: /宇宙|Cosmic|Plug|診断/i }),
-    ).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole("link", { name: /宇宙|Cosmic|Plug|診断/i })).toBeVisible({
+      timeout: 15_000,
+    });
 
     const bridgeLink = page.getByRole("link", { name: /宇宙|Cosmic|Plug|診断/i }).first();
     const href = await bridgeLink.getAttribute("href");

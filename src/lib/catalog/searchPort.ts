@@ -4,7 +4,10 @@ import {
   resolveSearchBackend,
   type CatalogSearchBackend,
 } from "@/lib/catalog/searchConfig";
-import type { CatalogSearchPort, CatalogSearchResult } from "@/lib/catalog/searchPortTypes";
+import type {
+  CatalogSearchPort,
+  CatalogSearchResult,
+} from "@/lib/catalog/searchPortTypes";
 import {
   searchDiscoveryIndexFts,
   searchDiscoveryIndexHybrid,
@@ -12,7 +15,9 @@ import {
 import { mergeSearchHits, tokenSearchAdapter } from "@/lib/catalog/tokenSearchAdapter";
 import { inferQueryIntent } from "@/lib/seo/searchIntent";
 
-function createPostgresSearchPort(mode: Extract<CatalogSearchBackend, "postgres" | "hybrid">): CatalogSearchPort {
+function createPostgresSearchPort(
+  mode: Extract<CatalogSearchBackend, "postgres" | "hybrid">,
+): CatalogSearchPort {
   return {
     backend: mode,
 

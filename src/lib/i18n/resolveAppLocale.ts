@@ -58,9 +58,7 @@ export interface AppLocaleRequestInput {
   acceptLanguage?: string | null;
 }
 
-export function resolveAppLocaleFromRequest(
-  input: AppLocaleRequestInput,
-): Locale {
+export function resolveAppLocaleFromRequest(input: AppLocaleRequestInput): Locale {
   const explicit = firstResolvedLocale(
     input.edgeLocale,
     input.queryLang,

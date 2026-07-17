@@ -1,8 +1,7 @@
 import { GoogleAuth } from "google-auth-library";
 
 const INDEXING_SCOPE = "https://www.googleapis.com/auth/indexing";
-const INDEXING_ENDPOINT =
-  "https://indexing.googleapis.com/v3/urlNotifications:publish";
+const INDEXING_ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish";
 
 export type IndexingNotificationType = "URL_UPDATED" | "URL_DELETED";
 
@@ -48,8 +47,7 @@ async function getAccessToken(): Promise<string> {
 
   const auth = new GoogleAuth({
     credentials: "keyFile" in credentials ? undefined : credentials,
-    keyFile:
-      "keyFile" in credentials ? (credentials.keyFile as string) : undefined,
+    keyFile: "keyFile" in credentials ? (credentials.keyFile as string) : undefined,
     scopes: [INDEXING_SCOPE],
   });
 
@@ -96,8 +94,7 @@ export async function publishUrlToGoogleIndexing(
           typeof body === "object" &&
           body !== null &&
           "error" in body &&
-          typeof (body as { error?: { message?: string } }).error?.message ===
-            "string"
+          typeof (body as { error?: { message?: string } }).error?.message === "string"
             ? (body as { error: { message: string } }).error.message
             : `Google Indexing API responded with ${response.status}`,
         retryable: isRetryableStatus(response.status),

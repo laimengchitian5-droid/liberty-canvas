@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  readDiagnosisEventLog,
-  readDiagnosisRef,
-} from "@/lib/diagnosis/analytics";
+import { readDiagnosisEventLog, readDiagnosisRef } from "@/lib/diagnosis/analytics";
 import { summarizeShareGrowthEvents } from "@/lib/diagnosis/plugShareGrowth";
 import type { ResultLocaleMessages } from "@/lib/diagnosis/resultLocalesCore";
 import styles from "./diagnosisResultPage.module.css";
@@ -66,7 +63,9 @@ export const ShareGrowthInsights = ({ slug, messages }: ShareGrowthInsightsProps
           </p>
         ) : null}
         {entries.length === 0 ? (
-          <p className={styles.shareGrowthLine}>まだシェアイベントは記録されていません。</p>
+          <p className={styles.shareGrowthLine}>
+            まだシェアイベントは記録されていません。
+          </p>
         ) : (
           <ul className={styles.shareGrowthList}>
             {entries.map(([event, count]) => (

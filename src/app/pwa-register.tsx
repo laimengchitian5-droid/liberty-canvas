@@ -26,10 +26,7 @@ export function PwaRegister() {
           }
 
           installing.addEventListener("statechange", () => {
-            if (
-              installing.state === "installed" &&
-              navigator.serviceWorker.controller
-            ) {
+            if (installing.state === "installed" && navigator.serviceWorker.controller) {
               setUpdateReady(true);
             }
           });
@@ -43,10 +40,7 @@ export function PwaRegister() {
       window.location.reload();
     };
 
-    navigator.serviceWorker.addEventListener(
-      "controllerchange",
-      onControllerChange,
-    );
+    navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
 
     if (document.readyState === "complete") {
       void registerServiceWorker();
@@ -57,10 +51,7 @@ export function PwaRegister() {
     }
 
     return () => {
-      navigator.serviceWorker.removeEventListener(
-        "controllerchange",
-        onControllerChange,
-      );
+      navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
     };
   }, []);
 

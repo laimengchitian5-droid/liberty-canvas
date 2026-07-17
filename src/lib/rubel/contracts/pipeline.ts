@@ -74,12 +74,7 @@ export interface HfChatRequestContract {
 /** /api/rubel/hf-chat → client */
 export interface HfChatResponseContract {
   text: string;
-  provider?:
-    | "huggingface"
-    | "fallback"
-    | "anthropic"
-    | "deepseek"
-    | "openai";
+  provider?: "huggingface" | "fallback" | "anthropic" | "deepseek" | "openai";
   model?: string;
   error?: string;
 }

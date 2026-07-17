@@ -33,15 +33,10 @@ export function buildPlugResultShareBaseMetadata(
   definition: PlugDiagnosisDefinition,
   query: PlugResultShareQuery | null,
 ): Metadata {
-  const landingPath = buildPlugResultPagePath(
-    definition.slug,
-    query ?? undefined,
-  );
+  const landingPath = buildPlugResultPagePath(definition.slug, query ?? undefined);
   const pageUrl = `${getSiteUrl()}${landingPath}`;
 
-  const planetSpec = query
-    ? getCosmicPlanetVisualSpec(query.planet)
-    : null;
+  const planetSpec = query ? getCosmicPlanetVisualSpec(query.planet) : null;
 
   const title = planetSpec
     ? `${planetSpec.nickname} | ${definition.title}`
@@ -60,16 +55,11 @@ export function buildPlugResultShareBaseMetadata(
       })
     : `${getSiteUrl()}/api/og/diagnosis?slug=${encodeURIComponent(definition.slug)}`;
 
-  const archetypeTitle = resolveArchetypeTitle(
-    definition,
-    query?.archetypeId ?? null,
-  );
+  const archetypeTitle = resolveArchetypeTitle(definition, query?.archetypeId ?? null);
 
   return {
     title,
-    description: query
-      ? `${description} ${archetypeTitle}`
-      : description,
+    description: query ? `${description} ${archetypeTitle}` : description,
     alternates: {
       canonical: pageUrl,
     },

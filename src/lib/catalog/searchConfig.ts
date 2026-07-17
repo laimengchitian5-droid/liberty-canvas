@@ -25,15 +25,9 @@ export function isVectorSearchEnabled(): boolean {
 }
 
 export function isPostgresConfigured(): boolean {
-  return Boolean(
-    process.env.POSTGRES_URL?.trim() || process.env.DATABASE_URL?.trim(),
-  );
+  return Boolean(process.env.POSTGRES_URL?.trim() || process.env.DATABASE_URL?.trim());
 }
 
 export function resolvePostgresConnectionString(): string | null {
-  return (
-    process.env.POSTGRES_URL?.trim() ??
-    process.env.DATABASE_URL?.trim() ??
-    null
-  );
+  return process.env.POSTGRES_URL?.trim() ?? process.env.DATABASE_URL?.trim() ?? null;
 }

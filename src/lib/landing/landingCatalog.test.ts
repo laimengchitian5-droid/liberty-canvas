@@ -8,13 +8,13 @@ import { buildLandingIntakeOutcome } from "@/lib/landing/landingIntakeBridge";
 import { getSeedDiagnosisById } from "@/lib/rubel/repository";
 
 describe("landingCatalog", () => {
-  it("generates 60 static params (10 topics × 6 locales)", () => {
-    expect(listLandingStaticParams()).toHaveLength(60);
+  it("generates 120 static params (20 topics × 6 locales)", () => {
+    expect(listLandingStaticParams()).toHaveLength(120);
   });
 
   it("lists all landing pages with absolute urls", () => {
     const pages = listAllLandingPages();
-    expect(pages).toHaveLength(60);
+    expect(pages).toHaveLength(120);
     expect(pages[0]?.absoluteUrl).toContain("/discover/");
   });
 
@@ -35,6 +35,30 @@ describe("landingCatalog", () => {
     const dePage = buildLandingPageDefinition("de", "enneagram-nine-types");
     expect(dePage?.copy.headline).not.toMatch(/Enneagramm|MBTI/i);
   });
+
+  it("resolves world-specialty-soul discover page", () => {
+    const jaPage = buildLandingPageDefinition("ja", "world-specialty-soul");
+    expect(jaPage?.topic.plugPlayPath).toBe("/diagnosis/play/world-specialty-soul");
+    expect(jaPage?.copy.headline).toContain("テロワール");
+  });
+
+  it("routes upcoming specialty landings to world-entry play path", () => {
+    const usPage = buildLandingPageDefinition("en", "us-corn-frontier");
+    expect(usPage?.topic.plugPlayPath).toBe("/diagnosis/play/world-specialty-soul");
+
+    const caPage = buildLandingPageDefinition("en", "ca-maple-resilience");
+    expect(caPage?.topic.plugPlayPath).toBe("/diagnosis/play/world-specialty-soul");
+  });
+
+  it("keeps live JP specialty on deep-dive play path", () => {
+    const jpPage = buildLandingPageDefinition("ja", "jp-sakamai-craft");
+    expect(jpPage?.topic.plugPlayPath).toBe("/diagnosis/play/jp-sakamai-craft");
+  });
+
+  it("keeps live FR specialty on deep-dive play path", () => {
+    const frPage = buildLandingPageDefinition("ja", "fr-terroir-poet");
+    expect(frPage?.topic.plugPlayPath).toBe("/diagnosis/play/fr-terroir-poet");
+  });
 });
 
 describe("buildLandingIntakeOutcome", () => {
@@ -43,6 +67,7 @@ describe("buildLandingIntakeOutcome", () => {
     expect(diagnosis).toBeTruthy();
 
     const outcome = buildLandingIntakeOutcome(diagnosis!, {
+      source: "satellite",
       locale: "en",
       slug: "sixteen-personalities",
       keyword: "Personality Spectrum",

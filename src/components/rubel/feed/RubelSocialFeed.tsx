@@ -59,13 +59,9 @@ const RubelSocialFeed = ({ cards, emptyMessage }: RubelSocialFeedProps) => {
               <h3 className="text-xl font-bold text-slate-200">{card.displayTitle}</h3>
               <p className={cn(rubelDs.muted, "mt-2")}>
                 {card.questionCount}{" "}
-                {card.questionCount === 1
-                  ? feed.questionSingular
-                  : feed.questionPlural}{" "}
-                · {card.resultCount}{" "}
-                {card.resultCount === 1
-                  ? feed.personaSingular
-                  : feed.personaPlural}
+                {card.questionCount === 1 ? feed.questionSingular : feed.questionPlural} ·{" "}
+                {card.resultCount}{" "}
+                {card.resultCount === 1 ? feed.personaSingular : feed.personaPlural}
               </p>
             </div>
 

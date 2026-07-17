@@ -1,0 +1,89 @@
+.shell {
+  --station-page-accent: #c9a09a;
+
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2rem);
+  background:
+    radial-gradient(
+      120% 80% at 12% 0%,
+      color-mix(in srgb, var(--station-page-accent) 16%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(165deg, #fffaf7 0%, #f1f5f9 100%);
+}
+
+.card {
+  inline-size: min(100%, 36rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: clamp(1.25rem, 4vw, 1.85rem);
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--station-page-accent) 40%, #cbd5e1);
+  background: rgba(255, 255, 255, 0.88);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  align-self: center;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--station-page-accent) 88%, #0f172a);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.welcome {
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: clamp(1.55rem, 4.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1e293b;
+}
+
+.lead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #64748b;
+}
+
+.gate {
+  margin-block: 0.35rem;
+  text-align: start;
+}
+
+.footerNav {
+  margin-block-start: 0.35rem;
+  padding-block-start: 1rem;
+  border-block-start: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.internalLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.internalLink:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.internalLink:hover {
+  color: #0f172a;
+}

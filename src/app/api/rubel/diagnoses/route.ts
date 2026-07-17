@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
+import { jsonError, parseJsonBody } from "@/lib/api/http";
 import {
-  getDiagnosisById,
   incrementDiagnosisSubmissions,
   listDiagnoses,
   saveDiagnosis,
 } from "@/lib/rubel/repository";
-import type { Diagnosis } from "@/types/rubel";
+import {
+  asRubelDiagnosis,
+  rubelDiagnosisIncrementSchema,
+  rubelDiagnosisSaveSchema,
+} from "@/lib/validation/rubelDiagnosisSchema";
 
 export async function GET() {
   const diagnoses = await listDiagnoses();
@@ -13,28 +17,35 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as Diagnosis;
+  const parsed = await parseJsonBody(request, rubelDiagnosisSaveSchema);
 
-  if (!body?.id || !body.title || !Array.isArray(body.questions)) {
-    return NextResponse.json({ error: "Invalid diagnosis payload" }, { status: 400 });
+  if (!parsed.ok) {
+    return parsed.response;
   }
 
-  await saveDiagnosis(body);
-  return NextResponse.json({ diagnosis: body });
+  const diagnosis = asRubelDiagnosis(parsed.data);
+  await saveDiagnosis(diagnosis);
+  return NextResponse.json(
+    { diagnosis },
+    { headers: { "Cache-Control": "private, no-store" } },
+  );
 }
 
 export async function PATCH(request: Request) {
-  const body = (await request.json()) as { id?: string; action?: string };
+  const parsed = await parseJsonBody(request, rubelDiagnosisIncrementSchema);
 
-  if (body.action !== "increment" || !body.id) {
-    return NextResponse.json({ error: "Invalid increment payload" }, { status: 400 });
+  if (!parsed.ok) {
+    return parsed.response;
   }
 
-  const updated = await incrementDiagnosisSubmissions(body.id);
+  const updated = await incrementDiagnosisSubmissions(parsed.data.id);
 
   if (!updated) {
-    return NextResponse.json({ error: "Diagnosis not found" }, { status: 404 });
+    return jsonError("Diagnosis not found", 404);
   }
 
-  return NextResponse.json({ diagnosis: updated });
+  return NextResponse.json(
+    { diagnosis: updated },
+    { headers: { "Cache-Control": "private, no-store" } },
+  );
 }

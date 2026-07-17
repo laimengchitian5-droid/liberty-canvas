@@ -31,20 +31,13 @@ export async function getPublishedBuilderBySlug(
 ): Promise<PublishedBuilderRecord | null> {
   const records = await readAllRecords();
   return (
-    records.find(
-      (entry) => entry.slug === slug && entry.status === "published",
-    ) ?? null
+    records.find((entry) => entry.slug === slug && entry.status === "published") ?? null
   );
 }
 
-export async function upsertBuilderRecord(
-  record: PublishedBuilderRecord,
-): Promise<void> {
+export async function upsertBuilderRecord(record: PublishedBuilderRecord): Promise<void> {
   const records = await readAllRecords();
-  const next = [
-    ...records.filter((entry) => entry.id !== record.id),
-    record,
-  ];
+  const next = [...records.filter((entry) => entry.id !== record.id), record];
 
   await writeJsonStore(STORE_KEY, next);
 }

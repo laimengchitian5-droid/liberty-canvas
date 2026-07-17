@@ -25,6 +25,9 @@ import styles from "./AdaptiveChat.module.css";
 interface AdaptiveChatProps {
   forgeSystemPrompt?: string;
   forgePersonaLabel?: string;
+  title?: string;
+  emptyStateText?: string;
+  ariaLabel?: string;
 }
 
 const MBTI_ARCHETYPE_PATTERN = /^[IE][NS][FT][JP]$/;
@@ -70,8 +73,7 @@ function getPersonaDisplayLabel(
   const normalizedArchetype = scoringResult.archetype.trim().toUpperCase();
 
   if (MBTI_ARCHETYPE_PATTERN.test(normalizedArchetype)) {
-    const nickname =
-      MBTI_PERSONA_NICKNAMES[normalizedArchetype] ?? "Personalized";
+    const nickname = MBTI_PERSONA_NICKNAMES[normalizedArchetype] ?? "Personalized";
     return `Mode: Tailored for ${nickname} (${normalizedArchetype})`;
   }
 
@@ -102,7 +104,13 @@ function buildRequestPersonaLabel(
 }
 
 export function AdaptiveChat(props: AdaptiveChatProps = {}) {
-  const { forgeSystemPrompt, forgePersonaLabel } = props;
+  const {
+    forgeSystemPrompt,
+    forgePersonaLabel,
+    title = "Adaptive AI Chat",
+    emptyStateText,
+    ariaLabel = "Personality adaptive AI chat",
+  } = props;
   const {
     scoringResult,
     kraepelinPerformance,
@@ -146,8 +154,7 @@ export function AdaptiveChat(props: AdaptiveChatProps = {}) {
     ],
   );
 
-  const { messages, sendMessage, status, error, stop } =
-    useAdaptiveChat(chatContext);
+  const { messages, sendMessage, status, error, stop } = useAdaptiveChat(chatContext);
 
   const [draft, setDraft] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
@@ -159,15 +166,14 @@ export function AdaptiveChat(props: AdaptiveChatProps = {}) {
 
   const personaLabel = useMemo(() => {
     if (isForgeMode && forgePersonaLabel?.trim()) {
-      return `Mode: ${forgePersonaLabel.trim()}`;
+      const label = forgePersonaLabel.trim();
+      if (label === "global-companion") {
+        return title;
+      }
+      return `Mode: ${label}`;
     }
     return getPersonaDisplayLabel(scoringResult, aiContext.activePersona);
-  }, [
-    aiContext.activePersona,
-    forgePersonaLabel,
-    isForgeMode,
-    scoringResult,
-  ]);
+  }, [aiContext.activePersona, forgePersonaLabel, isForgeMode, scoringResult, title]);
 
   const isTruthSeekerMode = scoringResult !== null && !scoringResult.isReliable;
 
@@ -262,13 +268,10 @@ export function AdaptiveChat(props: AdaptiveChatProps = {}) {
   }, []);
 
   return (
-    <section
-      className={styles.shell}
-      aria-label="Personality adaptive AI chat"
-    >
+    <section className={styles.shell} aria-label={ariaLabel}>
       <header className={styles.header}>
         <div className={styles.titleRow}>
-          <h2 className={styles.title}>Adaptive AI Chat</h2>
+          <h2 className={styles.title}>{title}</h2>
           <motion.p
             className={`${styles.personaBadge} ${
               isTruthSeekerMode ? styles.personaBadgeTruthSeeker : ""
@@ -290,9 +293,8 @@ export function AdaptiveChat(props: AdaptiveChatProps = {}) {
 
         {isTruthSeekerMode ? (
           <p className={styles.optimizationNote}>
-            Reliability optimization is active. Responses prioritize gentle
-            truth-seeking over personality flattery to uncover authentic
-            viewpoints.
+            Reliability optimization is active. Responses prioritize gentle truth-seeking
+            over personality flattery to uncover authentic viewpoints.
           </p>
         ) : null}
       </header>
@@ -306,18 +308,20 @@ export function AdaptiveChat(props: AdaptiveChatProps = {}) {
       >
         {messages.length === 0 ? (
           <div className={styles.emptyState}>
-            {scoringResult ? (
+            {emptyStateText ? (
+              <p>{emptyStateText}</p>
+            ) : scoringResult ? (
               <p>
                 Your chat is synchronized with assessment results
                 {scoringResult.isReliable
                   ? ` (${scoringResult.archetype}).`
-                  : " in truth-seeking optimization mode."}
-                {" "}Ask anything to receive a persona-adapted response.
+                  : " in truth-seeking optimization mode."}{" "}
+                Ask anything to receive a persona-adapted response.
               </p>
             ) : (
               <p>
-                Complete an assessment to unlock full persona adaptation. You can
-                still chat using the standard assistant mode.
+                Complete an assessment to unlock full persona adaptation. You can still
+                chat using the standard assistant mode.
               </p>
             )}
           </div>
@@ -326,20 +330,18 @@ export function AdaptiveChat(props: AdaptiveChatProps = {}) {
         {messages.map((message) => {
           const isUser = message.role === "user";
           const isStreaming =
-            !isUser &&
-            isSubmitting &&
-            message.id === messages.at(-1)?.id;
+            !isUser && isSubmitting && message.id === messages.at(-1)?.id;
           const structured = isUser ? undefined : parseStructuredFromMessage(message);
           const displayText = isUser
             ? message.parts
                 .filter((part) => part.type === "text")
                 .map((part) => part.text)
                 .join("")
-            : structured?.ai_response ??
+            : (structured?.ai_response ??
               message.parts
                 .filter((part) => part.type === "text")
                 .map((part) => part.text)
-                .join("");
+                .join(""));
 
           return (
             <motion.article
@@ -363,16 +365,12 @@ export function AdaptiveChat(props: AdaptiveChatProps = {}) {
 
                 {!isUser && structured?.next_suggested_question?.trim() ? (
                   <div className={styles.suggestedQuestion}>
-                    <span className={styles.suggestedLabel}>
-                      Suggested follow-up
-                    </span>
+                    <span className={styles.suggestedLabel}>Suggested follow-up</span>
                     <button
                       type="button"
                       className={styles.suggestedQuestionButton}
                       onClick={() =>
-                        applySuggestedQuestion(
-                          structured.next_suggested_question ?? "",
-                        )
+                        applySuggestedQuestion(structured.next_suggested_question ?? "")
                       }
                     >
                       {structured.next_suggested_question}

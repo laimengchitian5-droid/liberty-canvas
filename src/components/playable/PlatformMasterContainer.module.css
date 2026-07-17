@@ -1,0 +1,11 @@
+/* INP-oriented scroll surface — avoid layout thrash on long quiz lists */
+.main {
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  content-visibility: auto;
+  contain: content;
+}

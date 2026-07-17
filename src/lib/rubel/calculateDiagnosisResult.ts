@@ -39,9 +39,7 @@ export function buildVerbalizationAnchor(
     return null;
   }
 
-  const option = question.options.find(
-    (entry) => entry.id === lastAnswer.optionId,
-  );
+  const option = question.options.find((entry) => entry.id === lastAnswer.optionId);
 
   if (!option) {
     return null;

@@ -9,11 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  DEFAULT_LOCALE,
-  getDirection,
-  type Locale,
-} from "@/lib/i18n/config";
+import { DEFAULT_LOCALE, getDirection, type Locale } from "@/lib/i18n/config";
 import { getMessages, type LocaleMessages } from "@/lib/i18n/messages";
 import { persistClientLocale } from "@/lib/i18n/persistClientLocale";
 

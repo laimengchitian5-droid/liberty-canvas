@@ -1,4 +1,7 @@
-import type { AcademicTraitVector, LegalTraitKey } from "@/lib/diagnosis/academicTraitVector";
+import type {
+  AcademicTraitVector,
+  LegalTraitKey,
+} from "@/lib/diagnosis/academicTraitVector";
 import type { FiveFactorRadarPoint } from "@/lib/diagnosis/fiveFactorDisplay";
 import type { CategoryScoreMap, PersonalityCategory } from "@/types/diagnosis";
 import type { OceanScores } from "@/lib/psychology/types";

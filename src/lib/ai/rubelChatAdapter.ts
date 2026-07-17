@@ -21,18 +21,17 @@ export async function generateRubelChatReply(input: {
     return null;
   }
 
-  const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> =
-    [
-      {
-        role: "system",
-        content: input.resultData.compiledSystemPrompt,
-      },
-      ...input.history.map((turn) => ({
-        role: turn.role,
-        content: turn.content,
-      })),
-      { role: "user", content: input.userMessage },
-    ];
+  const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
+    {
+      role: "system",
+      content: input.resultData.compiledSystemPrompt,
+    },
+    ...input.history.map((turn) => ({
+      role: turn.role,
+      content: turn.content,
+    })),
+    { role: "user", content: input.userMessage },
+  ];
 
   try {
     const result = await generateText({

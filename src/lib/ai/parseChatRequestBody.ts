@@ -3,6 +3,7 @@ import type {
   AdaptiveChatRequestBody,
   ChatRequestMessage,
 } from "@/lib/ai/parseStreamingChatResponse";
+import { adaptiveChatRequestEnvelopeSchema } from "@/lib/validation/chatRequestSchema";
 
 interface RawChatRequest {
   messages?: unknown;
@@ -92,17 +93,25 @@ export function normalizeChatMessages(raw: unknown): ChatRequestMessage[] {
     .filter((message): message is ChatRequestMessage => message !== null);
 }
 
+/**
+ * Fail-closed envelope parse, then normalize messages for the chat adapter.
+ * Returns null when the outer Zod contract fails.
+ */
 export function parseAdaptiveChatRequest(
   payload: unknown,
-): AdaptiveChatRequestBody & { uiMessages?: UIMessage[] } {
-  const body = (payload ?? {}) as RawChatRequest;
+): (AdaptiveChatRequestBody & { uiMessages?: UIMessage[] }) | null {
+  const envelope = adaptiveChatRequestEnvelopeSchema.safeParse(payload ?? {});
+
+  if (!envelope.success) {
+    return null;
+  }
+
+  const body = envelope.data as RawChatRequest;
   const messages = normalizeChatMessages(body.messages);
 
   return {
     messages,
-    uiMessages: Array.isArray(body.messages)
-      ? (body.messages as UIMessage[])
-      : undefined,
+    uiMessages: Array.isArray(body.messages) ? (body.messages as UIMessage[]) : undefined,
     systemPrompt: body.systemPrompt ?? "",
     appliedPersona: body.appliedPersona ?? "standard-assistant",
     isReliable: body.isReliable ?? true,
@@ -118,8 +127,7 @@ export function parseAdaptiveChatRequest(
 
 export function getLatestUserMessage(messages: ChatRequestMessage[]): string {
   return (
-    [...messages].reverse().find((message) => message.role === "user")?.content ??
-    ""
+    [...messages].reverse().find((message) => message.role === "user")?.content ?? ""
   );
 }
 

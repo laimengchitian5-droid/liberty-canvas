@@ -101,9 +101,10 @@ export function MathGrid() {
   const visiblePairIndices = useMemo(() => {
     const windowSize = Math.min(8, pairCount);
 
-    return Array.from({ length: windowSize }, (_, offset) => visibleStartIndex + offset).filter(
-      (index) => index < pairCount,
-    );
+    return Array.from(
+      { length: windowSize },
+      (_, offset) => visibleStartIndex + offset,
+    ).filter((index) => index < pairCount);
   }, [pairCount, visibleStartIndex]);
 
   const finalizeTest = useCallback(() => {
@@ -114,7 +115,9 @@ export function MathGrid() {
     phaseRef.current = "complete";
     setPhase("complete");
 
-    workerRef.current?.postMessage({ type: "STOP" } satisfies KraepelinTimerWorkerMessage);
+    workerRef.current?.postMessage({
+      type: "STOP",
+    } satisfies KraepelinTimerWorkerMessage);
     workerRef.current?.terminate();
     workerRef.current = null;
 
@@ -208,13 +211,16 @@ export function MathGrid() {
     setPhase("running");
   }, []);
 
-  const appendDigitsIfNeeded = useCallback((nextPairIndex: number, currentDigits: number[]) => {
-    if (nextPairIndex + DIGIT_EXTENSION_THRESHOLD >= currentDigits.length) {
-      return [...currentDigits, randomDigit(), randomDigit()];
-    }
+  const appendDigitsIfNeeded = useCallback(
+    (nextPairIndex: number, currentDigits: number[]) => {
+      if (nextPairIndex + DIGIT_EXTENSION_THRESHOLD >= currentDigits.length) {
+        return [...currentDigits, randomDigit(), randomDigit()];
+      }
 
-    return currentDigits;
-  }, []);
+      return currentDigits;
+    },
+    [],
+  );
 
   const commitPairAnswer = useCallback(
     (pairIndex: number, rawValue: string) => {
@@ -381,7 +387,10 @@ export function MathGrid() {
                       </span>
                     </div>
 
-                    <label htmlFor={`math-grid-input-${pairIndex}`} className={styles.srOnly}>
+                    <label
+                      htmlFor={`math-grid-input-${pairIndex}`}
+                      className={styles.srOnly}
+                    >
                       Sum of {leftDigit} and {rightDigit}, ones digit only
                     </label>
                     <input
@@ -410,7 +419,9 @@ export function MathGrid() {
                       aria-label={`Answer slot ${pairIndex + 1}: ones digit of ${leftDigit} plus ${rightDigit}`}
                       aria-describedby="math-grid-instructions"
                       aria-invalid={inputState === "incorrect"}
-                      aria-disabled={phase !== "running" || pairIndex !== currentPairIndex}
+                      aria-disabled={
+                        phase !== "running" || pairIndex !== currentPairIndex
+                      }
                       onChange={(event) => handleInputChange(pairIndex, event)}
                       onKeyDown={(event) => handleInputKeyDown(pairIndex, event)}
                     />
@@ -420,7 +431,11 @@ export function MathGrid() {
             </div>
           </div>
 
-          <div className={styles.statsRow} role="group" aria-label="Live performance statistics">
+          <div
+            className={styles.statsRow}
+            role="group"
+            aria-label="Live performance statistics"
+          >
             <div className={styles.statCard}>
               <span className={styles.statLabel}>Attempts</span>
               <strong className={styles.statValue}>{liveStats.attempted}</strong>
@@ -444,7 +459,8 @@ export function MathGrid() {
           テスト完了。Focus pattern:{" "}
           <strong>{kraepelinPerformance.focusPattern.replace(/_/g, " ")}</strong> /
           Accuracy {kraepelinPerformance.overallAccuracy.toFixed(1)}% / Fatigue index{" "}
-          {kraepelinPerformance.fatigueIndex.toFixed(1)}. AI チャットへパフォーマンス曲線を同期しました。
+          {kraepelinPerformance.fatigueIndex.toFixed(1)}. AI
+          チャットへパフォーマンス曲線を同期しました。
         </div>
       ) : (
         <div className={styles.completeBannerPlaceholder} aria-hidden="true" />

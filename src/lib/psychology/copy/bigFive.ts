@@ -10,7 +10,7 @@ const SHARED_FAQ: Record<
     {
       question: "Is this Big Five test free?",
       answer:
-        "Yes. Rubel Canvas is a no-login, all-affirming AI personality experience — Lu (Liberate) + Bel (Beautiful) = your inner canvas.",
+        "Yes. Liberty Canvas is a no-login, all-affirming AI personality experience — Lu (Liberate) + Bel (Beautiful) = your inner canvas.",
     },
     {
       question: "How is this different from other type quizzes?",
@@ -22,7 +22,7 @@ const SHARED_FAQ: Record<
     {
       question: "ビッグファイブ診断は無料ですか？",
       answer:
-        "はい。Rubel Canvas はログイン不要の全肯定 AI 性格診断です。Lu（Liberate）+ Bel（Beautiful）= あなたの内面キャンバス。",
+        "はい。Liberty Canvas はログイン不要の全肯定 AI 性格診断です。Lu（Liberate）+ Bel（Beautiful）= あなたの内面キャンバス。",
     },
     {
       question: "他のタイプ診断との違いは？",
@@ -33,20 +33,17 @@ const SHARED_FAQ: Record<
   ko: [
     {
       question: "빅파이브 검사는 무료인가요?",
-      answer:
-        "네. Rubel Canvas는 로그인 없이 이용하는 전격 긍정 AI 성격 진단입니다.",
+      answer: "네. Liberty Canvas는 로그인 없이 이용하는 전격 긍정 AI 성격 진단입니다.",
     },
     {
       question: "다른 유형 검사와 무엇이 다른가요?",
-      answer:
-        "OCEAN 과학 지표와 공감형 AI 채팅을 결합한 LibertyCanvas 경험입니다.",
+      answer: "OCEAN 과학 지표와 공감형 AI 채팅을 결합한 LibertyCanvas 경험입니다.",
     },
   ],
   zh: [
     {
       question: "大五人格测试免费吗？",
-      answer:
-        "是的。Rubel Canvas 是无需登录的全肯定 AI 性格测试。",
+      answer: "是的。Liberty Canvas 是无需登录的全肯定 AI 性格测试。",
     },
     {
       question: "与其他类型测验有何不同？",
@@ -226,8 +223,7 @@ export const BIG_FIVE_COPY: Record<CoreLandingLocale, BigFiveLocaleCopy> = {
     locale: "zh",
     keyword: "大五人格 OCEAN 测试",
     headline: "共情型大五人格（OCEAN）诊断",
-    subhead:
-      "5 题直觉选择，即时 OCEAN 画像。全肯定 AI 会引用你的原话。",
+    subhead: "5 题直觉选择，即时 OCEAN 画像。全肯定 AI 会引用你的原话。",
     submitLabel: "查看 OCEAN 画像",
     trustLine: "无需登录 · 免费 · Qwen AI",
     revealTitle: "你的 OCEAN 签名已完成",

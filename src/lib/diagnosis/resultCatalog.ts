@@ -1,9 +1,6 @@
 import type { DiagnosisResult, PersonalityCategory } from "@/types/diagnosis";
 
-export const DIAGNOSIS_RESULT_CATALOG: Record<
-  PersonalityCategory,
-  DiagnosisResult
-> = {
+export const DIAGNOSIS_RESULT_CATALOG: Record<PersonalityCategory, DiagnosisResult> = {
   empathy: {
     id: "empathy-harmonizer",
     dominantCategory: "empathy",

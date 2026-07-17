@@ -1,4 +1,4 @@
-const CACHE_VERSION = "rubelcanvas-v5";
+const CACHE_VERSION = "libertycanvas-v6";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -10,6 +10,11 @@ const STATIC_ASSET_URLS = [
   "/icons/icon-512.png",
   "/icons/icon.svg",
   "/icons/maskable-icon.svg",
+  "/icons/brands/liberty-plug.svg",
+  "/icons/brands/liberty-play.svg",
+  "/icons/brands/liberty-discover.svg",
+  "/icons/brands/liberty-forge.svg",
+  "/icons/brands/liberty-runtime.svg",
   "/icons/apple-touch-icon.svg",
 ];
 

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
-import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
+import { trackPlayBridgeDual } from "@/lib/diagnosis/analytics";
 import {
   clearRubelBridgeHandoff,
   readRubelBridgeHandoff,
@@ -23,7 +23,7 @@ export function RubelBridgeHandoffCapture() {
       return;
     }
 
-    trackDiagnosisEvent("rubel_bridge_handoff_received", {
+    trackPlayBridgeDual("bridge_handoff_received", {
       slug,
       ref: "rubel-bridge",
       rubelDiagnosisId: handoff.rubelDiagnosisId,

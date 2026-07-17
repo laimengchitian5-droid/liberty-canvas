@@ -3,8 +3,7 @@
  */
 export const rubelDs = {
   page: "min-h-[100dvh] bg-gradient-to-b from-slate-950 via-slate-955 to-indigo-950/30 text-slate-200",
-  header:
-    "text-center text-xl font-bold tracking-tight text-slate-100 drop-shadow-sm",
+  header: "text-center text-xl font-bold tracking-tight text-slate-100 drop-shadow-sm",
   subheader: "text-sm leading-relaxed text-slate-400",
   glassHeader:
     "border-b border-white/10 bg-slate-950/60 backdrop-blur-xl backdrop-saturate-150",

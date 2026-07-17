@@ -1,27 +1,31 @@
 "use client";
 
 import { Send, Share2, Sparkles } from "lucide-react";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type FormEvent,
-} from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { useRubelQuizSession } from "@/hooks/useRubelQuizSession";
 import { useSatelliteHandoff } from "@/hooks/useSatelliteHandoff";
 import { useI18n } from "@/lib/i18n/I18nProvider";
-import type { InjectionChatTurn, RubelEnginePayload } from "@/lib/rubel/contracts/pipeline";
+import type {
+  InjectionChatTurn,
+  RubelEnginePayload,
+} from "@/lib/rubel/contracts/pipeline";
 import { OPENING_INJECTION_MESSAGE } from "@/lib/rubel/buildInjectionPrompt";
 import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
 import { requestRubelHfReply } from "@/lib/rubel/network/rubelHfClient";
 import { extractResultData } from "@/lib/rubel/resultData";
-import { buildShareText, getResultEditorial } from "@/lib/rubel/resultEditorial";
+import {
+  buildPlayResultSharePayload,
+  getResultEditorial,
+} from "@/lib/rubel/resultEditorial";
 import { suggestPlugDiagnosisSlug } from "@/lib/rubel/suggestPlugDiagnosisSlug";
 import { cn } from "@/lib/utils/cn";
 import type { Diagnosis, PlayOutcome, TraitVector } from "@/types/rubel";
 import { PlugCosmicBridgeCta } from "@/components/rubel/PlugCosmicBridgeCta";
-import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
+import { CognitiveArtSharePanel } from "@/components/visual/CognitiveArtSharePanel";
+import { trackPlayBridgeDual } from "@/lib/diagnosis/analytics";
+import { buildLibertyResultPath } from "@/lib/visual/artVectorCodec";
+import { buildPlayArtVector } from "@/lib/visual/buildArtVectorFromResult";
+import { useRouter } from "next/navigation";
 
 type Phase = "quiz" | "reveal" | "chat";
 
@@ -31,8 +35,6 @@ type ChatMessage = {
   text: string;
 };
 
-const REVEAL_MS = 1800;
-
 interface RubelPlayCoreProps {
   diagnosis: Diagnosis;
   onPlayComplete?: () => void;
@@ -40,13 +42,12 @@ interface RubelPlayCoreProps {
 
 function WaveTypingBubble({ label }: { label: string }) {
   return (
-    <div className={cn(rubelDs.bubbleAi, "animate-pulse text-slate-400")}>
-      {label}
-    </div>
+    <div className={cn(rubelDs.bubbleAi, "animate-pulse text-slate-400")}>{label}</div>
   );
 }
 
 const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
+  const router = useRouter();
   const { messages: i18n } = useI18n();
   const play = i18n.rubelPlay;
   const [phase, setPhase] = useState<Phase>("quiz");
@@ -71,7 +72,7 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
       setEnginePayload(payload ?? extractResultData(diagnosis, outcome));
       setWinningResultName(outcome.winningResult.name);
       setPhase("reveal");
-      trackDiagnosisEvent("rubel_play_completed", {
+      trackPlayBridgeDual("play_completed", {
         rubelDiagnosisId: diagnosis.id,
         slug: suggestPlugDiagnosisSlug(outcome.profile),
         funnelStep: "result_view",
@@ -103,6 +104,15 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
       )
     : null;
 
+  const artVector = buildPlayArtVector(
+    traitProfile,
+    enginePayload?.typeName ?? winningResultName,
+  );
+  const resultPath = buildLibertyResultPath({
+    vector: artVector,
+    seed: enginePayload?.typeName ?? winningResultName,
+  });
+
   const nextId = useCallback(() => {
     messageIdRef.current += 1;
     return `msg-${messageIdRef.current}`;
@@ -116,21 +126,12 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
     if (!hasAutoStarted && diagnosis.questions.length > 0) {
       startQuiz();
       setHasAutoStarted(true);
-      trackDiagnosisEvent("rubel_play_started", {
+      trackPlayBridgeDual("play_started", {
         rubelDiagnosisId: diagnosis.id,
         funnelStep: "play_start",
       });
     }
   }, [diagnosis.id, diagnosis.questions.length, hasAutoStarted, startQuiz]);
-
-  useEffect(() => {
-    if (phase !== "reveal") {
-      return;
-    }
-
-    const timer = window.setTimeout(() => setPhase("chat"), REVEAL_MS);
-    return () => window.clearTimeout(timer);
-  }, [phase]);
 
   const requestReply = useCallback(
     async (userMessage: string, showUser: boolean) => {
@@ -165,10 +166,7 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
           userMessage,
           customPersona: customPrompt,
         });
-        setMessages((current) => [
-          ...current,
-          { id: nextId(), role: "assistant", text },
-        ]);
+        setMessages((current) => [...current, { id: nextId(), role: "assistant", text }]);
       } catch (fetchError) {
         setError(
           fetchError instanceof Error ? fetchError.message : "エラーが発生しました。",
@@ -206,18 +204,22 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
     const result =
       diagnosis.results.find((entry) => entry.name === winningResultName) ??
       diagnosis.results[0];
-    const text = buildShareText(diagnosis, result);
+    const payload = buildPlayResultSharePayload(diagnosis, result);
 
     if (navigator.share) {
       try {
-        await navigator.share({ text, title: diagnosis.title });
+        await navigator.share({
+          text: payload.text,
+          title: payload.title,
+          url: payload.url,
+        });
         return;
       } catch {
         /* fall through to clipboard */
       }
     }
 
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(payload.text);
   }, [diagnosis, winningResultName]);
 
   const handleSubmit = useCallback(
@@ -248,9 +250,7 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
         </p>
         <h1 className={cn(rubelDs.header, "mt-1 text-lg")}>{diagnosis.title}</h1>
         {singleQuestion ? (
-          <p className={cn(rubelDs.subheader, "mt-2")}>
-            1問だけ、直感で選んでください。
-          </p>
+          <p className={cn(rubelDs.subheader, "mt-2")}>1問だけ、直感で選んでください。</p>
         ) : null}
       </header>
 
@@ -275,7 +275,9 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
                   <span className="block text-xs font-medium text-indigo-300/80">
                     {index === 0 ? play.optionA : play.optionB}
                   </span>
-                  <span className="mt-1 block text-base font-semibold">{option.text}</span>
+                  <span className="mt-1 block text-base font-semibold">
+                    {option.text}
+                  </span>
                 </button>
               ))}
             </div>
@@ -292,16 +294,39 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
               <p className={rubelDs.archetypeTitle}>{enginePayload.typeName}</p>
               <p className={cn(rubelDs.archetypeSubtitle, "mt-3")}>{editorial.tagline}</p>
               <p className="mt-2 text-xs text-slate-400">{play.revealTitle}</p>
+              <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+                <CognitiveArtSharePanel
+                  vector={artVector}
+                  archetypeLabel={enginePayload.typeName}
+                  sharePath={resultPath}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => router.push(resultPath)}
+                className={cn(
+                  rubelDs.primary,
+                  "mt-4 inline-flex min-h-11 w-full items-center justify-center",
+                )}
+              >
+                AI全肯定リザルトを見る
+              </button>
               <button
                 type="button"
                 onClick={() => void handleShare()}
                 className={cn(
                   rubelDs.primary,
-                  "mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2",
+                  "mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2",
                 )}
               >
-                <Share2 className="h-4 w-4" aria-hidden="true" />
-                X / LINE でシェア
+                <Share2 className="h-4 w-4" aria-hidden="true" />X / LINE でシェア
+              </button>
+              <button
+                type="button"
+                onClick={() => setPhase("chat")}
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-white/20 bg-white/5 px-4 text-sm font-semibold text-slate-100 transition hover:bg-white/10"
+              >
+                チャットへ進む
               </button>
               {traitProfile ? (
                 <div className="mt-4">
@@ -319,7 +344,9 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
           <div className="flex min-h-0 flex-1 flex-col">
             <div className="flex min-h-0 flex-[0.65] flex-col">
               <div className={cn("px-4 py-3", rubelDs.glassHeader)}>
-                <p className="text-sm font-semibold text-white">{enginePayload.typeName}</p>
+                <p className="text-sm font-semibold text-white">
+                  {enginePayload.typeName}
+                </p>
                 <p className="text-xs text-indigo-200/70">
                   {enginePayload.tone} · {enginePayload.empathyLevel}
                 </p>
@@ -328,6 +355,13 @@ const RubelPlayCore = ({ diagnosis, onPlayComplete }: RubelPlayCoreProps) => {
                     「{enginePayload.verbalizationAnchor.chosenOptionText}」から判定
                   </p>
                 ) : null}
+                <button
+                  type="button"
+                  onClick={() => router.push(resultPath)}
+                  className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-indigo-400/40 bg-indigo-950/40 px-4 text-sm font-semibold text-indigo-100 transition hover:bg-indigo-900/50"
+                >
+                  心の色リザルトを見る
+                </button>
               </div>
               <div
                 className="flex-1 space-y-3 overflow-y-auto px-4 py-4"

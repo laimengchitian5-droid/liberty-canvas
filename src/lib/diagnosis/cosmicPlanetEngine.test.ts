@@ -33,11 +33,13 @@ describe("cosmicPlanetEngine", () => {
     const definition = getPlugDiagnosisBySlug("oshikatsu");
     expect(definition).not.toBeNull();
 
-    const answers = extractQuestionBlocks(definition!).slice(0, 10).map((block, index) => ({
-      blockId: block.id,
-      optionId: block.options?.[0]?.id ?? `${block.id}-a`,
-      recordedAt: index,
-    }));
+    const answers = extractQuestionBlocks(definition!)
+      .slice(0, 10)
+      .map((block, index) => ({
+        blockId: block.id,
+        optionId: block.options?.[0]?.id ?? `${block.id}-a`,
+        recordedAt: index,
+      }));
 
     const outcome = compileLegallySafeResult(definition!, answers);
     const kind = resolveCosmicPlanetKind(outcome.academicVector);

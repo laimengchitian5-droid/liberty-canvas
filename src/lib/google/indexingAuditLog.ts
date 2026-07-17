@@ -127,13 +127,10 @@ export async function markIndexingSuccess(params: {
   return entry;
 }
 
-export async function listRetryableIndexingEntries(): Promise<
-  IndexingAuditEntry[]
-> {
+export async function listRetryableIndexingEntries(): Promise<IndexingAuditEntry[]> {
   const entries = await readAuditLog();
   return entries.filter(
-    (entry) =>
-      entry.status === "failed" && entry.attemptCount < MAX_RETRY_ATTEMPTS,
+    (entry) => entry.status === "failed" && entry.attemptCount < MAX_RETRY_ATTEMPTS,
   );
 }
 

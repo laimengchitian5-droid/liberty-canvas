@@ -1,3 +1,5 @@
+import { buildSpecialtyLandingTopics } from "@/lib/landing/specialtyLandingCopy";
+
 export const LANDING_TOPIC_SLUGS = [
   "big-five-ocean",
   "enneagram-nine-types",
@@ -9,15 +11,22 @@ export const LANDING_TOPIC_SLUGS = [
   "burnout-personality",
   "inner-child-healing",
   "shadow-self-archetype",
+  "world-specialty-soul",
+  "jp-sakamai-craft",
+  "us-corn-frontier",
+  "ca-maple-resilience",
+  "br-terra-roxa-spirit",
+  "fr-terroir-poet",
+  "cl-andes-dualcraft",
+  "md-cellar-guardian",
+  "pk-fragrant-earth",
+  "uk-maturation-highlander",
 ] as const;
 
 export type LandingTopicSlug = (typeof LANDING_TOPIC_SLUGS)[number];
 
 export type LandingSearchIntent =
-  | "informational"
-  | "navigational"
-  | "commercial"
-  | "transactional";
+  "informational" | "navigational" | "commercial" | "transactional";
 
 export interface LandingTopicConfig {
   slug: LandingTopicSlug;
@@ -46,7 +55,13 @@ export const LANDING_TOPICS: LandingTopicConfig[] = [
     psychDiagnosisPath: "/diagnosis/play/motivation-spectrum",
     schemaType: "Quiz",
     searchIntent: "informational",
-    searchTags: ["motivation spectrum", "9 patterns", "drive", "動機", "personality science"],
+    searchTags: [
+      "motivation spectrum",
+      "9 patterns",
+      "drive",
+      "動機",
+      "personality science",
+    ],
   },
   {
     slug: "sixteen-personalities",
@@ -112,6 +127,7 @@ export const LANDING_TOPICS: LandingTopicConfig[] = [
     searchIntent: "transactional",
     searchTags: ["shadow self", "archetype", "genz", "cosmic"],
   },
+  ...buildSpecialtyLandingTopics(),
 ];
 
 export function getLandingTopic(slug: string): LandingTopicConfig | null {

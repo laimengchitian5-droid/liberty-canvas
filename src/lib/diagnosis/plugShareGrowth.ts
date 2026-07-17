@@ -27,11 +27,7 @@ export function resolvePlugShareCopyVariant(): PlugShareCopyVariant {
   try {
     const stored = sessionStorage.getItem(SHARE_VARIANT_KEY);
 
-    if (
-      stored === "cosmic" ||
-      stored === "headline" ||
-      stored === "emotional"
-    ) {
+    if (stored === "cosmic" || stored === "headline" || stored === "emotional") {
       return stored;
     }
 
@@ -108,10 +104,7 @@ export function buildPlugShareText(params: {
   );
 }
 
-export function appendOgVariantToUrl(
-  url: string,
-  variant: PlugOgVariant,
-): string {
+export function appendOgVariantToUrl(url: string, variant: PlugOgVariant): string {
   if (variant === "radar") {
     return url;
   }

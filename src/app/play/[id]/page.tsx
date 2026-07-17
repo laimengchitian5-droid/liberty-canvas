@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import {
-  getDiagnosisById,
-  getSeedDiagnosisById,
-} from "@/lib/rubel/repository";
+import { getDiagnosisById, getSeedDiagnosisById } from "@/lib/rubel/repository";
 import { SEED_DIAGNOSES } from "@/lib/rubel/seedDiagnoses";
 import {
   buildPlayPageDescription,
@@ -12,13 +9,16 @@ import {
 } from "@/lib/rubel/rubelSeo";
 import { RubelPlayPageClient } from "@/components/rubel/RubelPlayPageClient";
 import { getSiteUrl } from "@/lib/site/url";
-import { buildPlayOgImageUrl } from "@/lib/seo/ogUrls";
-import { PRODUCT_NAME } from "@/lib/brand/constants";
+import { buildPlayOgImageUrl, buildPlayResultOgImageUrl } from "@/lib/seo/ogUrls";
+import { getBrand } from "@/lib/brand/registry";
+
+const playBrand = getBrand("liberty-play");
 
 const BRAND_STORY = BRAND_NARRATIVE;
 
 interface PlayPageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ r?: string }>;
 }
 
 export function generateStaticParams() {
@@ -27,30 +27,44 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: PlayPageProps): Promise<Metadata> {
   const { id } = await params;
-  const diagnosis =
-    getSeedDiagnosisById(id) ?? (await getDiagnosisById(id));
+  const query = await searchParams;
+  const diagnosis = getSeedDiagnosisById(id) ?? (await getDiagnosisById(id));
   const siteUrl = getSiteUrl();
 
   if (!diagnosis) {
     return {
-      title: `性格診断が見つかりません | ${PRODUCT_NAME}`,
-      description: `${PRODUCT_NAME} — 無料AI性格診断プラットフォーム`,
+      title: `性格診断が見つかりません | ${playBrand.name}`,
+      description: `${playBrand.name} — ${playBrand.taglineJa}`,
       robots: { index: false, follow: true },
     };
   }
 
-  const title = buildPlayPageTitle(diagnosis);
-  const description = buildPlayPageDescription(diagnosis);
-  const playUrl = `${siteUrl}/play/${diagnosis.id}`;
-  const ogImage = buildPlayOgImageUrl(diagnosis.title, description);
+  const resultName = query.r?.trim().slice(0, 80);
+  const matchedResult = resultName
+    ? diagnosis.results.find((entry) => entry.name === resultName)
+    : null;
+
+  const title = matchedResult
+    ? `${matchedResult.name} — ${diagnosis.title}`
+    : buildPlayPageTitle(diagnosis);
+  const description = matchedResult
+    ? `${matchedResult.name} — ${buildPlayPageDescription(diagnosis)}`
+    : buildPlayPageDescription(diagnosis);
+  const playUrl = matchedResult
+    ? `${siteUrl}/play/${diagnosis.id}?r=${encodeURIComponent(matchedResult.name)}`
+    : `${siteUrl}/play/${diagnosis.id}`;
+  const ogImage = matchedResult
+    ? buildPlayResultOgImageUrl(matchedResult.name, diagnosis.title)
+    : buildPlayOgImageUrl(diagnosis.title, description);
 
   return {
     title,
     description,
     keywords: diagnosis.searchKeywords,
-    alternates: { canonical: playUrl },
+    alternates: { canonical: `${siteUrl}/play/${diagnosis.id}` },
     robots: {
       index: true,
       follow: true,
@@ -60,7 +74,7 @@ export async function generateMetadata({
       title,
       description,
       url: playUrl,
-      siteName: PRODUCT_NAME,
+      siteName: playBrand.name,
       locale: diagnosis.language === "ja" ? "ja_JP" : "en_US",
       type: "website",
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
@@ -76,12 +90,9 @@ export async function generateMetadata({
 
 export default async function PlayPage({ params }: PlayPageProps) {
   const { id } = await params;
-  const diagnosis =
-    getSeedDiagnosisById(id) ?? (await getDiagnosisById(id));
+  const diagnosis = getSeedDiagnosisById(id) ?? (await getDiagnosisById(id));
   const jsonLd = diagnosis ? buildPlayPageJsonLd(diagnosis) : null;
-  const seoDescription = diagnosis
-    ? buildPlayPageDescription(diagnosis)
-    : null;
+  const seoDescription = diagnosis ? buildPlayPageDescription(diagnosis) : null;
 
   return (
     <>

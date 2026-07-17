@@ -1,7 +1,4 @@
-import {
-  RUBEL_LOCAL_CATALOG_KEY,
-  SEED_DIAGNOSES,
-} from "@/lib/rubel/seedDiagnoses";
+import { RUBEL_LOCAL_CATALOG_KEY, SEED_DIAGNOSES } from "@/lib/rubel/seedDiagnoses";
 import type { Diagnosis } from "@/types/rubel";
 
 export function readClientCatalog(): Diagnosis[] {
@@ -38,10 +35,7 @@ export function writeClientCatalog(diagnoses: Diagnosis[]): void {
 
 export function upsertClientDiagnosis(diagnosis: Diagnosis): void {
   const current = readClientCatalog();
-  const next = [
-    ...current.filter((entry) => entry.id !== diagnosis.id),
-    diagnosis,
-  ];
+  const next = [...current.filter((entry) => entry.id !== diagnosis.id), diagnosis];
 
   writeClientCatalog(next);
 }

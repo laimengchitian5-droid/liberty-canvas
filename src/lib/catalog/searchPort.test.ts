@@ -1,12 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  buildLocalEmbedding,
-  cosineSimilarity,
-} from "@/lib/catalog/localEmbedding";
-import {
-  isPostgresConfigured,
-  resolveSearchBackend,
-} from "@/lib/catalog/searchConfig";
+import { buildLocalEmbedding, cosineSimilarity } from "@/lib/catalog/localEmbedding";
+import { isPostgresConfigured, resolveSearchBackend } from "@/lib/catalog/searchConfig";
 import { tokenSearchAdapter } from "@/lib/catalog/tokenSearchAdapter";
 import { scoringComputePort } from "@/lib/diagnosis/scoring/scoringPort";
 import { fourAxisScoresToAcademicVector } from "@/lib/diagnosis/scoring/fourAxisAdapter";

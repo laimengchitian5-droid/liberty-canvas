@@ -49,6 +49,6 @@
 
 ## 想定 Q&A（3つ）
 
-1. **なぜ AI SDK？** → `docs/WHY-AI-SDK.md`  
-2. **データはどこに？** → 診断回答は端末内、AI は API 経由のみ  
+1. **なぜ AI SDK？** → `docs/WHY-AI-SDK.md`
+2. **データはどこに？** → 診断回答は端末内、AI は API 経由のみ
 3. **差別化は？** → 構造化 persona + 適応チャット（Assessment Hub）

@@ -1,23 +1,36 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PRODUCT_NAME, PRODUCT_TAGLINE_EN } from "@/lib/brand/constants";
+import {
+  LANDING_DISCOVER_IDENTITY_JA,
+  LANDING_DISCOVER_NAME,
+  LANDING_DISCOVER_NAME_JA,
+} from "@/lib/landing/landingBrand";
 import { buildDiscoverLocaleAlternates } from "@/lib/seo/hreflang";
 import { buildGenericOgImageUrl } from "@/lib/seo/ogUrls";
+import {
+  buildDiscoverHubCollectionPage,
+  buildDiscoverWebSiteEntity,
+  buildOrganizationEntity,
+  mergeSchemaGraphs,
+} from "@/lib/seo/schemaGraph";
 import { LANDING_LOCALES, LANDING_LOCALE_META } from "@/lib/landing/landingLocales";
 import { getSiteUrl } from "@/lib/site/url";
 
+const DISCOVER_HUB_LEAD_EN =
+  "Which nation's culinary terroir echoes your implicit data profile?";
+
 export const metadata: Metadata = {
-  title: `Discover — Global Personality SEO Hub | ${PRODUCT_NAME}`,
-  description: PRODUCT_TAGLINE_EN,
+  title: `Discover — Global Personality SEO Hub | ${LANDING_DISCOVER_NAME}`,
+  description: DISCOVER_HUB_LEAD_EN,
   alternates: {
     canonical: `${getSiteUrl()}/discover`,
     languages: buildDiscoverLocaleAlternates(),
   },
   openGraph: {
-    title: `Discover | ${PRODUCT_NAME}`,
-    description: PRODUCT_TAGLINE_EN,
+    title: `Discover | ${LANDING_DISCOVER_NAME}`,
+    description: DISCOVER_HUB_LEAD_EN,
     url: `${getSiteUrl()}/discover`,
-    siteName: PRODUCT_NAME,
+    siteName: LANDING_DISCOVER_NAME,
     images: [{ url: buildGenericOgImageUrl(), width: 1200, height: 630 }],
   },
   robots: { index: true, follow: true },
@@ -25,19 +38,19 @@ export const metadata: Metadata = {
 
 export default function DiscoverIndexPage() {
   const siteUrl = getSiteUrl();
-  const jsonLd = {
+  const jsonLd = mergeSchemaGraphs({
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: `${PRODUCT_NAME} Discover`,
-    description: PRODUCT_TAGLINE_EN,
-    url: `${siteUrl}/discover`,
-    inLanguage: ["ja", "en", "ko", "zh"],
-    isPartOf: {
-      "@type": "WebSite",
-      name: PRODUCT_NAME,
-      url: siteUrl,
-    },
-  };
+    "@graph": [
+      buildOrganizationEntity(siteUrl),
+      buildDiscoverWebSiteEntity(siteUrl),
+      {
+        ...buildDiscoverHubCollectionPage(siteUrl),
+        alternateName: LANDING_DISCOVER_IDENTITY_JA,
+        description: DISCOVER_HUB_LEAD_EN,
+        inLanguage: ["ja", "en", "ko", "zh", "fr", "de"],
+      },
+    ],
+  });
 
   return (
     <main className="mx-auto min-h-[100dvh] max-w-md bg-slate-950 px-4 py-10 text-slate-100">
@@ -45,10 +58,12 @@ export default function DiscoverIndexPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="text-2xl font-bold">{PRODUCT_NAME} Discover</h1>
-      <p className="mt-2 text-sm text-slate-400">
-        Programmatic SEO — pick your region:
+      <h1 className="text-2xl font-bold">{LANDING_DISCOVER_NAME_JA}</h1>
+      <p className="mt-2 text-sm text-slate-400">{LANDING_DISCOVER_IDENTITY_JA}</p>
+      <p className="mt-4 text-sm leading-relaxed text-slate-300">
+        {DISCOVER_HUB_LEAD_EN}
       </p>
+      <p className="mt-2 text-sm text-slate-400">Programmatic SEO — pick your region:</p>
       <ul className="mt-6 grid gap-3">
         {LANDING_LOCALES.map((locale) => (
           <li key={locale}>
@@ -58,7 +73,9 @@ export default function DiscoverIndexPage() {
               hrefLang={LANDING_LOCALE_META[locale].htmlLang}
             >
               <span className="font-semibold">{LANDING_LOCALE_META[locale].label}</span>
-              <span className="mt-1 block text-xs uppercase text-slate-500">{locale}</span>
+              <span className="mt-1 block text-xs uppercase text-slate-500">
+                {locale}
+              </span>
             </Link>
           </li>
         ))}

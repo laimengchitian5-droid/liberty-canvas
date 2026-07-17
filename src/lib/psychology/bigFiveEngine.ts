@@ -47,9 +47,9 @@ export function buildBigFiveResult(
   const traitLabel = copy.traitLabels[dominant];
   const scoreValue = scores[dominant];
 
-  const detailLines = (
-    Object.entries(scores) as Array<[OceanDimension, number]>
-  ).map(([dimension, value]) => `${copy.traitLabels[dimension]}: ${value}/1`);
+  const detailLines = (Object.entries(scores) as Array<[OceanDimension, number]>).map(
+    ([dimension, value]) => `${copy.traitLabels[dimension]}: ${value}/1`,
+  );
 
   return {
     typeName: `${traitLabel} ${scoreValue >= 1 ? "High" : "Balanced"} Type`,
@@ -71,5 +71,5 @@ export function formatBigFiveShareText(
       ? "https://liberty-canvas.vercel.app/diagnosis/big-five"
       : `https://liberty-canvas.vercel.app/diagnosis/big-five?lang=${locale}`;
 
-  return `${result.typeName} — ${copy.keyword}\n${result.summary}\n${url}\n#RubelCanvas #BigFive #OCEAN`;
+  return `${result.typeName} — ${copy.keyword}\n${result.summary}\n${url}\n#LibertyCanvas #BigFive #OCEAN`;
 }

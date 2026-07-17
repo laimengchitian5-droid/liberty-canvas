@@ -1,23 +1,19 @@
 "use client";
 
-import Link from "next/link";
+import { BrandWordmark } from "@/components/brand/BrandWordmark";
 import { Send } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type FormEvent,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   LANDING_LOCALES,
   LANDING_LOCALE_META,
   isLandingLocale,
   type LandingLocale,
 } from "@/lib/landing/landingLocales";
-import type { InjectionChatTurn, RubelEnginePayload } from "@/lib/rubel/contracts/pipeline";
+import type {
+  InjectionChatTurn,
+  RubelEnginePayload,
+} from "@/lib/rubel/contracts/pipeline";
 import { OPENING_INJECTION_MESSAGE } from "@/lib/rubel/buildInjectionPrompt";
 import { requestRubelHfReply } from "@/lib/rubel/network/rubelHfClient";
 import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
@@ -42,21 +38,20 @@ import {
 } from "@/lib/psychology/psychIntakeStore";
 import { PsychScreenshotReveal } from "@/components/psychology/PsychScreenshotReveal";
 import { cn } from "@/lib/utils/cn";
+import { buildLibertyResultPath } from "@/lib/visual/artVectorCodec";
+import { buildPsychArtVector } from "@/lib/visual/buildArtVectorFromResult";
 
 type Phase = "quiz" | "reveal" | "chat";
 
 type ChatMessage = { id: string; role: "user" | "assistant"; text: string };
 
-const REVEAL_MS = 2000;
 const LOCALE_STORAGE_KEY = "rubel-psych-locale-v1";
 
 interface PsychDiagnosisClientProps {
   topic: PsychTopicSlug;
 }
 
-function resolveLocaleAfterMount(
-  searchParams: URLSearchParams | null,
-): LandingLocale {
+function resolveLocaleAfterMount(searchParams: URLSearchParams | null): LandingLocale {
   const fromQuery = searchParams?.get("lang");
 
   if (fromQuery && isLandingLocale(fromQuery)) {
@@ -79,9 +74,8 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
   const [phase, setPhase] = useState<Phase>("quiz");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [bigFiveAnswers, setBigFiveAnswers] = useState<BigFiveAnswerRecord[]>([]);
-  const [selectedEnneagram, setSelectedEnneagram] = useState<EnneagramTypeDefinition | null>(
-    null,
-  );
+  const [selectedEnneagram, setSelectedEnneagram] =
+    useState<EnneagramTypeDefinition | null>(null);
   const [quizResult, setQuizResult] = useState<PsychQuizResult | null>(null);
   const [enginePayload, setEnginePayload] = useState<RubelEnginePayload | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -120,8 +114,7 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
       setLocale(next);
       window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
 
-      const path =
-        topic === "big-five" ? "/diagnosis/big-five" : "/diagnosis/enneagram";
+      const path = topic === "big-five" ? "/diagnosis/big-five" : "/diagnosis/enneagram";
       const query = next === "ja" ? "" : `?lang=${next}`;
       router.replace(`${path}${query}`);
     },
@@ -184,15 +177,6 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
     [enneagramCopy, finalizeQuiz],
   );
 
-  useEffect(() => {
-    if (phase !== "reveal") {
-      return;
-    }
-
-    const timer = window.setTimeout(() => setPhase("chat"), REVEAL_MS);
-    return () => window.clearTimeout(timer);
-  }, [phase]);
-
   const requestReply = useCallback(
     async (userMessage: string, showUser: boolean) => {
       if (!enginePayload) {
@@ -221,14 +205,9 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
           history,
           userMessage,
         });
-        setMessages((current) => [
-          ...current,
-          { id: nextId(), role: "assistant", text },
-        ]);
+        setMessages((current) => [...current, { id: nextId(), role: "assistant", text }]);
       } catch (fetchError) {
-        setError(
-          fetchError instanceof Error ? fetchError.message : "Error",
-        );
+        setError(fetchError instanceof Error ? fetchError.message : "Error");
       } finally {
         setIsLoading(false);
       }
@@ -301,10 +280,10 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
   return (
     <div className={cn(rubelTheme.page, meta.fontClass)}>
       <header className={cn("px-4 py-3", rubelDs.glassHeader)}>
-        <div className={cn(rubelTheme.container, "flex items-center justify-between gap-3")}>
-          <Link href="/" className="text-sm font-semibold text-indigo-300">
-            Rubel Canvas
-          </Link>
+        <div
+          className={cn(rubelTheme.container, "flex items-center justify-between gap-3")}
+        >
+          <BrandWordmark brandId="liberty-plug" locale="ja" href="/" compact />
           <nav className="flex gap-1" aria-label="Language">
             {LANDING_LOCALES.map((code) => (
               <button
@@ -325,7 +304,12 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
         </div>
       </header>
 
-      <div className={cn(rubelTheme.container, "flex min-h-[calc(100dvh-4rem)] flex-col pb-8")}>
+      <div
+        className={cn(
+          rubelTheme.container,
+          "flex min-h-[calc(100dvh-4rem)] flex-col pb-8",
+        )}
+      >
         {phase === "quiz" && topic === "big-five" && currentBigFiveQuestion ? (
           <>
             <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300/90">
@@ -334,7 +318,9 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
             <h1 className="mt-3 text-center text-2xl font-bold leading-tight text-white sm:text-3xl">
               {pageCopy.headline}
             </h1>
-            <p className={cn(rubelDs.subheader, "mt-3 text-center")}>{pageCopy.subhead}</p>
+            <p className={cn(rubelDs.subheader, "mt-3 text-center")}>
+              {pageCopy.subhead}
+            </p>
 
             <div className="mt-6 flex justify-center gap-1">
               {bigFiveCopy.questions.map((_, index) => (
@@ -380,7 +366,9 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
             <h1 className="mt-3 text-center text-2xl font-bold leading-tight text-white sm:text-3xl">
               {pageCopy.headline}
             </h1>
-            <p className={cn(rubelDs.subheader, "mt-3 text-center")}>{pageCopy.subhead}</p>
+            <p className={cn(rubelDs.subheader, "mt-3 text-center")}>
+              {pageCopy.subhead}
+            </p>
             <p className="mt-6 text-center text-sm font-medium text-slate-200">
               {enneagramCopy.promptLabel}
             </p>
@@ -400,8 +388,12 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
                   <span className="block text-xs font-medium text-indigo-300/80">
                     {typeDef.tagline}
                   </span>
-                  <span className="mt-1 block text-base font-semibold">{typeDef.name}</span>
-                  <span className="mt-1 block text-xs text-slate-400">{typeDef.description}</span>
+                  <span className="mt-1 block text-base font-semibold">
+                    {typeDef.name}
+                  </span>
+                  <span className="mt-1 block text-xs text-slate-400">
+                    {typeDef.description}
+                  </span>
                 </button>
               ))}
             </div>
@@ -414,6 +406,7 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
             result={quizResult}
             pageCopy={pageCopy}
             onShare={() => void handleShare()}
+            onContinueToChat={() => setPhase("chat")}
           />
         ) : null}
 
@@ -422,9 +415,21 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
             <div className={cn("mt-4 px-1 py-3", rubelDs.glassHeader, "rounded-2xl")}>
               <p className="text-sm font-semibold text-white">{quizResult.typeName}</p>
               <p className="text-xs text-indigo-200/70">{quizResult.summary}</p>
-              <p className="mt-1 text-xs text-slate-400">
-                「{quizResult.anchorAnswer}」
-              </p>
+              <p className="mt-1 text-xs text-slate-400">「{quizResult.anchorAnswer}」</p>
+              <button
+                type="button"
+                onClick={() =>
+                  router.push(
+                    buildLibertyResultPath({
+                      vector: buildPsychArtVector(quizResult),
+                      seed: quizResult.typeName,
+                    }),
+                  )
+                }
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-indigo-400/40 bg-indigo-950/40 px-4 text-sm font-semibold text-indigo-100 transition hover:bg-indigo-900/50"
+              >
+                心の色リザルトを見る
+              </button>
             </div>
 
             <div
@@ -488,7 +493,9 @@ export function PsychDiagnosisClient({ topic }: PsychDiagnosisClientProps) {
         ) : null}
 
         {phase === "quiz" ? (
-          <p className="mt-auto pt-6 text-center text-xs text-slate-500">{pageCopy.trustLine}</p>
+          <p className="mt-auto pt-6 text-center text-xs text-slate-500">
+            {pageCopy.trustLine}
+          </p>
         ) : null}
       </div>
     </div>

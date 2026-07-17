@@ -1,24 +1,28 @@
 "use client";
 
 import { Share2, Sparkles } from "lucide-react";
-import type { BigFiveLocaleCopy, EnneagramLocaleCopy, PsychQuizResult, PsychTopicSlug } from "@/lib/psychology/types";
+import { useRouter } from "next/navigation";
+import type {
+  BigFiveLocaleCopy,
+  EnneagramLocaleCopy,
+  PsychQuizResult,
+  PsychTopicSlug,
+} from "@/lib/psychology/types";
 import type { OceanDimension } from "@/lib/psychology/types";
+import { CognitiveArtSharePanel } from "@/components/visual/CognitiveArtSharePanel";
 import { rubelDs } from "@/lib/rubel/rubelDesignSystem";
+import { PRODUCT_NAME } from "@/lib/brand/constants";
+import { getSiteUrl } from "@/lib/site/url";
 import { cn } from "@/lib/utils/cn";
-
-const OCEAN_ORDER: OceanDimension[] = [
-  "openness",
-  "conscientiousness",
-  "extraversion",
-  "agreeableness",
-  "neuroticism",
-];
+import { buildLibertyResultPath } from "@/lib/visual/artVectorCodec";
+import { buildPsychArtVector } from "@/lib/visual/buildArtVectorFromResult";
 
 interface PsychScreenshotRevealProps {
   topic: PsychTopicSlug;
   result: PsychQuizResult;
   pageCopy: BigFiveLocaleCopy | EnneagramLocaleCopy;
   onShare: () => void;
+  onContinueToChat: () => void;
 }
 
 function OceanBars({
@@ -32,9 +36,17 @@ function OceanBars({
     return null;
   }
 
+  const oceanOrder: OceanDimension[] = [
+    "openness",
+    "conscientiousness",
+    "extraversion",
+    "agreeableness",
+    "neuroticism",
+  ];
+
   return (
     <ul className="mt-5 space-y-2 text-left" aria-label="OCEAN profile">
-      {OCEAN_ORDER.map((dimension) => {
+      {oceanOrder.map((dimension) => {
         const value = result.oceanScores![dimension];
         const pct = value >= 1 ? 100 : 35;
 
@@ -62,9 +74,17 @@ export function PsychScreenshotReveal({
   result,
   pageCopy,
   onShare,
+  onContinueToChat,
 }: PsychScreenshotRevealProps) {
+  const router = useRouter();
   const traitLabels =
     topic === "big-five" && "traitLabels" in pageCopy ? pageCopy.traitLabels : null;
+
+  const artVector = buildPsychArtVector(result);
+  const resultPath = buildLibertyResultPath({
+    vector: artVector,
+    seed: result.typeName,
+  });
 
   return (
     <div className="flex flex-1 items-center justify-center px-1 py-6">
@@ -77,7 +97,10 @@ export function PsychScreenshotReveal({
               {result.enneagramTypeNumber}
             </p>
           ) : (
-            <Sparkles className="mx-auto mb-3 h-9 w-9 text-indigo-300" aria-hidden="true" />
+            <Sparkles
+              className="mx-auto mb-3 h-9 w-9 text-indigo-300"
+              aria-hidden="true"
+            />
           )}
 
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-indigo-300/90">
@@ -88,11 +111,28 @@ export function PsychScreenshotReveal({
             {result.summary}
           </p>
 
-          <p className={rubelDs.screenshotTrapQuote}>
-            「{result.anchorAnswer}」
-          </p>
+          <p className={rubelDs.screenshotTrapQuote}>「{result.anchorAnswer}」</p>
 
           {traitLabels ? <OceanBars result={result} traitLabels={traitLabels} /> : null}
+
+          <div className="mt-5 rounded-2xl border border-white/10 bg-slate-950/40 p-3">
+            <CognitiveArtSharePanel
+              vector={artVector}
+              archetypeLabel={result.typeName}
+              sharePath={resultPath}
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => router.push(resultPath)}
+            className={cn(
+              rubelDs.primary,
+              "mt-4 inline-flex min-h-12 w-full items-center justify-center text-base",
+            )}
+          >
+            AI全肯定リザルトを見る
+          </button>
 
           <p className="mt-4 text-xs text-slate-400">{pageCopy.revealTitle}</p>
 
@@ -108,8 +148,16 @@ export function PsychScreenshotReveal({
             {pageCopy.shareLabel}
           </button>
 
+          <button
+            type="button"
+            onClick={onContinueToChat}
+            className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-white/20 bg-white/5 px-4 text-base font-semibold text-slate-100 transition hover:bg-white/10"
+          >
+            チャットへ進む
+          </button>
+
           <p className={rubelDs.screenshotTrapBrand}>
-            Rubel Canvas · liberty-canvas.vercel.app
+            {PRODUCT_NAME} · {getSiteUrl().replace(/^https?:\/\//, "")}
           </p>
           <p className="mt-1 text-[9px] text-slate-500">
             Lu + Bel = Liberate Beautiful souls

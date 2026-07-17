@@ -2,19 +2,14 @@ import { DEFAULT_LOCALE } from "@/lib/i18n/config";
 import { listApps } from "@/lib/apps/repository";
 import { deriveCreatorInitials } from "@/lib/rubel/creatorDisplay";
 import { USER_DATA_REQUEST } from "@/lib/user/constants";
-import {
-  USER_DATA_SCHEMA_VERSION,
-  type UserData,
-} from "@/types/user";
+import { USER_DATA_SCHEMA_VERSION, type UserData } from "@/types/user";
 
 function deriveDisplayName(userId: string): string {
   if (userId === "guest_user") {
     return "ゲストユーザー";
   }
 
-  return userId
-    .replace(/[_-]+/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  return userId.replace(/[_-]+/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 function pickMemberSince(isoDates: readonly string[]): string {

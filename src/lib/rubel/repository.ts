@@ -1,9 +1,10 @@
+import { getBrand } from "@/lib/brand/registry";
 import { readJsonStore, writeJsonStore } from "@/lib/storage/jsonStore";
-import { buildGlobalReachLabel, inferCrossLingualKeywords } from "@/lib/rubel/i18n/constants";
 import {
-  deriveCreatorAccent,
-  deriveCreatorInitials,
-} from "@/lib/rubel/creatorDisplay";
+  buildGlobalReachLabel,
+  inferCrossLingualKeywords,
+} from "@/lib/rubel/i18n/constants";
+import { deriveCreatorAccent, deriveCreatorInitials } from "@/lib/rubel/creatorDisplay";
 import { formatSubmissionCount } from "@/lib/rubel/formatSubmissionCount";
 import { SEED_DIAGNOSES } from "@/lib/rubel/seedDiagnoses";
 import type { Diagnosis, HubDiagnosisCard } from "@/types/rubel";
@@ -17,7 +18,7 @@ function normalizeDiagnosis(diagnosis: Diagnosis): Diagnosis {
   return {
     ...diagnosis,
     language,
-    creatorName: diagnosis.creatorName ?? "Rubel Canvas",
+    creatorName: diagnosis.creatorName ?? getBrand("liberty-play").name,
     searchKeywords:
       diagnosis.searchKeywords?.length > 0
         ? diagnosis.searchKeywords
@@ -25,10 +26,7 @@ function normalizeDiagnosis(diagnosis: Diagnosis): Diagnosis {
   };
 }
 
-function mergeDiagnoses(
-  seed: Diagnosis[],
-  custom: Diagnosis[],
-): Diagnosis[] {
+function mergeDiagnoses(seed: Diagnosis[], custom: Diagnosis[]): Diagnosis[] {
   const byId = new Map<string, Diagnosis>();
 
   for (const diagnosis of seed) {
@@ -58,9 +56,7 @@ export function getSeedDiagnosisById(id: string): Diagnosis | null {
   return match ? normalizeDiagnosis(match) : null;
 }
 
-export async function getDiagnosisById(
-  id: string,
-): Promise<Diagnosis | null> {
+export async function getDiagnosisById(id: string): Promise<Diagnosis | null> {
   const seedMatch = getSeedDiagnosisById(id);
   if (seedMatch) {
     const custom = await readCustomDiagnoses();
@@ -74,10 +70,7 @@ export async function getDiagnosisById(
 
 export async function saveDiagnosis(diagnosis: Diagnosis): Promise<void> {
   const custom = await readCustomDiagnoses();
-  const nextCustom = [
-    ...custom.filter((entry) => entry.id !== diagnosis.id),
-    diagnosis,
-  ];
+  const nextCustom = [...custom.filter((entry) => entry.id !== diagnosis.id), diagnosis];
 
   await writeJsonStore(STORE_KEY, nextCustom);
 }
@@ -99,10 +92,7 @@ export async function incrementDiagnosisSubmissions(
     totalSubmissions: current.totalSubmissions + 1,
   };
 
-  const nextCustom = [
-    ...custom.filter((entry) => entry.id !== id),
-    updated,
-  ];
+  const nextCustom = [...custom.filter((entry) => entry.id !== id), updated];
 
   await writeJsonStore(STORE_KEY, nextCustom);
   return updated;

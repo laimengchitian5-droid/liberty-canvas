@@ -16,10 +16,7 @@ function translateString(
     return text;
   }
 
-  return (
-    lookupTranslation(text, sourceLanguage, targetLanguage) ??
-    text
-  );
+  return lookupTranslation(text, sourceLanguage, targetLanguage) ?? text;
 }
 
 function translateResult(

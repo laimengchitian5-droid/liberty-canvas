@@ -1,13 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type KeyboardEvent,
-} from "react";
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import {
   initializeClientAnalytics,
   listenForConsentUpdates,
@@ -125,38 +119,38 @@ export function GDPRConsent() {
             transition={PANEL_SPRING}
             onKeyDown={trapFocus}
           >
-          <h2 id="gdpr-consent-title" className={styles.title}>
-            {gdpr.title}
-          </h2>
-          <p id="gdpr-consent-description" className={styles.description}>
-            {gdpr.description}
-          </p>
+            <h2 id="gdpr-consent-title" className={styles.title}>
+              {gdpr.title}
+            </h2>
+            <p id="gdpr-consent-description" className={styles.description}>
+              {gdpr.description}
+            </p>
 
-          <div className={styles.actions}>
-            <button
-              type="button"
-              className={styles.buttonSecondary}
-              aria-label={gdpr.essentialAria}
-              onClick={handleEssentialOnly}
-            >
-              {gdpr.essentialOnly}
-            </button>
-            <button
-              ref={acceptAllRef}
-              type="button"
-              className={styles.buttonPrimary}
-              aria-label={gdpr.acceptAllAria}
-              onClick={handleAcceptAll}
-            >
-              {gdpr.acceptAll}
-            </button>
-          </div>
+            <div className={styles.actions}>
+              <button
+                type="button"
+                className={styles.buttonSecondary}
+                aria-label={gdpr.essentialAria}
+                onClick={handleEssentialOnly}
+              >
+                {gdpr.essentialOnly}
+              </button>
+              <button
+                ref={acceptAllRef}
+                type="button"
+                className={styles.buttonPrimary}
+                aria-label={gdpr.acceptAllAria}
+                onClick={handleAcceptAll}
+              >
+                {gdpr.acceptAll}
+              </button>
+            </div>
 
-          <span className="sr-only" aria-live="polite">
-            {gdpr.consentFlag}: {currentFlag}
-          </span>
-        </motion.section>
-      </motion.div>
+            <span className="sr-only" aria-live="polite">
+              {gdpr.consentFlag}: {currentFlag}
+            </span>
+          </motion.section>
+        </motion.div>
       ) : null}
     </AnimatePresence>
   );

@@ -100,9 +100,7 @@ export async function generateUserAwareMetadata(
 
   const keywords = mergeKeywordLists(
     options.baseMetadata.keywords,
-    pathCluster
-      ? [...pathCluster.keywords, ...seoContext.keywords]
-      : seoContext.keywords,
+    pathCluster ? [...pathCluster.keywords, ...seoContext.keywords] : seoContext.keywords,
   );
 
   return {

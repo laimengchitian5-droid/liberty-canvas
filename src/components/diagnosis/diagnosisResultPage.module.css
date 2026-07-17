@@ -99,20 +99,14 @@
 }
 
 .planetCrystalline {
-  background: radial-gradient(
-      circle at 30% 25%,
-      rgb(255 255 255 / 0.55) 0%,
-      transparent 28%
-    ),
+  background:
+    radial-gradient(circle at 30% 25%, rgb(255 255 255 / 0.55) 0%, transparent 28%),
     radial-gradient(circle at 62% 68%, var(--planet-core-1) 0%, var(--planet-core-2) 70%);
 }
 
 .planetCloudy {
-  background: radial-gradient(
-      circle at 40% 35%,
-      rgb(255 255 255 / 0.35) 0%,
-      transparent 35%
-    ),
+  background:
+    radial-gradient(circle at 40% 35%, rgb(255 255 255 / 0.35) 0%, transparent 35%),
     radial-gradient(circle at 55% 60%, var(--planet-core-1) 0%, var(--planet-core-2) 65%);
 }
 

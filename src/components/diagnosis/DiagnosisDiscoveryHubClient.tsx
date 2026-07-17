@@ -8,6 +8,10 @@ import {
   groupUnifiedDiscoveryCatalog,
   type UnifiedDiscoveryEntry,
 } from "@/lib/catalog/unifiedDiscoveryTypes";
+import {
+  SPECIALTY_SERIES_EYEBROW,
+  SPECIALTY_SERIES_LEAD,
+} from "@/lib/specialty/specialtyHubCatalog";
 import { appendSearchRefToHref } from "@/lib/seo/searchIntent";
 import { HubSearchBar } from "@/components/catalog/HubSearchBar";
 import styles from "./diagnosisDiscoveryHub.module.css";
@@ -27,7 +31,7 @@ export const DiagnosisDiscoveryHubClient = ({
     [catalog, query],
   );
 
-  const { plugOfficial, plugCommunity, rubelQuick } =
+  const { specialtySeries, plugOfficial, plugCommunity, rubelQuick } =
     groupUnifiedDiscoveryCatalog(filtered);
 
   const renderGrid = (entries: UnifiedDiscoveryEntry[], eyebrow?: string) => (
@@ -39,20 +43,20 @@ export const DiagnosisDiscoveryHubClient = ({
             : entry.href;
 
         return (
-        <li key={entry.id}>
-          <Link
-            href={href}
-            className={styles.card}
-            style={{ borderColor: `${entry.themeColor}44` }}
-          >
-            <span className={styles.cardEyebrow}>{eyebrow ?? entry.eyebrow}</span>
-            <span className={styles.cardTitle}>{entry.title}</span>
-            <span className={styles.cardSubtitle}>{entry.subtitle}</span>
-            <span className={styles.cardMeta}>
-              {entry.questionCount}問 · 約{entry.estimatedMinutes}分
-            </span>
-          </Link>
-        </li>
+          <li key={entry.id}>
+            <Link
+              href={href}
+              className={styles.card}
+              style={{ borderColor: `${entry.themeColor}44` }}
+            >
+              <span className={styles.cardEyebrow}>{eyebrow ?? entry.eyebrow}</span>
+              <span className={styles.cardTitle}>{entry.title}</span>
+              <span className={styles.cardSubtitle}>{entry.subtitle}</span>
+              <span className={styles.cardMeta}>
+                {entry.questionCount}問 · 約{entry.estimatedMinutes}分
+              </span>
+            </Link>
+          </li>
         );
       })}
     </ul>
@@ -69,6 +73,14 @@ export const DiagnosisDiscoveryHubClient = ({
         <p className={styles.emptyCommunity}>
           「{query}」に一致する診断は見つかりませんでした。
         </p>
+      ) : null}
+
+      {specialtySeries.length > 0 ? (
+        <div className={styles.sectionBlock}>
+          <h3 className={styles.sectionTitle}>{SPECIALTY_SERIES_EYEBROW}</h3>
+          <p className={styles.seriesLead}>{SPECIALTY_SERIES_LEAD}</p>
+          {renderGrid(specialtySeries, "世界9カ国")}
+        </div>
       ) : null}
 
       {plugOfficial.length > 0 ? (

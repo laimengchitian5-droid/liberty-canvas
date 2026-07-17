@@ -36,9 +36,7 @@ async function writeAllApps(apps: StoredUniversalApp[]): Promise<void> {
   await writeJsonStore(APPS_KEY, apps);
 }
 
-function buildAiAgentConfig(
-  input: CreateUniversalAppInput,
-): AIAgentConfig | undefined {
+function buildAiAgentConfig(input: CreateUniversalAppInput): AIAgentConfig | undefined {
   if (input.appType !== "ai_agent") {
     return undefined;
   }
@@ -144,9 +142,7 @@ export async function listAppIds(): Promise<string[]> {
   return apps.map((app) => app.id);
 }
 
-export async function listAppsByType(
-  appType: AppType,
-): Promise<StoredUniversalApp[]> {
+export async function listAppsByType(appType: AppType): Promise<StoredUniversalApp[]> {
   const apps = await listApps();
   return apps.filter((app) => app.appType === appType);
 }

@@ -5,7 +5,9 @@ import { extractQuestionBlocks } from "@/lib/diagnosis/extractDiagnosisElements"
 import { LEGAL_TRAIT_KEYS } from "@/lib/diagnosis/academicTraitVector";
 import type { CompilerAnswer } from "@/types/diagnosisCompiler";
 
-function buildFullAnswers(definition: NonNullable<ReturnType<typeof getPlugDiagnosisBySlug>>): CompilerAnswer[] {
+function buildFullAnswers(
+  definition: NonNullable<ReturnType<typeof getPlugDiagnosisBySlug>>,
+): CompilerAnswer[] {
   return extractQuestionBlocks(definition).map((block, index) => {
     if (block.inputType === "slider" && block.slider) {
       return {

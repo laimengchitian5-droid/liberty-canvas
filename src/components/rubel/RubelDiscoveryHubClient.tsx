@@ -20,21 +20,30 @@ import type { LocaleCode } from "@/types/rubel-i18n";
 
 const HUB_COPY: Record<
   LocaleCode,
-  { title: string; lead: string; empty: string; create: string; search: string }
+  {
+    title: string;
+    lead: string;
+    empty: string;
+    create: string;
+    search: string;
+    freeChat: string;
+  }
 > = {
   en: {
-    title: "Discover Diagnoses",
-    lead: "Tap Play — answer one question, then chat with your matched persona.",
+    title: "Free AI Personality Test",
+    lead: "One answer → cosmic result + affirming AI chat. Free, no signup.",
     empty: "No diagnoses yet. Be the first creator.",
     create: "Create a diagnosis",
     search: "Search diagnoses (multilingual semantic)",
+    freeChat: "Talk freely with the world",
   },
   ja: {
     title: "無料AI性格診断を探す",
-    lead: "1問だけ答えてプレイ → 結果タイプに合ったAIキャラとチャット。",
+    lead: "1回答で宇宙キャラ結果と全肯定AIチャット。登録不要・無料。",
     empty: "まだ診断がありません。",
     create: "オリジナル診断を作成",
     search: "診断を検索（日本語・English・semantic）",
+    freeChat: "世界と自由に話す",
   },
   es: {
     title: "Descubre diagnósticos",
@@ -42,6 +51,7 @@ const HUB_COPY: Record<
     empty: "Aún no hay diagnósticos.",
     create: "Crear diagnóstico",
     search: "Buscar diagnósticos",
+    freeChat: "Habla libremente con el mundo",
   },
   ko: {
     title: "진단 둘러보기",
@@ -49,6 +59,7 @@ const HUB_COPY: Record<
     empty: "아직 진단이 없습니다.",
     create: "진단 만들기",
     search: "진단 검색",
+    freeChat: "세계와 자유롭게 대화",
   },
   fr: {
     title: "Découvrir les diagnostics",
@@ -56,6 +67,7 @@ const HUB_COPY: Record<
     empty: "Aucun diagnostic pour l'instant.",
     create: "Créer un diagnostic",
     search: "Rechercher des diagnostics",
+    freeChat: "Parler librement au monde",
   },
 };
 
@@ -103,14 +115,8 @@ const RubelDiscoveryHubInner = ({
           trendingLabel: "",
           href: `/play/${diagnosis.id}`,
         }),
-        displayTitle: translateHubTitle(
-          diagnosis.title,
-          diagnosis.language,
-          locale,
-        ),
-        trendingLabel: feedTrending(
-          formatSubmissionCount(diagnosis.totalSubmissions),
-        ),
+        displayTitle: translateHubTitle(diagnosis.title, diagnosis.language, locale),
+        trendingLabel: feedTrending(formatSubmissionCount(diagnosis.totalSubmissions)),
       };
     });
   }, [feedTrending, filteredCatalog, initialCards, locale]);
@@ -137,6 +143,12 @@ const RubelDiscoveryHubInner = ({
           >
             <PlusCircle className="h-4 w-4" aria-hidden="true" />
             {copy.create}
+          </Link>
+          <Link
+            href="/chat"
+            className="mt-3 inline-flex min-h-11 items-center justify-center px-5 text-sm font-medium text-[#5c5348] underline-offset-4 hover:underline"
+          >
+            {copy.freeChat}
           </Link>
         </header>
 

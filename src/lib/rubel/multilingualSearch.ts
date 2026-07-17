@@ -10,11 +10,7 @@ function scoreDiagnosisMatch(
   diagnosis: Diagnosis,
   queryTokens: Set<string>,
 ): { score: number; matchedTokens: string[] } {
-  const candidates = [
-    diagnosis.title,
-    ...diagnosis.searchKeywords,
-    diagnosis.language,
-  ];
+  const candidates = [diagnosis.title, ...diagnosis.searchKeywords, diagnosis.language];
 
   const matchedTokens = new Set<string>();
   let score = 0;
@@ -40,10 +36,7 @@ function scoreDiagnosisMatch(
  * Mock frontend semantic search across multilingual diagnosis metadata.
  * Example: query "cat" surfaces Japanese title "あなたのネコ度診断".
  */
-export function multilingualSearch(
-  query: string,
-  catalog: Diagnosis[],
-): SearchResult[] {
+export function multilingualSearch(query: string, catalog: Diagnosis[]): SearchResult[] {
   const trimmed = query.trim();
 
   if (!trimmed) {

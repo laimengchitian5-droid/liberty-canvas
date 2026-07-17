@@ -1,0 +1,27 @@
+# Dependencies & build
+node_modules/
+.next/
+out/
+dist/
+coverage/
+artifacts/
+test-results/
+playwright-report/
+blob-report/
+
+# Locks & generated
+package-lock.json
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Public assets (binary / service worker payloads)
+public/
+data/
+
+# Env & secrets
+.env*
+secrets/
+
+# Misc
+*.log
+.vercel/

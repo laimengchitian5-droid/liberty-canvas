@@ -27,10 +27,7 @@ export const CosmicPlanetGallery = ({
   messages,
   onPreviewKind,
 }: CosmicPlanetGalleryProps) => {
-  const entries = useMemo(
-    () => buildPlanetGalleryEntries(vector),
-    [vector],
-  );
+  const entries = useMemo(() => buildPlanetGalleryEntries(vector), [vector]);
 
   const [previewKind, setPreviewKind] = useState<CosmicPlanetKind | null>(null);
   const selectedKind = previewKind ?? activePlanetKind;

@@ -1,12 +1,23 @@
-import { createEmptyAcademicVector, freezeAcademicVector, resolveDominantTraits } from "@/lib/diagnosis/academicTraitVector";
-import { buildFiveFactorRadar, type FiveFactorRadarPoint } from "@/lib/diagnosis/fiveFactorDisplay";
+import {
+  createEmptyAcademicVector,
+  freezeAcademicVector,
+  resolveDominantTraits,
+} from "@/lib/diagnosis/academicTraitVector";
+import {
+  buildFiveFactorRadar,
+  type FiveFactorRadarPoint,
+} from "@/lib/diagnosis/fiveFactorDisplay";
 import {
   buildCosmicCharacterSheet,
   isCosmicPlanetKind,
   type CosmicCharacterSheet,
   type CosmicPlanetKind,
 } from "@/lib/diagnosis/cosmicPlanetEngine";
-import { extractResultBlock, extractSeoBlock, extractViralPresets } from "@/lib/diagnosis/extractDiagnosisElements";
+import {
+  extractResultBlock,
+  extractSeoBlock,
+  extractViralPresets,
+} from "@/lib/diagnosis/extractDiagnosisElements";
 import { getSiteUrl } from "@/lib/site/url";
 import type {
   LegallySafeDiagnosisOutcome,
@@ -62,10 +73,7 @@ export function encodePlugResultShareQuery(
   const search = new URLSearchParams();
   search.set("planet", params.planet);
   search.set("archetype", params.archetypeId);
-  search.set(
-    "f",
-    params.factors.map((value) => String(clampPercent(value))).join("-"),
-  );
+  search.set("f", params.factors.map((value) => String(clampPercent(value))).join("-"));
   return search;
 }
 
@@ -148,9 +156,7 @@ export function rebuildOutcomeFromShareQuery(
     dominantTraits: resolveDominantTraits(academicVector, 2),
     resultLayout: resultBlock?.layout ?? "character_archetype_card",
     viralPresets: extractViralPresets(definition),
-    seoTags: seoBlock
-      ? [...seoBlock.desireTags, ...seoBlock.targetDemographics]
-      : [],
+    seoTags: seoBlock ? [...seoBlock.desireTags, ...seoBlock.targetDemographics] : [],
     isComplete: true,
     answeredCount: questionCount,
     totalQuestions: questionCount,
@@ -228,10 +234,7 @@ export function buildCosmicOgImageUrl(params: {
   }
 
   if (params.factors) {
-    search.set(
-      "f",
-      params.factors.map((value) => String(clampPercent(value))).join("-"),
-    );
+    search.set("f", params.factors.map((value) => String(clampPercent(value))).join("-"));
   }
 
   return `${getSiteUrl()}/api/og/diagnosis?${search.toString()}`;
@@ -252,10 +255,7 @@ function persistDurablePlugResultSnapshot(snapshot: PlugResultSnapshot): void {
       expiresAt: Date.now() + PLUG_RESULT_SNAPSHOT_TTL_MS,
     };
 
-    localStorage.setItem(
-      buildDurableSnapshotKey(snapshot.slug),
-      JSON.stringify(durable),
-    );
+    localStorage.setItem(buildDurableSnapshotKey(snapshot.slug), JSON.stringify(durable));
   } catch {
     // quota exceeded — session snapshot still works for same tab
   }

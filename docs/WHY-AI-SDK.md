@@ -4,12 +4,12 @@ LibertyCanvas migrated `/api/chat` and `/api/diagnosis/advice` from manual Groq 
 
 ## Problems with hand-rolled SSE
 
-| Issue | Impact |
-|-------|--------|
-| Provider-specific delta parsing | Every model change breaks the client |
-| No unified fallback | OpenAI / Anthropic required duplicate routes |
-| Stream cleanup bugs | Strict Mode double-fetch, leaked readers |
-| Untyped boundaries | JSON advice drift without Zod recovery |
+| Issue                           | Impact                                       |
+| ------------------------------- | -------------------------------------------- |
+| Provider-specific delta parsing | Every model change breaks the client         |
+| No unified fallback             | OpenAI / Anthropic required duplicate routes |
+| Stream cleanup bugs             | Strict Mode double-fetch, leaked readers     |
+| Untyped boundaries              | JSON advice drift without Zod recovery       |
 
 ## What AI SDK gives us
 

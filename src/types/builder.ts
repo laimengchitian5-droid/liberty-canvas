@@ -12,20 +12,14 @@ import type { PsychFrameworkId } from "@/lib/diagnosis/scoring/types";
  * Typeform-style conversational flow with logic jumps and affirmation beats.
  */
 export type BlockType =
-  | "CONVERSATIONAL_QUESTION"
-  | "AI_INTERMEDIATE_FEEDBACK"
-  | "CONDITIONAL_BRANCH";
+  "CONVERSATIONAL_QUESTION" | "AI_INTERMEDIATE_FEEDBACK" | "CONDITIONAL_BRANCH";
 
 /**
  * Creator-facing OCEAN trait axes — abstract vectors only, no scoring math exposed.
  * Maps internally to LibertyCanvas `LegalTraitKey` at compile time.
  */
 export type OceanTraitKey =
-  | "openness"
-  | "conscientiousness"
-  | "extraversion"
-  | "agreeableness"
-  | "neuroticism";
+  "openness" | "conscientiousness" | "extraversion" | "agreeableness" | "neuroticism";
 
 export const OCEAN_TRAIT_KEYS = [
   "openness",
@@ -38,12 +32,7 @@ export const OCEAN_TRAIT_KEYS = [
 /** Creator-safe scoring payload — partial OCEAN weights per choice. */
 export type ScoringPayload = Readonly<Partial<Record<OceanTraitKey, number>>>;
 
-export const BUILDER_CREATOR_TAGS = [
-  "高校生向け",
-  "推し活",
-  "恋愛",
-  "短時間",
-] as const;
+export const BUILDER_CREATOR_TAGS = ["高校生向け", "推し活", "恋愛", "短時間"] as const;
 
 export type BuilderCreatorTag = (typeof BUILDER_CREATOR_TAGS)[number] | string;
 
@@ -85,9 +74,7 @@ export interface ConditionalBranchBlock {
 }
 
 export type BuilderBlock =
-  | ConversationalQuestionBlock
-  | AiIntermediateFeedbackBlock
-  | ConditionalBranchBlock;
+  ConversationalQuestionBlock | AiIntermediateFeedbackBlock | ConditionalBranchBlock;
 
 export interface BuilderResultConfig {
   layout: ResultLayoutKind;
@@ -132,9 +119,7 @@ export interface BuilderRuntimeFeedbackStep {
   originQuestionId: string;
 }
 
-export type BuilderRuntimeStep =
-  | BuilderRuntimeQuestionStep
-  | BuilderRuntimeFeedbackStep;
+export type BuilderRuntimeStep = BuilderRuntimeQuestionStep | BuilderRuntimeFeedbackStep;
 
 export type BuilderCompilerPhase = "intro" | "questions" | "feedback" | "result";
 

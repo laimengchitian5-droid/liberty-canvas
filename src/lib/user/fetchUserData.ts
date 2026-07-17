@@ -131,9 +131,7 @@ async function executeNetworkFetch(
 ): Promise<UserData> {
   const timeoutController = new AbortController();
   const timeoutId = setTimeout(() => {
-    timeoutController.abort(
-      new UserDataTimeoutError(USER_DATA_REQUEST.timeoutMs),
-    );
+    timeoutController.abort(new UserDataTimeoutError(USER_DATA_REQUEST.timeoutMs));
   }, USER_DATA_REQUEST.timeoutMs);
 
   const mergedSignal = mergeAbortSignals(signal, timeoutController.signal);
@@ -159,20 +157,14 @@ async function executeNetworkFetch(
       throw new UserDataAbortedError();
     }
 
-    throw new UserDataNetworkError(
-      "ユーザーデータ API への接続に失敗しました。",
-      cause,
-    );
+    throw new UserDataNetworkError("ユーザーデータ API への接続に失敗しました。", cause);
   } finally {
     clearTimeout(timeoutId);
   }
 
   const rawBody = await readResponseBody(response);
 
-  if (
-    response.status < USER_DATA_HTTP.okMin ||
-    response.status > USER_DATA_HTTP.okMax
-  ) {
+  if (response.status < USER_DATA_HTTP.okMin || response.status > USER_DATA_HTTP.okMax) {
     throw new UserDataHttpError(
       response.status,
       response.statusText,

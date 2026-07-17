@@ -129,8 +129,7 @@ export function buildFeedbackRuntimeStep(
   originQuestionId: string,
 ): BuilderRuntimeFeedbackStep | null {
   const block = definition.blocks.find(
-    (entry) =>
-      isAiIntermediateFeedbackBlock(entry) && entry.id === feedbackBlockId,
+    (entry) => isAiIntermediateFeedbackBlock(entry) && entry.id === feedbackBlockId,
   );
 
   if (!block || !isAiIntermediateFeedbackBlock(block)) {
@@ -167,15 +166,9 @@ export function buildBuilderSeoContext(
   const landingPath =
     definition.seoTuning?.landingPath ?? `/diagnosis/play/${definition.slug}`;
   const baseKeywords = definition.seoTuning
-    ? [
-        ...definition.seoTuning.desireTags,
-        ...definition.seoTuning.targetDemographics,
-      ]
+    ? [...definition.seoTuning.desireTags, ...definition.seoTuning.targetDemographics]
     : [];
-  const viralKeywords = buildBuilderOgKeywords(
-    definition.creatorTags,
-    baseKeywords,
-  );
+  const viralKeywords = buildBuilderOgKeywords(definition.creatorTags, baseKeywords);
   const title = buildBuilderOgTitle(
     definition.seoTuning?.titleTemplate ?? definition.title,
     definition.creatorTags,

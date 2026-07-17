@@ -1,8 +1,5 @@
 import type { z } from "zod";
-import {
-  USER_ERROR_CODES,
-  type UserErrorCode,
-} from "@/lib/user/constants";
+import { USER_ERROR_CODES, type UserErrorCode } from "@/lib/user/constants";
 
 interface UserDataErrorInit {
   message: string;
@@ -62,10 +59,7 @@ export class UserDataHttpError extends UserDataError {
   constructor(status: number, statusText: string, message?: string) {
     super({
       message: message ?? `ユーザーデータ API が ${status} を返しました。`,
-      code:
-        status === 404
-          ? USER_ERROR_CODES.notFound
-          : USER_ERROR_CODES.http,
+      code: status === 404 ? USER_ERROR_CODES.notFound : USER_ERROR_CODES.http,
     });
     this.name = "UserDataHttpError";
     this.status = status;

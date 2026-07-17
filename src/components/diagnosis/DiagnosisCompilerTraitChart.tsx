@@ -53,10 +53,7 @@ export const DiagnosisCompilerTraitChart = ({
     );
   }
 
-  const maxScore = Math.max(
-    1,
-    ...LEGAL_TRAIT_KEYS.map((key) => academicVector[key]),
-  );
+  const maxScore = Math.max(1, ...LEGAL_TRAIT_KEYS.map((key) => academicVector[key]));
 
   return (
     <div className={styles.traitChart} role="group" aria-label="学術特性チャート">
@@ -76,9 +73,7 @@ export const DiagnosisCompilerTraitChart = ({
                 }}
               />
             </div>
-            <span className={styles.traitValue}>
-              {Math.round(score * 100) / 100}
-            </span>
+            <span className={styles.traitValue}>{Math.round(score * 100) / 100}</span>
           </div>
         );
       })}

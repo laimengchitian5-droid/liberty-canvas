@@ -5,6 +5,7 @@ import {
   PRODUCT_NAME,
   PRODUCT_SHORT_NAME,
 } from "@/lib/brand/constants";
+import { buildHomeSerpTitleJa } from "@/lib/seo/homeSerp";
 
 export const GOOGLE_SITE_VERIFICATION_TOKEN =
   "-h8gKgWbXc5zfc-Y-NqWTd53-FW1At752195m3NT3yg";
@@ -17,8 +18,9 @@ export function getGoogleSiteVerification(): string {
 export function buildRootMetadata(): Metadata {
   const googleSiteVerification = getGoogleSiteVerification();
 
-  return {    title: {
-      default: `${PRODUCT_NAME} — 無料AI性格診断`,
+  return {
+    title: {
+      default: buildHomeSerpTitleJa(),
       template: `%s | ${PRODUCT_NAME}`,
     },
     description: PRODUCT_DESCRIPTION,

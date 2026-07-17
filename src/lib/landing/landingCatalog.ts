@@ -4,9 +4,24 @@ import type { LandingLocale } from "@/lib/landing/landingLocales";
 import { LANDING_LOCALES, LANDING_LOCALE_META } from "@/lib/landing/landingLocales";
 import type { LandingTopicConfig } from "@/lib/landing/landingTopics";
 import { getLandingCopy } from "@/lib/landing/landingCopy";
-import { getLandingTopic, LANDING_TOPIC_SLUGS, LANDING_TOPICS } from "@/lib/landing/landingTopics";
-import { PRODUCT_NAME } from "@/lib/brand/constants";
+import {
+  getLandingTopic,
+  LANDING_TOPIC_SLUGS,
+  LANDING_TOPICS,
+} from "@/lib/landing/landingTopics";
+import { LANDING_DISCOVER_NAME } from "@/lib/landing/landingBrand";
+import {
+  resolveLandingCanonicalPath,
+  shouldIndexLandingSlug,
+} from "@/lib/landing/landingIndexPolicy";
 import { getSiteUrl } from "@/lib/site/url";
+import {
+  buildDiscoverLandingAssessmentEntity,
+  buildDiscoverLandingWebPageEntity,
+  buildDiscoverWebSiteEntity,
+  buildOrganizationEntity,
+  mergeSchemaGraphs,
+} from "@/lib/seo/schemaGraph";
 
 export interface LandingPageDefinition {
   locale: LandingLocale;
@@ -60,6 +75,11 @@ export function listAllLandingPages(): LandingPageDefinition[] {
   return pages;
 }
 
+/** Indexable Discover landings only — excludes upcoming specialty bait URLs. */
+export function listIndexableLandingPages(): LandingPageDefinition[] {
+  return listAllLandingPages().filter((page) => shouldIndexLandingSlug(page.slug));
+}
+
 export function listLandingStaticParams(): Array<{ locale: string; slug: string }> {
   return LANDING_TOPIC_SLUGS.flatMap((slug) =>
     LANDING_LOCALES.map((locale) => ({ locale, slug })),
@@ -69,9 +89,12 @@ export function listLandingStaticParams(): Array<{ locale: string; slug: string 
 export function buildLandingMetadata(page: LandingPageDefinition): Metadata {
   const meta = LANDING_LOCALE_META[page.locale];
   const languages: Record<string, string> = {};
+  const indexable = shouldIndexLandingSlug(page.slug);
+  const canonicalPath = resolveLandingCanonicalPath(page.locale, page.slug);
+  const canonicalUrl = `${getSiteUrl()}${canonicalPath}`;
 
   for (const locale of LANDING_LOCALES) {
-    languages[locale] = buildLandingPath(locale, page.slug);
+    languages[locale] = resolveLandingCanonicalPath(locale, page.slug);
   }
 
   return {
@@ -79,14 +102,14 @@ export function buildLandingMetadata(page: LandingPageDefinition): Metadata {
     description: page.copy.metaDescription,
     keywords: page.copy.keywords,
     alternates: {
-      canonical: page.absoluteUrl,
+      canonical: canonicalUrl,
       languages,
     },
     openGraph: {
       title: page.copy.title,
       description: page.copy.metaDescription,
-      url: page.absoluteUrl,
-      siteName: PRODUCT_NAME,
+      url: canonicalUrl,
+      siteName: LANDING_DISCOVER_NAME,
       locale: meta.ogLocale,
       type: "website",
     },
@@ -95,57 +118,52 @@ export function buildLandingMetadata(page: LandingPageDefinition): Metadata {
       title: page.copy.headline,
       description: page.copy.metaDescription,
     },
-    robots: { index: true, follow: true },
+    robots: indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true, googleBot: { index: false, follow: true } },
   };
 }
 
 export function buildLandingJsonLd(page: LandingPageDefinition) {
   const siteUrl = getSiteUrl();
+  const htmlLang = LANDING_LOCALE_META[page.locale].htmlLang;
 
-  return {
+  const faqNode = {
+    "@type": "FAQPage",
+    "@id": `${page.absoluteUrl}#faq`,
+    mainEntity: page.copy.faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
+  return mergeSchemaGraphs({
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": page.topic.schemaType,
-        "@id": `${page.absoluteUrl}#assessment`,
+      buildOrganizationEntity(siteUrl),
+      buildDiscoverWebSiteEntity(siteUrl),
+      buildDiscoverLandingAssessmentEntity({
+        absoluteUrl: page.absoluteUrl,
+        schemaType: page.topic.schemaType,
         name: page.copy.schemaName,
         description: page.copy.schemaDescription,
-        url: page.absoluteUrl,
-        inLanguage: LANDING_LOCALE_META[page.locale].htmlLang,
-        isAccessibleForFree: true,
-        provider: {
-          "@type": "Organization",
-          name: PRODUCT_NAME,
-          url: siteUrl,
-          alternateName: "liberty-canvas",
-        },
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${page.absoluteUrl}#faq`,
-        mainEntity: page.copy.faq.map((item) => ({
-          "@type": "Question",
-          name: item.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: item.answer,
-          },
-        })),
-      },
-      {
-        "@type": "WebPage",
-        "@id": page.absoluteUrl,
+        inLanguage: htmlLang,
+        siteUrl,
+      }),
+      buildDiscoverLandingWebPageEntity({
+        absoluteUrl: page.absoluteUrl,
         name: page.copy.title,
         description: page.copy.metaDescription,
-        inLanguage: LANDING_LOCALE_META[page.locale].htmlLang,
-        isPartOf: {
-          "@type": "WebSite",
-          name: PRODUCT_NAME,
-          url: siteUrl,
-        },
-      },
+        inLanguage: htmlLang,
+        siteUrl,
+      }),
+      faqNode,
     ],
-  };
+  });
 }
 
 export function resolveLandingPage(

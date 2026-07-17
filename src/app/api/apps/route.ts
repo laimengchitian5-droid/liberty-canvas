@@ -4,19 +4,13 @@ import {
   saveUniversalApp,
   listApps,
 } from "@/lib/apps/repository";
+import { jsonError, parseJsonBody } from "@/lib/api/http";
 import { refreshPublishedAppDiscovery } from "@/lib/quiz/refreshSitemap";
 import { getActiveStorageMode } from "@/lib/storage/jsonStore";
 import { buildAppPageUrl } from "@/lib/site/url";
 import { createUniversalAppSchema } from "@/lib/validation/appSchema";
 
 export const runtime = "nodejs";
-
-function jsonError(message: string, status: number, details?: unknown) {
-  return NextResponse.json(
-    { error: message, ...(details !== undefined ? { details } : {}) },
-    { status },
-  );
-}
 
 function triggerSitemapInvalidation(appId: string): void {
   refreshPublishedAppDiscovery();
@@ -27,24 +21,10 @@ function triggerSitemapInvalidation(appId: string): void {
 }
 
 export async function POST(request: Request) {
-  const contentType = request.headers.get("content-type") ?? "";
+  const parsed = await parseJsonBody(request, createUniversalAppSchema);
 
-  if (!contentType.includes("application/json")) {
-    return jsonError("Content-Type must be application/json", 415);
-  }
-
-  let payload: unknown;
-
-  try {
-    payload = await request.json();
-  } catch {
-    return jsonError("Request body must be valid JSON", 400);
-  }
-
-  const parsed = createUniversalAppSchema.safeParse(payload);
-
-  if (!parsed.success) {
-    return jsonError("Validation failed", 400, parsed.error.flatten());
+  if (!parsed.ok) {
+    return parsed.response;
   }
 
   try {
@@ -87,9 +67,6 @@ export async function GET() {
       storage: getActiveStorageMode(),
     });
   } catch (error) {
-    return jsonError(
-      error instanceof Error ? error.message : "Failed to list apps",
-      500,
-    );
+    return jsonError(error instanceof Error ? error.message : "Failed to list apps", 500);
   }
 }

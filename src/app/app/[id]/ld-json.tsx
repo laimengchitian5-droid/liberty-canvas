@@ -1,9 +1,5 @@
 import type { StoredUniversalApp } from "@/types/platform";
-import {
-  buildAppOgImageUrl,
-  buildAppPageUrl,
-  buildQuizOgImageUrl,
-} from "@/lib/site/url";
+import { buildAppOgImageUrl, buildAppPageUrl, buildQuizOgImageUrl } from "@/lib/site/url";
 
 function buildAssessmentStructuredData(app: StoredUniversalApp) {
   const pageUrl = buildAppPageUrl(app.id);

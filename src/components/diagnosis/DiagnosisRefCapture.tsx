@@ -2,10 +2,7 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  writeDiagnosisLang,
-  writeDiagnosisRef,
-} from "@/lib/diagnosis/diagnosisSession";
+import { writeDiagnosisLang, writeDiagnosisRef } from "@/lib/diagnosis/diagnosisSession";
 import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
 import { normalizeLocaleCandidate } from "@/lib/i18n/resolveAppLocale";
 

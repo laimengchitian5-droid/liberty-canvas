@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { resolveAppLocaleFromRequest, resolveDiscoverPathLocale } from "@/lib/i18n/resolveAppLocale";
+import {
+  resolveAppLocaleFromRequest,
+  resolveDiscoverPathLocale,
+} from "@/lib/i18n/resolveAppLocale";
 
 describe("resolveAppLocaleFromRequest", () => {
   it("prefers query lang over cookie", () => {
@@ -30,12 +33,8 @@ describe("resolveAppLocaleFromRequest", () => {
   });
 
   it("resolves discover path locale from pathname", () => {
-    expect(resolveDiscoverPathLocale("/discover/ko/mbti-personality-types")).toBe(
-      "ko",
-    );
-    expect(resolveDiscoverPathLocale("/discover/fr/enneagram-nine-types")).toBe(
-      "fr",
-    );
+    expect(resolveDiscoverPathLocale("/discover/ko/mbti-personality-types")).toBe("ko");
+    expect(resolveDiscoverPathLocale("/discover/fr/enneagram-nine-types")).toBe("fr");
     expect(resolveDiscoverPathLocale("/discover/de/big-five-ocean")).toBe("de");
     expect(resolveDiscoverPathLocale("/diagnosis/play/romance")).toBeNull();
   });

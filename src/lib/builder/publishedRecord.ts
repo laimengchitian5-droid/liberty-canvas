@@ -28,7 +28,7 @@ export function buildPublishedBuilderRecord(input: {
     publishedAt:
       input.status === "published"
         ? (input.existing?.publishedAt ?? now)
-        : input.existing?.publishedAt ?? null,
+        : (input.existing?.publishedAt ?? null),
     updatedAt: now,
     definition: input.definition,
   };

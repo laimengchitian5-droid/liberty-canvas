@@ -164,11 +164,7 @@ const RubelCreatorWizard = () => {
   );
 
   const updateOption = useCallback(
-    (
-      questionId: string,
-      optionId: string,
-      patch: Partial<CreatorOptionDraft>,
-    ) => {
+    (questionId: string, optionId: string, patch: Partial<CreatorOptionDraft>) => {
       setQuestions((current) =>
         current.map((question) => {
           if (question.id !== questionId) {
@@ -188,12 +184,7 @@ const RubelCreatorWizard = () => {
   );
 
   const updateOptionTrait = useCallback(
-    (
-      questionId: string,
-      optionId: string,
-      trait: PersonalityTrait,
-      value: number,
-    ) => {
+    (questionId: string, optionId: string, trait: PersonalityTrait, value: number) => {
       setQuestions((current) =>
         current.map((question) => {
           if (question.id !== questionId) {
@@ -222,9 +213,7 @@ const RubelCreatorWizard = () => {
   const updateResult = useCallback(
     (resultId: string, patch: Partial<CreatorResultDraft>) => {
       setResults((current) =>
-        current.map((entry) =>
-          entry.id === resultId ? { ...entry, ...patch } : entry,
-        ),
+        current.map((entry) => (entry.id === resultId ? { ...entry, ...patch } : entry)),
       );
     },
     [],
@@ -256,8 +245,7 @@ const RubelCreatorWizard = () => {
     if (stepIndex === 1) {
       const invalid = questions.find(
         (entry) =>
-          !entry.text.trim() ||
-          entry.options.some((option) => !option.text.trim()),
+          !entry.text.trim() || entry.options.some((option) => !option.text.trim()),
       );
 
       if (invalid) {
@@ -337,13 +325,7 @@ const RubelCreatorWizard = () => {
     } finally {
       setIsPublishing(false);
     }
-  }, [
-    creatorLanguage,
-    diagnosisTitle,
-    messages.creator,
-    questions,
-    results,
-  ]);
+  }, [creatorLanguage, diagnosisTitle, messages.creator, questions, results]);
 
   return (
     <div className="mx-auto w-full max-w-lg px-4 py-8">
@@ -368,12 +350,16 @@ const RubelCreatorWizard = () => {
                   "flex h-10 items-center justify-center rounded-xl text-xs font-bold",
                   done && "bg-indigo-500/20 text-indigo-300",
                   active && "bg-indigo-500 text-white",
-                  !done && !active && "border border-slate-800 bg-slate-900 text-slate-600",
+                  !done &&
+                    !active &&
+                    "border border-slate-800 bg-slate-900 text-slate-600",
                 )}
               >
                 {done ? <Check className="h-4 w-4" /> : index + 1}
               </div>
-              <p className="mt-1 truncate text-center text-[10px] text-slate-600">{label}</p>
+              <p className="mt-1 truncate text-center text-[10px] text-slate-600">
+                {label}
+              </p>
             </li>
           );
         })}
@@ -461,12 +447,7 @@ const RubelCreatorWizard = () => {
                             profile={option.traits}
                             traitLabels={c.traits}
                             onChange={(trait, value) =>
-                              updateOptionTrait(
-                                question.id,
-                                option.id,
-                                trait,
-                                value,
-                              )
+                              updateOptionTrait(question.id, option.id, trait, value)
                             }
                           />
                         </NotionAccordion>
@@ -628,7 +609,10 @@ const RubelCreatorWizard = () => {
       </AnimatePresence>
 
       {errorMessage ? (
-        <p role="alert" className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+        <p
+          role="alert"
+          className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300"
+        >
           {errorMessage}
         </p>
       ) : null}
@@ -636,12 +620,20 @@ const RubelCreatorWizard = () => {
       {stepIndex < steps.length - 1 ? (
         <div className="mt-8 flex gap-3">
           {stepIndex > 0 ? (
-            <RubelMotionButton variant="secondary" onClick={handleBack} className="min-h-12 flex-1">
+            <RubelMotionButton
+              variant="secondary"
+              onClick={handleBack}
+              className="min-h-12 flex-1"
+            >
               <ChevronLeft className="mr-1 h-4 w-4" aria-hidden="true" />
               {c.back}
             </RubelMotionButton>
           ) : null}
-          <RubelMotionButton variant="primary" onClick={handleNext} className="min-h-12 flex-1">
+          <RubelMotionButton
+            variant="primary"
+            onClick={handleNext}
+            className="min-h-12 flex-1"
+          >
             {c.continue}
             <ChevronRight className="ml-1 h-4 w-4" aria-hidden="true" />
           </RubelMotionButton>

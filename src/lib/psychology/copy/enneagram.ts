@@ -1,60 +1,243 @@
 import type { CoreLandingLocale, LandingLocale } from "@/lib/landing/landingLocales";
 import { resolveCoreLandingLocale } from "@/lib/landing/landingLocales";
-import type { EnneagramLocaleCopy, EnneagramTypeDefinition } from "@/lib/psychology/types";
+import type {
+  EnneagramLocaleCopy,
+  EnneagramTypeDefinition,
+} from "@/lib/psychology/types";
 
 function typesEn(): EnneagramTypeDefinition[] {
   return [
-    { typeNumber: 1, name: "Type 1 · Reformer", tagline: "Principled idealist", description: "You seek integrity and improvement." },
-    { typeNumber: 2, name: "Type 2 · Helper", tagline: "Warm connector", description: "You lead with care and generosity." },
-    { typeNumber: 3, name: "Type 3 · Achiever", tagline: "Driven performer", description: "You move fast toward visible success." },
-    { typeNumber: 4, name: "Type 4 · Individualist", tagline: "Deep feeler", description: "You crave authentic emotional depth." },
-    { typeNumber: 5, name: "Type 5 · Investigator", tagline: "Quiet analyst", description: "You observe before you engage." },
-    { typeNumber: 6, name: "Type 6 · Loyalist", tagline: "Steady guardian", description: "You value trust and preparedness." },
-    { typeNumber: 7, name: "Type 7 · Enthusiast", tagline: "Spark optimist", description: "You chase possibility and joy." },
-    { typeNumber: 8, name: "Type 8 · Challenger", tagline: "Bold protector", description: "You confront life with direct strength." },
-    { typeNumber: 9, name: "Type 9 · Peacemaker", tagline: "Harmony anchor", description: "You soften tension and unify people." },
+    {
+      typeNumber: 1,
+      name: "Type 1 · Reformer",
+      tagline: "Principled idealist",
+      description: "You seek integrity and improvement.",
+    },
+    {
+      typeNumber: 2,
+      name: "Type 2 · Helper",
+      tagline: "Warm connector",
+      description: "You lead with care and generosity.",
+    },
+    {
+      typeNumber: 3,
+      name: "Type 3 · Achiever",
+      tagline: "Driven performer",
+      description: "You move fast toward visible success.",
+    },
+    {
+      typeNumber: 4,
+      name: "Type 4 · Individualist",
+      tagline: "Deep feeler",
+      description: "You crave authentic emotional depth.",
+    },
+    {
+      typeNumber: 5,
+      name: "Type 5 · Investigator",
+      tagline: "Quiet analyst",
+      description: "You observe before you engage.",
+    },
+    {
+      typeNumber: 6,
+      name: "Type 6 · Loyalist",
+      tagline: "Steady guardian",
+      description: "You value trust and preparedness.",
+    },
+    {
+      typeNumber: 7,
+      name: "Type 7 · Enthusiast",
+      tagline: "Spark optimist",
+      description: "You chase possibility and joy.",
+    },
+    {
+      typeNumber: 8,
+      name: "Type 8 · Challenger",
+      tagline: "Bold protector",
+      description: "You confront life with direct strength.",
+    },
+    {
+      typeNumber: 9,
+      name: "Type 9 · Peacemaker",
+      tagline: "Harmony anchor",
+      description: "You soften tension and unify people.",
+    },
   ];
 }
 
 function typesJa(): EnneagramTypeDefinition[] {
   return [
-    { typeNumber: 1, name: "タイプ1 · 改革者", tagline: "理想を貫く完璧主義", description: "正しさと改善への強い志向。" },
-    { typeNumber: 2, name: "タイプ2 · 援助者", tagline: "温かいサポーター", description: "他者のケアでつながる。" },
-    { typeNumber: 3, name: "タイプ3 · 達成者", tagline: "結果を出す推進力", description: "成功と評価への高いエネルギー。" },
-    { typeNumber: 4, name: "タイプ4 · 個性主義者", tagline: "深い感受性", description: "独自性と本音の感情を大切に。" },
-    { typeNumber: 5, name: "タイプ5 · 調査者", tagline: "静かな分析家", description: "距離を保ちながら理解する。" },
-    { typeNumber: 6, name: "タイプ6 · 忠実者", tagline: "信頼の守護者", description: "安心と備えを重視。" },
-    { typeNumber: 7, name: "タイプ7 · 熱狂者", tagline: "可能性の探求者", description: "楽しさと自由を追い求める。" },
-    { typeNumber: 8, name: "タイプ8 · 挑戦者", tagline: "強さの守護者", description: "率直に前へ進む。" },
-    { typeNumber: 9, name: "タイプ9 · 平和主義者", tagline: "調和の架け橋", description: "争いを和らげ統合する。" },
+    {
+      typeNumber: 1,
+      name: "タイプ1 · 改革者",
+      tagline: "理想を貫く完璧主義",
+      description: "正しさと改善への強い志向。",
+    },
+    {
+      typeNumber: 2,
+      name: "タイプ2 · 援助者",
+      tagline: "温かいサポーター",
+      description: "他者のケアでつながる。",
+    },
+    {
+      typeNumber: 3,
+      name: "タイプ3 · 達成者",
+      tagline: "結果を出す推進力",
+      description: "成功と評価への高いエネルギー。",
+    },
+    {
+      typeNumber: 4,
+      name: "タイプ4 · 個性主義者",
+      tagline: "深い感受性",
+      description: "独自性と本音の感情を大切に。",
+    },
+    {
+      typeNumber: 5,
+      name: "タイプ5 · 調査者",
+      tagline: "静かな分析家",
+      description: "距離を保ちながら理解する。",
+    },
+    {
+      typeNumber: 6,
+      name: "タイプ6 · 忠実者",
+      tagline: "信頼の守護者",
+      description: "安心と備えを重視。",
+    },
+    {
+      typeNumber: 7,
+      name: "タイプ7 · 熱狂者",
+      tagline: "可能性の探求者",
+      description: "楽しさと自由を追い求める。",
+    },
+    {
+      typeNumber: 8,
+      name: "タイプ8 · 挑戦者",
+      tagline: "強さの守護者",
+      description: "率直に前へ進む。",
+    },
+    {
+      typeNumber: 9,
+      name: "タイプ9 · 平和主義者",
+      tagline: "調和の架け橋",
+      description: "争いを和らげ統合する。",
+    },
   ];
 }
 
 function typesKo(): EnneagramTypeDefinition[] {
   return [
-    { typeNumber: 1, name: "유형 1 · 개혁가", tagline: "원칙주의 이상가", description: "올바름과 개선을 추구합니다." },
-    { typeNumber: 2, name: "유형 2 · 조력자", tagline: "따뜻한 연결자", description: "돌봄과 배려로 관계를 만듭니다." },
-    { typeNumber: 3, name: "유형 3 · 성취자", tagline: "추진력 있는 수행자", description: "눈에 보이는 성과를 향해 달립니다." },
-    { typeNumber: 4, name: "유형 4 · 개성주의자", tagline: "깊은 감수성", description: "진정성과 감정의 깊이를 원합니다." },
-    { typeNumber: 5, name: "유형 5 · 탐구자", tagline: "조용한 분석가", description: "관찰 후 깊이 이해합니다." },
-    { typeNumber: 6, name: "유형 6 · 충성가", tagline: "신뢰의 수호자", description: "안전과 준비를 중시합니다." },
-    { typeNumber: 7, name: "유형 7 · 열정가", tagline: "가능성의 낙관주의자", description: "즐거움과 자유를 추구합니다." },
-    { typeNumber: 8, name: "유형 8 · 도전자", tagline: "대담한 수호자", description: "직접적 힘으로 앞으로 나아갑니다." },
-    { typeNumber: 9, name: "유형 9 · 평화주의자", tagline: "조화의 중재자", description: "긴장을 완화하고 통합합니다." },
+    {
+      typeNumber: 1,
+      name: "유형 1 · 개혁가",
+      tagline: "원칙주의 이상가",
+      description: "올바름과 개선을 추구합니다.",
+    },
+    {
+      typeNumber: 2,
+      name: "유형 2 · 조력자",
+      tagline: "따뜻한 연결자",
+      description: "돌봄과 배려로 관계를 만듭니다.",
+    },
+    {
+      typeNumber: 3,
+      name: "유형 3 · 성취자",
+      tagline: "추진력 있는 수행자",
+      description: "눈에 보이는 성과를 향해 달립니다.",
+    },
+    {
+      typeNumber: 4,
+      name: "유형 4 · 개성주의자",
+      tagline: "깊은 감수성",
+      description: "진정성과 감정의 깊이를 원합니다.",
+    },
+    {
+      typeNumber: 5,
+      name: "유형 5 · 탐구자",
+      tagline: "조용한 분석가",
+      description: "관찰 후 깊이 이해합니다.",
+    },
+    {
+      typeNumber: 6,
+      name: "유형 6 · 충성가",
+      tagline: "신뢰의 수호자",
+      description: "안전과 준비를 중시합니다.",
+    },
+    {
+      typeNumber: 7,
+      name: "유형 7 · 열정가",
+      tagline: "가능성의 낙관주의자",
+      description: "즐거움과 자유를 추구합니다.",
+    },
+    {
+      typeNumber: 8,
+      name: "유형 8 · 도전자",
+      tagline: "대담한 수호자",
+      description: "직접적 힘으로 앞으로 나아갑니다.",
+    },
+    {
+      typeNumber: 9,
+      name: "유형 9 · 평화주의자",
+      tagline: "조화의 중재자",
+      description: "긴장을 완화하고 통합합니다.",
+    },
   ];
 }
 
 function typesZh(): EnneagramTypeDefinition[] {
   return [
-    { typeNumber: 1, name: "类型 1 · 改革者", tagline: "原则型理想主义", description: "追求正确与持续改进。" },
-    { typeNumber: 2, name: "类型 2 · 助人者", tagline: "温暖连接者", description: "以关怀建立关系。" },
-    { typeNumber: 3, name: "类型 3 · 成就者", tagline: "结果导向", description: "向可见成功快速推进。" },
-    { typeNumber: 4, name: "类型 4 · 个人主义者", tagline: "深度感受者", description: "渴望真实情感深度。" },
-    { typeNumber: 5, name: "类型 5 · 调查者", tagline: "冷静分析者", description: "先观察再深入理解。" },
-    { typeNumber: 6, name: "类型 6 · 忠诚者", tagline: "信任守护者", description: "重视安全与准备。" },
-    { typeNumber: 7, name: "类型 7 · 热情者", tagline: "可能性乐观派", description: "追逐快乐与自由。" },
-    { typeNumber: 8, name: "类型 8 · 挑战者", tagline: "力量守护者", description: "以直接力量面对人生。" },
-    { typeNumber: 9, name: "类型 9 · 和平者", tagline: "和谐桥梁", description: "缓和冲突并整合。" },
+    {
+      typeNumber: 1,
+      name: "类型 1 · 改革者",
+      tagline: "原则型理想主义",
+      description: "追求正确与持续改进。",
+    },
+    {
+      typeNumber: 2,
+      name: "类型 2 · 助人者",
+      tagline: "温暖连接者",
+      description: "以关怀建立关系。",
+    },
+    {
+      typeNumber: 3,
+      name: "类型 3 · 成就者",
+      tagline: "结果导向",
+      description: "向可见成功快速推进。",
+    },
+    {
+      typeNumber: 4,
+      name: "类型 4 · 个人主义者",
+      tagline: "深度感受者",
+      description: "渴望真实情感深度。",
+    },
+    {
+      typeNumber: 5,
+      name: "类型 5 · 调查者",
+      tagline: "冷静分析者",
+      description: "先观察再深入理解。",
+    },
+    {
+      typeNumber: 6,
+      name: "类型 6 · 忠诚者",
+      tagline: "信任守护者",
+      description: "重视安全与准备。",
+    },
+    {
+      typeNumber: 7,
+      name: "类型 7 · 热情者",
+      tagline: "可能性乐观派",
+      description: "追逐快乐与自由。",
+    },
+    {
+      typeNumber: 8,
+      name: "类型 8 · 挑战者",
+      tagline: "力量守护者",
+      description: "以直接力量面对人生。",
+    },
+    {
+      typeNumber: 9,
+      name: "类型 9 · 和平者",
+      tagline: "和谐桥梁",
+      description: "缓和冲突并整合。",
+    },
   ];
 }
 
@@ -104,13 +287,11 @@ export const ENNEAGRAM_COPY: Record<CoreLandingLocale, EnneagramLocaleCopy> = {
     faq: [
       {
         question: "動機スペクトル診断は無料ですか？",
-        answer:
-          "はい。LibertyCanvas はログイン不要の全肯定 AI 性格診断です。",
+        answer: "はい。LibertyCanvas はログイン不要の全肯定 AI 性格診断です。",
       },
       {
         question: "AI とパターンについて話せますか？",
-        answer:
-          "もちろん。全肯定 AI があなたの選択を引用して共感します。",
+        answer: "もちろん。全肯定 AI があなたの選択を引用して共感します。",
       },
     ],
     types: typesJa(),
@@ -145,8 +326,7 @@ export const ENNEAGRAM_COPY: Record<CoreLandingLocale, EnneagramLocaleCopy> = {
     locale: "zh",
     keyword: "动机光谱 性格测试",
     headline: "共情型动机光谱诊断",
-    subhead:
-      "选择最贴近当下的动机模式，即时宇宙角色揭示，全肯定 AI 聊天。",
+    subhead: "选择最贴近当下的动机模式，即时宇宙角色揭示，全肯定 AI 聊天。",
     promptLabel: "哪个动机模式最像现在的你？",
     submitLabel: "查看动机模式",
     trustLine: "无需登录 · 免费 · 全肯定 AI",

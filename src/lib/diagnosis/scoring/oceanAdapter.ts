@@ -28,16 +28,12 @@ export function oceanScoresToAcademicVector(scores: OceanScores): AcademicTraitV
   return normalizeAcademicVector(raw);
 }
 
-export function academicVectorToOceanScores(
-  vector: AcademicTraitVector,
-): OceanScores {
+export function academicVectorToOceanScores(vector: AcademicTraitVector): OceanScores {
   return {
     openness: clampUnit(vector.trait_openness),
     conscientiousness: clampUnit(vector.trait_conscientiousness),
     extraversion: clampUnit(vector.trait_extraversion),
-    agreeableness: clampUnit(
-      (vector.trait_agreeableness + vector.trait_empathy) / 2,
-    ),
+    agreeableness: clampUnit((vector.trait_agreeableness + vector.trait_empathy) / 2),
     neuroticism: clampUnit(vector.trait_neuroticism),
   };
 }

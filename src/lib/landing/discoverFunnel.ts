@@ -1,21 +1,14 @@
 import type { Locale } from "@/lib/i18n/config";
 import { normalizeLocaleCandidate } from "@/lib/i18n/resolveAppLocale";
-import {
-  isLandingLocale,
-  type LandingLocale,
-} from "@/lib/landing/landingLocales";
+import { isLandingLocale, type LandingLocale } from "@/lib/landing/landingLocales";
 
 export const DISCOVER_FUNNEL_REF_PREFIX = "discover-" as const;
 export const DISCOVER_DIRECT_MODE = "direct" as const;
 
 export type DiscoverFunnelSubmitEvent =
-  | "discover_funnel_submit"
-  | "discover_funnel_direct";
+  "discover_funnel_submit" | "discover_funnel_direct";
 
-export function buildDiscoverFunnelRef(
-  locale: LandingLocale,
-  slug: string,
-): string {
+export function buildDiscoverFunnelRef(locale: LandingLocale, slug: string): string {
   return `${DISCOVER_FUNNEL_REF_PREFIX}${locale}-${slug}`;
 }
 

@@ -14,7 +14,14 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        // Prefer bundled Chromium; fall back to system Chrome when sandbox
+        // browser downloads are unavailable (local Windows agent runs).
+        ...(process.env.PLAYWRIGHT_USE_SYSTEM_CHROME === "1"
+          ? { channel: "chrome" as const }
+          : {}),
+      },
     },
   ],
   webServer: process.env.PLAYWRIGHT_BASE_URL

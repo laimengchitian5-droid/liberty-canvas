@@ -54,9 +54,7 @@ describe("fetchUserData", () => {
   it("rejects invalid userId before network I/O", async () => {
     mockFetchSuccess();
 
-    await expect(fetchUserData("bad id!")).rejects.toBeInstanceOf(
-      UserDataInputError,
-    );
+    await expect(fetchUserData("bad id!")).rejects.toBeInstanceOf(UserDataInputError);
 
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -103,9 +101,7 @@ describe("fetchUserData", () => {
       ),
     );
 
-    await expect(fetchUserData("missing_user")).rejects.toBeInstanceOf(
-      UserDataHttpError,
-    );
+    await expect(fetchUserData("missing_user")).rejects.toBeInstanceOf(UserDataHttpError);
   });
 
   it("maps malformed API payloads to UserDataValidationError", async () => {

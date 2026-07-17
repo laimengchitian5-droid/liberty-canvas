@@ -45,9 +45,9 @@ describe("searchIntent", () => {
   });
 
   it("boosts plug-official for transactional queries", () => {
-    expect(intentRankBoost("transactional", "transactional", "plug-official")).toBeGreaterThan(
-      intentRankBoost("informational", "transactional", "plug-official"),
-    );
+    expect(
+      intentRankBoost("transactional", "transactional", "plug-official"),
+    ).toBeGreaterThan(intentRankBoost("informational", "transactional", "plug-official"));
   });
 
   it("builds search ref slugs", () => {

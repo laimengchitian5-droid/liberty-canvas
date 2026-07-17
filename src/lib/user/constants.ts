@@ -29,5 +29,4 @@ export const USER_ERROR_CODES = {
   aborted: "USER_ABORTED",
 } as const;
 
-export type UserErrorCode =
-  (typeof USER_ERROR_CODES)[keyof typeof USER_ERROR_CODES];
+export type UserErrorCode = (typeof USER_ERROR_CODES)[keyof typeof USER_ERROR_CODES];

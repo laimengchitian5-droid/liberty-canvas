@@ -74,10 +74,7 @@ export function buildDiagnosisFromCreator(input: {
           }))
           .filter((option) => option.text.length > 0),
       }))
-      .filter(
-        (question) =>
-          question.text.length > 0 && question.options.length >= 2,
-      ),
+      .filter((question) => question.text.length > 0 && question.options.length >= 2),
   };
 }
 

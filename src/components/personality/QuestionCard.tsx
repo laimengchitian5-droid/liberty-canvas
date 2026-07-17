@@ -1,12 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { getSlideOffset } from "@/lib/i18n/motion";
 import { usePlatform } from "@/store/PlatformContext";
@@ -134,10 +129,7 @@ export function QuestionCard() {
           aria-valuenow={progress}
           aria-label="Assessment progress"
         >
-          <div
-            className={styles.progressFill}
-            style={{ width: `${progress}%` }}
-          />
+          <div className={styles.progressFill} style={{ width: `${progress}%` }} />
         </div>
       </header>
 

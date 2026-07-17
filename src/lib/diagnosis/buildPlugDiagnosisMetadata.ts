@@ -9,15 +9,10 @@ import { PRODUCT_NAME } from "@/lib/brand/constants";
 import { getSiteUrl } from "@/lib/site/url";
 
 import {
-
   buildBuilderOgDescription,
-
   buildBuilderOgImageUrl,
-
   buildBuilderOgKeywords,
-
   buildBuilderOgTitle,
-
 } from "@/lib/builder/buildBuilderOgKeywords";
 
 import { buildBuilderSeoContext } from "@/lib/builder/compileBuilderRuntime";
@@ -28,18 +23,9 @@ import { isBuilderDiagnosisDefinition } from "@/types/builder";
 
 import type { PlugDiagnosisDefinition } from "@/types/diagnosisCompiler";
 
-
-
-type DiagnosisMetadataInput =
-
-  | PlugDiagnosisDefinition
-
-  | BuilderDiagnosisDefinition;
-
-
+type DiagnosisMetadataInput = PlugDiagnosisDefinition | BuilderDiagnosisDefinition;
 
 function resolveSeoPayload(definition: DiagnosisMetadataInput): {
-
   landingPath: string;
 
   title: string;
@@ -49,17 +35,11 @@ function resolveSeoPayload(definition: DiagnosisMetadataInput): {
   keywords: readonly string[];
 
   ogImageUrl: string;
-
 } {
-
   if (isBuilderDiagnosisDefinition(definition)) {
-
     const seo = buildBuilderSeoContext(definition);
 
-
-
     return {
-
       landingPath: seo.landingPath,
 
       title: seo.title,
@@ -69,12 +49,8 @@ function resolveSeoPayload(definition: DiagnosisMetadataInput): {
       keywords: seo.viralKeywords,
 
       ogImageUrl: `${getSiteUrl()}${seo.ogImagePath}`,
-
     };
-
   }
-
-
 
   const seoBlock = extractSeoBlock(definition);
 
@@ -83,59 +59,40 @@ function resolveSeoPayload(definition: DiagnosisMetadataInput): {
   const creatorTags = seoBlock?.desireTags ?? [];
 
   const baseKeywords = seoBlock
-
     ? [...seoBlock.desireTags, ...seoBlock.targetDemographics]
-
     : [definition.eyebrow, definition.title];
 
-
-
   return {
-
     landingPath,
 
     title: buildBuilderOgTitle(
-
       seoBlock?.titleTemplate ?? definition.title,
 
       creatorTags,
-
     ),
 
     description: buildBuilderOgDescription(
-
       seoBlock?.descriptionTemplate ?? definition.subtitle,
 
       creatorTags,
 
       definition.estimatedMinutes,
-
     ),
 
     keywords: buildBuilderOgKeywords(creatorTags, baseKeywords),
 
     ogImageUrl: `${getSiteUrl()}${buildBuilderOgImageUrl(definition.slug)}`,
-
   };
-
 }
 
-
-
 export function buildPlugDiagnosisBaseMetadata(
-
   definition: DiagnosisMetadataInput,
-
 ): Metadata {
-
   const seo = resolveSeoPayload(definition);
 
   const pageUrl = `${getSiteUrl()}${seo.landingPath}`;
 
-
-
   return {
-
     title: seo.title,
 
     description: seo.description,
@@ -143,15 +100,12 @@ export function buildPlugDiagnosisBaseMetadata(
     keywords: [...seo.keywords],
 
     alternates: {
-
       canonical: pageUrl,
 
       languages: buildHreflangAlternates(seo.landingPath),
-
     },
 
     openGraph: {
-
       type: "website",
 
       url: pageUrl,
@@ -165,9 +119,7 @@ export function buildPlugDiagnosisBaseMetadata(
       locale: "ja_JP",
 
       images: [
-
         {
-
           url: seo.ogImageUrl,
 
           width: 1200,
@@ -175,15 +127,11 @@ export function buildPlugDiagnosisBaseMetadata(
           height: 630,
 
           alt: seo.title,
-
         },
-
       ],
-
     },
 
     twitter: {
-
       card: "summary_large_image",
 
       title: seo.title,
@@ -191,32 +139,18 @@ export function buildPlugDiagnosisBaseMetadata(
       description: seo.description,
 
       images: [seo.ogImageUrl],
-
     },
-
   };
-
 }
 
-
-
 export async function buildPlugDiagnosisMetadata(
-
   definition: DiagnosisMetadataInput,
-
 ): Promise<Metadata> {
-
   const seo = resolveSeoPayload(definition);
 
-
-
   return generateUserAwareMetadata({
-
     landingPath: seo.landingPath,
 
     baseMetadata: buildPlugDiagnosisBaseMetadata(definition),
-
   });
-
 }
-

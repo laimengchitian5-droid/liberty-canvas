@@ -47,7 +47,8 @@ const SAMPLE_BUILDER: BuilderDiagnosisDefinition = {
       type: "AI_INTERMEDIATE_FEEDBACK",
       id: "fb-1",
       triggerAfterBlockId: "q-1",
-      affirmationTemplate: "「{choice}」— 素敵な選択ですね。あなたらしさが伝わってきます ✨",
+      affirmationTemplate:
+        "「{choice}」— 素敵な選択ですね。あなたらしさが伝わってきます ✨",
     },
     {
       type: "CONDITIONAL_BRANCH",
@@ -88,7 +89,8 @@ const SAMPLE_BUILDER: BuilderDiagnosisDefinition = {
         id: "lc-romantic-explorer",
         title: "ロマンティック・エクスプローラー",
         subtitle: "好奇心とやさしさで関係を育てるタイプ",
-        analysis: "LibertyCanvas 独自分析：あなたは新しい体験を大切にしながら、相手への配慮も忘れません。",
+        analysis:
+          "LibertyCanvas 独自分析：あなたは新しい体験を大切にしながら、相手への配慮も忘れません。",
         themeColor: "#c9a09a",
         traitProfile: {
           trait_openness: 0.8,
@@ -100,7 +102,8 @@ const SAMPLE_BUILDER: BuilderDiagnosisDefinition = {
         id: "lc-steady-partner",
         title: "ステディ・パートナー",
         subtitle: "安定感で信頼を築くタイプ",
-        analysis: "LibertyCanvas 独自分析：丁寧なコミュニケーションが、あなたの恋愛の強みです。",
+        analysis:
+          "LibertyCanvas 独自分析：丁寧なコミュニケーションが、あなたの恋愛の強みです。",
         themeColor: "#9caf88",
         traitProfile: {
           trait_conscientiousness: 0.8,
@@ -127,12 +130,8 @@ describe("mapScoringPayloadToTraitWeights", () => {
 
 describe("compileBuilderRuntime", () => {
   it("resolves conditional branch by choice", () => {
-    expect(
-      resolveNextQuestionBlockId(SAMPLE_BUILDER, "q-1", "q-1-a"),
-    ).toBe("q-2a");
-    expect(
-      resolveNextQuestionBlockId(SAMPLE_BUILDER, "q-1", "q-1-b"),
-    ).toBe("q-2b");
+    expect(resolveNextQuestionBlockId(SAMPLE_BUILDER, "q-1", "q-1-a")).toBe("q-2a");
+    expect(resolveNextQuestionBlockId(SAMPLE_BUILDER, "q-1", "q-1-b")).toBe("q-2b");
   });
 
   it("interpolates affirmation template", () => {

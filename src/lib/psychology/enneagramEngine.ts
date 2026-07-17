@@ -1,4 +1,8 @@
-import type { EnneagramLocaleCopy, EnneagramTypeDefinition, PsychQuizResult } from "@/lib/psychology/types";
+import type {
+  EnneagramLocaleCopy,
+  EnneagramTypeDefinition,
+  PsychQuizResult,
+} from "@/lib/psychology/types";
 
 export function buildEnneagramResult(
   copy: EnneagramLocaleCopy,

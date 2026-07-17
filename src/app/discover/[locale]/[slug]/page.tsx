@@ -7,6 +7,7 @@ import {
   resolveLandingPage,
 } from "@/lib/landing/landingCatalog";
 import { notFound } from "next/navigation";
+import { getBrand } from "@/lib/brand/registry";
 
 interface DiscoverLandingPageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -23,15 +24,13 @@ export async function generateMetadata({
   const page = resolveLandingPage(locale, slug);
 
   if (!page) {
-    return { title: "Rubel Canvas Discover" };
+    return { title: `${getBrand("liberty-discover").name} Discover` };
   }
 
   return buildLandingMetadata(page);
 }
 
-export default async function DiscoverLandingPage({
-  params,
-}: DiscoverLandingPageProps) {
+export default async function DiscoverLandingPage({ params }: DiscoverLandingPageProps) {
   const { locale, slug } = await params;
   const page = resolveLandingPage(locale, slug);
 

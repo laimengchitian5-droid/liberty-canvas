@@ -3,22 +3,25 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { QuizLdJson } from "@/app/quiz/[id]/ld-json";
 import { QuizPageShell } from "@/app/quiz/[id]/QuizPageShell";
+import { getBrand } from "@/lib/brand/registry";
 import { getCustomQuizById } from "@/lib/quiz/repository";
-import {
-  buildQuizOgImageUrl,
-  buildQuizPageUrl,
-  getSiteUrl,
-} from "@/lib/site/url";
+import { buildQuizResultOgImageUrl, buildQuizResultShareUrl } from "@/lib/seo/ogUrls";
+import { buildQuizOgImageUrl, buildQuizPageUrl, getSiteUrl } from "@/lib/site/url";
 import styles from "./page.module.css";
+
+const runtimeBrand = getBrand("liberty-runtime");
 
 interface QuizPageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ result?: string; score?: string }>;
 }
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: QuizPageProps): Promise<Metadata> {
   const { id } = await params;
+  const query = await searchParams;
   const quiz = await getCustomQuizById(id);
 
   if (!quiz) {
@@ -28,18 +31,36 @@ export async function generateMetadata({
     };
   }
 
-  const pageUrl = buildQuizPageUrl(quiz.id);
-  const ogImageUrl = buildQuizOgImageUrl(quiz.id);
-  const title = `${quiz.title} | パーソナリティ診断`;
-  const description = quiz.description;
-  const siteName = "LibertyCanvas";
+  const resultLabel = query.result?.trim().slice(0, 80);
+  const scoreRaw = query.score?.trim();
+  const scoreNum =
+    scoreRaw && Number.isFinite(Number(scoreRaw)) ? Number(scoreRaw) : undefined;
+
+  const pageUrl = resultLabel
+    ? buildQuizResultShareUrl(quiz.id, resultLabel, scoreNum)
+    : buildQuizPageUrl(quiz.id);
+  const scoreLabel = resultLabel
+    ? scoreNum !== undefined
+      ? `${resultLabel} · ${Math.round(scoreNum)}`
+      : resultLabel
+    : null;
+  const ogImageUrl = scoreLabel
+    ? buildQuizResultOgImageUrl(quiz.id, scoreLabel)
+    : buildQuizOgImageUrl(quiz.id);
+  const title = resultLabel
+    ? `${resultLabel} — ${quiz.title}`
+    : `${quiz.title} | パーソナリティ診断`;
+  const description = resultLabel
+    ? `診断結果: ${resultLabel} — ${quiz.description}`
+    : quiz.description;
+  const siteName = runtimeBrand.name;
 
   return {
     title,
     description,
     metadataBase: new URL(getSiteUrl()),
     alternates: {
-      canonical: pageUrl,
+      canonical: buildQuizPageUrl(quiz.id),
     },
     openGraph: {
       type: "website",
@@ -118,9 +139,7 @@ export default async function QuizPage({ params }: QuizPageProps) {
           </div>
           <div className={styles.metaCard}>
             <span className={styles.metaLabel}>結果タイプ</span>
-            <strong className={styles.metaValue}>
-              {quiz.resultsMapping.length}
-            </strong>
+            <strong className={styles.metaValue}>{quiz.resultsMapping.length}</strong>
           </div>
           <div className={styles.metaCard}>
             <span className={styles.metaLabel}>作成者 ID</span>

@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import {
-  AUTH_HTTP,
-  AUTH_SESSION_MODES,
-  LC_SESSION,
-} from "@/lib/auth/constants";
+import { jsonError } from "@/lib/api/http";
+import { AUTH_HTTP, AUTH_SESSION_MODES, LC_SESSION } from "@/lib/auth/constants";
 import {
   buildSessionClearCookieHeader,
   buildSessionSetCookieHeader,
@@ -15,13 +12,6 @@ import {
 } from "@/lib/validation/authSchema";
 
 export const runtime = "nodejs";
-
-function jsonError(message: string, status: number, details?: unknown) {
-  return NextResponse.json(
-    { error: message, ...(details !== undefined ? { details } : {}) },
-    { status },
-  );
-}
 
 function buildClearSessionCookieHeader(): string {
   return buildSessionClearCookieHeader();

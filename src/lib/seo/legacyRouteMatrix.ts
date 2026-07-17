@@ -23,16 +23,11 @@ export const LEGACY_DIAGNOSIS_REDIRECTS: Readonly<Record<string, string>> = {
   "/diagnosis/v2/assessment": "/diagnosis/play/personality-spectrum",
 };
 
-export function resolveLegacyDiagnosisRedirect(
-  pathname: string,
-): string | null {
+export function resolveLegacyDiagnosisRedirect(pathname: string): string | null {
   return LEGACY_DIAGNOSIS_REDIRECTS[pathname] ?? null;
 }
 
-export function buildLegacyRedirectUrl(
-  requestUrl: URL,
-  targetPath: string,
-): URL {
+export function buildLegacyRedirectUrl(requestUrl: URL, targetPath: string): URL {
   const url = new URL(targetPath, requestUrl.origin);
 
   for (const [key, value] of requestUrl.searchParams.entries()) {

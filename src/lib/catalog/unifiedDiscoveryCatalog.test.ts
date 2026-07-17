@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   getInsightsSecret,
   isInsightsAccessAllowed,
@@ -6,36 +6,32 @@ import {
 import { groupUnifiedDiscoveryCatalog } from "@/lib/catalog/unifiedDiscoveryCatalog";
 
 describe("verifyInsightsAccess", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
   it("allows development without secret", () => {
-    const previous = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
+    vi.stubEnv("NODE_ENV", "development");
 
     expect(isInsightsAccessAllowed({ headerKey: null })).toBe(true);
-
-    process.env.NODE_ENV = previous;
   });
 
   it("matches header key to configured secret", () => {
-    const previous = process.env.LC_INSIGHTS_SECRET;
-    process.env.LC_INSIGHTS_SECRET = "test-secret";
-    process.env.NODE_ENV = "production";
+    vi.stubEnv("LC_INSIGHTS_SECRET", "test-secret");
+    vi.stubEnv("NODE_ENV", "production");
 
-    expect(
-      isInsightsAccessAllowed({ headerKey: "test-secret" }),
-    ).toBe(true);
-    expect(
-      isInsightsAccessAllowed({ headerKey: "wrong" }),
-    ).toBe(false);
-
-    process.env.LC_INSIGHTS_SECRET = previous;
-    process.env.NODE_ENV = "test";
+    expect(isInsightsAccessAllowed({ headerKey: "test-secret" })).toBe(true);
+    expect(isInsightsAccessAllowed({ headerKey: "wrong" })).toBe(false);
   });
 
   it("returns null secret when unset", () => {
+    vi.unstubAllEnvs();
     const previous = process.env.LC_INSIGHTS_SECRET;
     delete process.env.LC_INSIGHTS_SECRET;
     expect(getInsightsSecret()).toBeNull();
-    process.env.LC_INSIGHTS_SECRET = previous;
+    if (previous !== undefined) {
+      process.env.LC_INSIGHTS_SECRET = previous;
+    }
   });
 });
 

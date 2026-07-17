@@ -20,17 +20,10 @@ import {
   peekFetchUserDataCache,
 } from "@/lib/user/fetchUserData";
 import { DEFAULT_GUEST_USER_ID, USER_ERROR_CODES } from "@/lib/user/constants";
-import {
-  isUserDataError,
-  UserDataError,
-} from "@/lib/user/errors";
+import { isUserDataError, UserDataError } from "@/lib/user/errors";
 import { readStoredUserId, writeStoredUserId } from "@/lib/user/readStoredUserId";
 import { createSessionResponseSchema } from "@/lib/validation/authSchema";
-import type {
-  UserData,
-  UserSeoContext,
-  UserSessionStatus,
-} from "@/types/user";
+import type { UserData, UserSeoContext, UserSessionStatus } from "@/types/user";
 import type { Locale } from "@/lib/i18n/config";
 import type {
   BuilderDiagnosisDefinition,
@@ -107,10 +100,7 @@ function buildPlugSeoContextFromDefinition(
     creatorTags,
     viralKeywords: buildBuilderOgKeywords(creatorTags, baseKeywords),
     landingPath,
-    title: buildBuilderOgTitle(
-      seoBlock?.titleTemplate ?? definition.title,
-      creatorTags,
-    ),
+    title: buildBuilderOgTitle(seoBlock?.titleTemplate ?? definition.title, creatorTags),
     description: buildBuilderOgDescription(
       seoBlock?.descriptionTemplate ?? definition.subtitle,
       creatorTags,
@@ -120,17 +110,11 @@ function buildPlugSeoContextFromDefinition(
   };
 }
 
-function buildSeoContext(
-  data: UserData,
-  locale: Locale | null,
-): UserSeoContext {
+function buildSeoContext(data: UserData, locale: Locale | null): UserSeoContext {
   return mapUserDataToSeoContext(data, locale ?? data.profile.locale);
 }
 
-function applyCachedSnapshot(
-  userId: string,
-  cached: UserData,
-): Partial<UserStoreState> {
+function applyCachedSnapshot(userId: string, cached: UserData): Partial<UserStoreState> {
   return {
     userId,
     data: cached,
@@ -323,8 +307,7 @@ export const useUserStore = create<UserStore>()(
           error: null,
           authErrorMessage: null,
           seoContext: buildSeoContext(data, localeOverride),
-          authStatus:
-            userId === DEFAULT_GUEST_USER_ID ? "idle" : "authenticated",
+          authStatus: userId === DEFAULT_GUEST_USER_ID ? "idle" : "authenticated",
         });
       } catch (cause) {
         set({
@@ -340,7 +323,11 @@ export const useUserStore = create<UserStore>()(
       }
     },
 
-    establishSession: async ({ userId, mode = AUTH_SESSION_MODES.login, displayName }) => {
+    establishSession: async ({
+      userId,
+      mode = AUTH_SESSION_MODES.login,
+      displayName,
+    }) => {
       const inFlight = sessionEstablishInFlight.get(userId);
 
       if (inFlight) {
@@ -396,10 +383,7 @@ export const useUserStore = create<UserStore>()(
           return;
         }
 
-        if (
-          get().userId === trimmed &&
-          get().authStatus === "authenticated"
-        ) {
+        if (get().userId === trimmed && get().authStatus === "authenticated") {
           await get().loadUserData({ userId: trimmed, forceRefresh: true });
           return;
         }

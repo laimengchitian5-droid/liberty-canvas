@@ -31,7 +31,10 @@ describe("diagnosis share", () => {
   });
 
   it("builds emotional share variant", () => {
-    const text = buildDiagnosisShareText(DIAGNOSIS_RESULT_CATALOG.leadership, "emotional");
+    const text = buildDiagnosisShareText(
+      DIAGNOSIS_RESULT_CATALOG.leadership,
+      "emotional",
+    );
     expect(text).toContain("わたしの心の色は");
     expect(text.length).toBeLessThanOrEqual(120);
   });
@@ -40,7 +43,9 @@ describe("diagnosis share", () => {
     for (const category of ["empathy", "logic", "creativity", "leadership"] as const) {
       const result = DIAGNOSIS_RESULT_CATALOG[category];
       expect(buildDiagnosisShareText(result, "headline").length).toBeLessThanOrEqual(120);
-      expect(buildDiagnosisShareText(result, "emotional").length).toBeLessThanOrEqual(120);
+      expect(buildDiagnosisShareText(result, "emotional").length).toBeLessThanOrEqual(
+        120,
+      );
     }
   });
 });

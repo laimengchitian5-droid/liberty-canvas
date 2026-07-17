@@ -3,7 +3,10 @@ import {
   listPlugDiagnosisSlugs as listStaticPlugDiagnosisSlugs,
 } from "@/config/diagnoses";
 import { convertBuilderToPlugDefinition } from "@/lib/builder/convertBuilderToPlugDefinition";
-import { getPublishedBuilderBySlug, listPublishedBuilderSlugs } from "@/lib/builder/repository";
+import {
+  getPublishedBuilderBySlug,
+  listPublishedBuilderSlugs,
+} from "@/lib/builder/repository";
 import type { PlugDiagnosisDefinition } from "@/types/diagnosisCompiler";
 
 export function getStaticPlugDiagnosisBySlugOrNull(

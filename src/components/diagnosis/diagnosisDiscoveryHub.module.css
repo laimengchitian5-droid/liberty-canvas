@@ -55,6 +55,13 @@
   color: rgb(74 64 56);
 }
 
+.seriesLead {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: rgb(107 93 84);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -74,7 +81,9 @@
   border: 1px solid rgb(168 152 142 / 0.22);
   background: rgb(255 252 247 / 0.95);
   text-decoration: none;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .card:hover {

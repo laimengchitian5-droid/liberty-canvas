@@ -53,14 +53,7 @@ export const PlugAdvicePanel = ({
     return () => {
       reset();
     };
-  }, [
-    cosmicSheet,
-    diagnosisTitle,
-    outcome,
-    reset,
-    slug,
-    startStream,
-  ]);
+  }, [cosmicSheet, diagnosisTitle, outcome, reset, slug, startStream]);
 
   useEffect(() => {
     if (advice) {

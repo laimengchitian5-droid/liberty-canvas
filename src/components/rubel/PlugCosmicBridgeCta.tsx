@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { trackDiagnosisEvent } from "@/lib/diagnosis/analytics";
-import { buildPlugPlayHref, suggestPlugDiagnosisSlug } from "@/lib/rubel/suggestPlugDiagnosisSlug";
+import { trackPlayBridgeDual } from "@/lib/diagnosis/analytics";
+import {
+  buildPlugPlayHref,
+  suggestPlugDiagnosisSlug,
+} from "@/lib/rubel/suggestPlugDiagnosisSlug";
 import { seedRubelBridgeHandoff } from "@/lib/rubel/rubelBridgeHandoff";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils/cn";
@@ -33,7 +36,7 @@ export const PlugCosmicBridgeCta = ({
     }
 
     impressionSentRef.current = true;
-    trackDiagnosisEvent("rubel_bridge_impression", {
+    trackPlayBridgeDual("bridge_impression", {
       slug,
       ref: "rubel-bridge",
       rubelDiagnosisId,
@@ -43,7 +46,7 @@ export const PlugCosmicBridgeCta = ({
 
   const handleBridgeClick = () => {
     seedRubelBridgeHandoff({ profile, slug, rubelDiagnosisId });
-    trackDiagnosisEvent("rubel_bridge_click", {
+    trackPlayBridgeDual("bridge_click", {
       slug,
       ref: "rubel-bridge",
       rubelDiagnosisId,

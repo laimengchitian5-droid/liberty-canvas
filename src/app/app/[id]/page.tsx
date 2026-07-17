@@ -4,11 +4,7 @@ import { notFound } from "next/navigation";
 import { AppRuntimeShell } from "@/app/app/[id]/AppRuntimeShell";
 import { AppLdJson } from "@/app/app/[id]/ld-json";
 import { getAppById } from "@/lib/apps/repository";
-import {
-  buildAppOgImageUrl,
-  buildAppPageUrl,
-  getSiteUrl,
-} from "@/lib/site/url";
+import { buildAppOgImageUrl, buildAppPageUrl, getSiteUrl } from "@/lib/site/url";
 import styles from "./page.module.css";
 
 interface AppPageProps {
@@ -26,9 +22,7 @@ function buildAppTitle(appTitle: string, appType: string): string {
   return `${appTitle} | LibertyCanvas ${suffix}`;
 }
 
-export async function generateMetadata({
-  params,
-}: AppPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: AppPageProps): Promise<Metadata> {
   const { id } = await params;
   const app = await getAppById(id);
 

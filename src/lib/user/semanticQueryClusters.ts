@@ -26,7 +26,7 @@ export const SEMANTIC_QUERY_CLUSTERS: readonly SemanticQueryCluster[] = [
   {
     id: SEMANTIC_QUERY_CLUSTER_IDS.rubelCanvasJa,
     primaryQuery: "ルベルキャンバス",
-    alternateQueries: ["ルベル キャンバス", "Rubel Canvas 日本語"],
+    alternateQueries: ["ルベル キャンバス", "Liberty Canvas 日本語"],
     locales: ["ja"],
     title: "ルベルキャンバス — 無料AI性格診断",
     description:
@@ -41,19 +41,16 @@ export const SEMANTIC_QUERY_CLUSTERS: readonly SemanticQueryCluster[] = [
     locales: ["en"],
     title: "Liberty Canvas — Free AI Personality Workspace",
     description:
-      "Liberty Canvas (Rubel Canvas) offers empathetic personality tests and all-affirming AI chat with no login required.",
+      "Liberty Canvas (Liberty Canvas) offers empathetic personality tests and all-affirming AI chat with no login required.",
     keywords: ["liberty canvas", "personality test", "AI chat", "free"],
     landingPath: "/",
   },
   {
     id: SEMANTIC_QUERY_CLUSTER_IDS.sixteenPersonalitiesAlt,
     primaryQuery: "16personalities free alternative",
-    alternateQueries: [
-      "16 personalities free alternative",
-      "16personalities 無料 代替",
-    ],
+    alternateQueries: ["16 personalities free alternative", "16personalities 無料 代替"],
     locales: ["en", "ja"],
-    title: "16Personalities Free Alternative — Rubel Canvas",
+    title: "16Personalities Free Alternative — Liberty Canvas",
     description:
       "A warm, inclusive 16Personalities-style experience with instant results and affirming AI follow-up chat.",
     keywords: [
@@ -69,7 +66,7 @@ export const SEMANTIC_QUERY_CLUSTERS: readonly SemanticQueryCluster[] = [
     primaryQuery: "全肯定 AI チャット",
     alternateQueries: ["全肯定AI", "肯定感 AI チャット"],
     locales: ["ja"],
-    title: "全肯定 AI チャット — Rubel Canvas",
+    title: "全肯定 AI チャット — Liberty Canvas",
     description:
       "診断結果に合わせた、やさしく全肯定のAIチャット。自己否定の声をそっと受け止めます。",
     keywords: ["全肯定 AI チャット", "AI チャット", "自己肯定感", "性格診断"],
@@ -80,25 +77,16 @@ export const SEMANTIC_QUERY_CLUSTERS: readonly SemanticQueryCluster[] = [
     primaryQuery: "自己肯定感 上げる 診断",
     alternateQueries: ["自己肯定感 診断", "自信 診断 無料"],
     locales: ["ja"],
-    title: "自己肯定感を上げる診断 — Rubel Canvas",
+    title: "自己肯定感を上げる診断 — Liberty Canvas",
     description:
       "やさしい質問で自分らしさを見つけ、全肯定メッセージで自己肯定感を育てる診断体験。",
-    keywords: [
-      "自己肯定感 上げる 診断",
-      "自己肯定感 診断",
-      "性格診断",
-      "メンタルケア",
-    ],
+    keywords: ["自己肯定感 上げる 診断", "自己肯定感 診断", "性格診断", "メンタルケア"],
     landingPath: "/diagnosis",
   },
 ] as const;
 
-export function resolveSemanticClustersForLocale(
-  locale: Locale,
-): SemanticQueryCluster[] {
-  return SEMANTIC_QUERY_CLUSTERS.filter((cluster) =>
-    cluster.locales.includes(locale),
-  );
+export function resolveSemanticClustersForLocale(locale: Locale): SemanticQueryCluster[] {
+  return SEMANTIC_QUERY_CLUSTERS.filter((cluster) => cluster.locales.includes(locale));
 }
 
 export function resolvePrimaryClusterForPath(
@@ -110,8 +98,7 @@ export function resolvePrimaryClusterForPath(
   return (
     SEMANTIC_QUERY_CLUSTERS.find(
       (cluster) =>
-        cluster.landingPath === normalizedPath &&
-        cluster.locales.includes(locale),
+        cluster.landingPath === normalizedPath && cluster.locales.includes(locale),
     ) ?? null
   );
 }

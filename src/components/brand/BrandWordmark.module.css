@@ -1,0 +1,28 @@
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.label {
+  font-size: clamp(0.88rem, 2.4vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.labelCompact {
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .label {
+    font-size: 0.82rem;
+  }
+}

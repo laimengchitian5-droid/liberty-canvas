@@ -42,7 +42,11 @@ export function buildOshikatsuQuestionBank(): QuestionBlock[] {
       {
         id: "q-oshi-1-c",
         label: "推しの過去作と比べて、変化の意味を考える",
-        traitWeights: { trait_openness: 0.4, trait_empathy: 0.3, trait_conscientiousness: 0.2 },
+        traitWeights: {
+          trait_openness: 0.4,
+          trait_empathy: 0.3,
+          trait_conscientiousness: 0.2,
+        },
       },
       {
         id: "q-oshi-1-d",
@@ -81,7 +85,11 @@ export function buildOshikatsuQuestionBank(): QuestionBlock[] {
       {
         id: "q-oshi-3-b",
         label: "ファンの考察を読んで、みんなの視点を楽しむ",
-        traitWeights: { trait_agreeableness: 0.4, trait_empathy: 0.3, trait_openness: 0.2 },
+        traitWeights: {
+          trait_agreeableness: 0.4,
+          trait_empathy: 0.3,
+          trait_openness: 0.2,
+        },
       },
       {
         id: "q-oshi-3-c",

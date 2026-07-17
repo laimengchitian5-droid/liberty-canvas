@@ -1,7 +1,10 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
+import { buildOgPalette } from "@/lib/brand/ogBrand";
 import { getMergedPlugDiagnosisBySlug } from "@/lib/builder/plugCatalog";
 import { CosmicPlanetOg, PlugLandingOg } from "@/lib/diagnosis/cosmicPlanetOg";
+import { resolveSpecialtyOgMeta } from "@/lib/specialty/specialtyOgMeta";
+import { SpecialtyLandingOg, SpecialtyResultOg } from "@/lib/specialty/specialtyOg";
 import {
   getCosmicPlanetVisualSpec,
   getCosmicShareHashtag,
@@ -12,19 +15,12 @@ import {
   buildRadarLevelsFromFactorPercentiles,
   parseFactorPercentiles,
 } from "@/lib/diagnosis/plugResultShare";
-import {
-  getDiagnosisResult,
-  isPersonalityCategory,
-} from "@/lib/diagnosis/share";
+import { getDiagnosisResult, isPersonalityCategory } from "@/lib/diagnosis/share";
 import { DIAGNOSTIC_QUESTION_COUNT } from "@/types/diagnosis";
 
 export const runtime = "nodejs";
 
-const BRAND = {
-  cream: "#FAF9F6",
-  ink: "#4A4038",
-  muted: "#8B7D72",
-};
+const CANVAS_PALETTE = buildOgPalette("liberty-canvas");
 
 function GenericOg() {
   return (
@@ -36,33 +32,55 @@ function GenericOg() {
         flexDirection: "column",
         justifyContent: "space-between",
         padding: "56px 64px",
-        background: `radial-gradient(circle at 85% 15%, #C9A09A33 0%, transparent 42%), radial-gradient(circle at 10% 90%, #9CAF8822 0%, transparent 38%), ${BRAND.cream}`,
-        color: BRAND.ink,
+        background: CANVAS_PALETTE.background,
+        color: CANVAS_PALETTE.foreground,
         fontFamily: "serif",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 22, color: BRAND.muted }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 14,
+          fontSize: 22,
+          color: CANVAS_PALETTE.muted,
+        }}
+      >
         <div
           style={{
             width: 12,
             height: 12,
             borderRadius: 999,
-            background: "linear-gradient(135deg, #C9A09A, #C4A962)",
+            background: `linear-gradient(135deg, ${CANVAS_PALETTE.accent}, #C4A962)`,
           }}
         />
-        LibertyCanvas · 心の色診断
+        {CANVAS_PALETTE.eyebrow}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        <div style={{ fontSize: 58, fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.02em" }}>
+        <div
+          style={{
+            fontSize: 58,
+            fontWeight: 700,
+            lineHeight: 1.15,
+            letterSpacing: "-0.02em",
+          }}
+        >
           あなたの心の色、
           <br />
           {DIAGNOSTIC_QUESTION_COUNT}問で見つける
         </div>
-        <div style={{ fontSize: 28, lineHeight: 1.55, color: BRAND.muted, maxWidth: 880 }}>
+        <div
+          style={{
+            fontSize: 28,
+            lineHeight: 1.55,
+            color: CANVAS_PALETTE.muted,
+            maxWidth: 880,
+          }}
+        >
           大人可愛い多肢選択診断と、AI パーソナルアドバイス
         </div>
       </div>
-      <div style={{ fontSize: 22, color: BRAND.muted }}>#心の色診断</div>
+      <div style={{ fontSize: 22, color: CANVAS_PALETTE.muted }}>#心の色診断</div>
     </div>
   );
 }
@@ -85,13 +103,15 @@ function ResultOg({
         flexDirection: "column",
         justifyContent: "space-between",
         padding: "56px 64px",
-        background: `radial-gradient(circle at 92% 8%, ${themeColor}44 0%, transparent 40%), radial-gradient(circle at 8% 92%, ${themeColor}22 0%, transparent 36%), ${BRAND.cream}`,
-        color: BRAND.ink,
+        background: `radial-gradient(circle at 92% 8%, ${themeColor}44 0%, transparent 40%), radial-gradient(circle at 8% 92%, ${themeColor}22 0%, transparent 36%), ${CANVAS_PALETTE.cream}`,
+        color: CANVAS_PALETTE.ink,
         fontFamily: "serif",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ fontSize: 22, color: BRAND.muted }}>心の色診断 · 結果</div>
+      <div
+        style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+      >
+        <div style={{ fontSize: 22, color: CANVAS_PALETTE.muted }}>心の色診断 · 結果</div>
         <div
           style={{
             width: 48,
@@ -103,15 +123,36 @@ function ResultOg({
         />
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-        <div style={{ fontSize: 56, fontWeight: 700, lineHeight: 1.12, letterSpacing: "-0.02em" }}>
+        <div
+          style={{
+            fontSize: 56,
+            fontWeight: 700,
+            lineHeight: 1.12,
+            letterSpacing: "-0.02em",
+          }}
+        >
           {title}
         </div>
-        <div style={{ fontSize: 30, lineHeight: 1.45, color: BRAND.muted, maxWidth: 900 }}>
+        <div
+          style={{
+            fontSize: 30,
+            lineHeight: 1.45,
+            color: CANVAS_PALETTE.muted,
+            maxWidth: 900,
+          }}
+        >
           {subtitle}
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: BRAND.muted }}>
-        <span>LibertyCanvas</span>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          fontSize: 22,
+          color: CANVAS_PALETTE.muted,
+        }}
+      >
+        <span>{CANVAS_PALETTE.nameJa}</span>
         <span>#心の色診断</span>
       </div>
     </div>
@@ -131,7 +172,8 @@ export async function GET(request: NextRequest) {
   if (headline) {
     return new ImageResponse(
       <PlugLandingOg
-        eyebrow="LibertyCanvas · Play"
+        brandId="liberty-play"
+        eyebrow={buildOgPalette("liberty-play").eyebrow}
         title={headline}
         subtitle={headlineSubtitle ?? "1-question AI personality quiz"}
       />,
@@ -159,16 +201,45 @@ export async function GET(request: NextRequest) {
           : factorPercentiles
             ? buildRadarLevelsFromFactorPercentiles(factorPercentiles)
             : undefined;
+      const specialtyMeta = resolveSpecialtyOgMeta(slug, archetype?.id);
 
       return new ImageResponse(
         <CosmicPlanetOg
           nickname={planetSpec.nickname}
           coreStatus={planetSpec.coreStatus}
           archetypeTitle={archetype?.title ?? definition.title}
-          hashtag={getCosmicShareHashtag(planet)}
+          hashtag={specialtyMeta?.hashtag ?? getCosmicShareHashtag(planet)}
           planet={planetSpec}
           diagnosisTitle={definition.title}
           radarLevels={radarLevels}
+          specialtyBadge={
+            specialtyMeta
+              ? {
+                  flagEmoji: specialtyMeta.flagEmoji,
+                  label: specialtyMeta.countryNameJa,
+                }
+              : undefined
+          }
+        />,
+        { width: 1200, height: 630 },
+      );
+    }
+
+    const specialtyMeta = resolveSpecialtyOgMeta(slug, archetypeId);
+
+    if (specialtyMeta?.archetypeTitle) {
+      return new ImageResponse(
+        <SpecialtyResultOg meta={specialtyMeta} diagnosisTitle={definition.title} />,
+        { width: 1200, height: 630 },
+      );
+    }
+
+    if (specialtyMeta) {
+      return new ImageResponse(
+        <SpecialtyLandingOg
+          title={definition.title}
+          subtitle={definition.subtitle}
+          meta={specialtyMeta}
         />,
         { width: 1200, height: 630 },
       );

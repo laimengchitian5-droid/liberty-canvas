@@ -41,7 +41,11 @@ export const DiagnosisCompilerIntro = ({
       <h1 className={cn(styles.title, "font-serif")}>{definition.title}</h1>
       <p className={styles.lead}>{definition.subtitle}</p>
       {desireTags.length > 0 ? (
-        <div className={styles.metaPills} role="group" aria-label={introCopy.tagsGroupAria}>
+        <div
+          className={styles.metaPills}
+          role="group"
+          aria-label={introCopy.tagsGroupAria}
+        >
           {desireTags.map((tag) => (
             <span key={tag} className={styles.metaPill}>
               {tag}

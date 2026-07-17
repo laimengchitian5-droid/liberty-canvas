@@ -27,9 +27,7 @@ export function resolveCoreLandingLocale(locale: LandingLocale): CoreLandingLoca
   return isCoreLandingLocale(locale) ? locale : "en";
 }
 
-export function isEuropeanDiscoverLocale(
-  value: string,
-): value is EuropeanDiscoverLocale {
+export function isEuropeanDiscoverLocale(value: string): value is EuropeanDiscoverLocale {
   return (EUROPEAN_DISCOVER_LOCALES as readonly string[]).includes(value);
 }
 

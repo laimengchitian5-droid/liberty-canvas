@@ -7,9 +7,7 @@ import {
 
 const DEFAULT_MODEL = "text-embedding-3-small";
 
-export async function embedCatalogTexts(
-  texts: readonly string[],
-): Promise<number[][]> {
+export async function embedCatalogTexts(texts: readonly string[]): Promise<number[][]> {
   const openAiKey = process.env.OPENAI_API_KEY?.trim();
 
   if (!openAiKey || texts.length === 0) {
@@ -18,9 +16,7 @@ export async function embedCatalogTexts(
 
   try {
     const openai = createOpenAI({ apiKey: openAiKey });
-    const model = openai.embedding(
-      process.env.OPENAI_EMBEDDING_MODEL ?? DEFAULT_MODEL,
-    );
+    const model = openai.embedding(process.env.OPENAI_EMBEDDING_MODEL ?? DEFAULT_MODEL);
     const { embeddings } = await embedMany({
       model,
       values: [...texts],

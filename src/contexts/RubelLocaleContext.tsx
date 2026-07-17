@@ -3,11 +3,7 @@
 import type { ReactNode } from "react";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import type { Locale } from "@/lib/i18n/config";
-import {
-  DEFAULT_LOCALE,
-  type LocaleCode,
-  isLocaleCode,
-} from "@/types/rubel-i18n";
+import { DEFAULT_LOCALE, type LocaleCode, isLocaleCode } from "@/types/rubel-i18n";
 
 interface RubelLocaleContextValue {
   locale: LocaleCode;
@@ -31,9 +27,7 @@ function rubelLocaleToApp(locale: LocaleCode): Locale {
 }
 
 /** @deprecated Wrapper kept for backward compatibility — locale is synced via I18nProvider */
-const RubelLocaleProvider = ({ children }: { children: ReactNode }) => (
-  <>{children}</>
-);
+const RubelLocaleProvider = ({ children }: { children: ReactNode }) => <>{children}</>;
 
 function useRubelLocale(): RubelLocaleContextValue {
   const { locale, setLocale } = useI18n();

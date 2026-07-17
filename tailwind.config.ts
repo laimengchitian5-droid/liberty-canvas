@@ -38,12 +38,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: [
-          "Noto Serif JP",
-          "Yu Mincho",
-          "Hiragino Mincho ProN",
-          "serif",
-        ],
+        serif: ["Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", "serif"],
         "sans-jp": ["Hiragino Sans", "Noto Sans JP", "system-ui", "sans-serif"],
         "sans-ko": ["Malgun Gothic", "Noto Sans KR", "system-ui", "sans-serif"],
         "sans-zh": ["PingFang SC", "Noto Sans SC", "system-ui", "sans-serif"],

@@ -15,10 +15,7 @@ export function satelliteIntakeToOutcome(
   const pickIndex = intake.userText.trim().length % Math.max(options.length, 1);
   const optionId = options[pickIndex]?.id ?? options[0]?.id;
 
-  const answers =
-    question && optionId
-      ? [{ questionId: question.id, optionId }]
-      : [];
+  const answers = question && optionId ? [{ questionId: question.id, optionId }] : [];
 
   const outcome = calculateDiagnosisResult(diagnosis, answers);
 

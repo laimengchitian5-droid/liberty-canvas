@@ -21,6 +21,6 @@ https://liberty-canvas.vercel.app/diagnosis?ref=matsuri
 
 ## ブース運用
 
-1. 来場者に QR 読取 → 診断完走  
-2. 結果画面で **印刷** または **シェア**  
+1. 来場者に QR 読取 → 診断完走
+2. 結果画面で **印刷** または **シェア**
 3. オプション: Assessment Hub で深掘り MBTI + AI チャット

@@ -1,21 +1,13 @@
 export type DiagnosisElementKind =
-  | "QUESTION_BLOCK"
-  | "SEO_TUNING_BLOCK"
-  | "RESULT_TEMPLATE_BLOCK"
-  | "VIRAL_SHARE_BLOCK";
+  "QUESTION_BLOCK" | "SEO_TUNING_BLOCK" | "RESULT_TEMPLATE_BLOCK" | "VIRAL_SHARE_BLOCK";
 
 export type QuestionInputType = "multiple_choice" | "slider" | "text";
 
 export type ResultLayoutKind =
-  | "full_affirmation_chart"
-  | "character_archetype_card"
-  | "compatibility_radar";
+  "full_affirmation_chart" | "character_archetype_card" | "compatibility_radar";
 
 export type ViralSharePresetKind =
-  | "x_twitter_card"
-  | "image_download"
-  | "native_share"
-  | "copy_link";
+  "x_twitter_card" | "image_download" | "native_share" | "copy_link";
 
 import type {
   AcademicTraitVector,
@@ -102,10 +94,7 @@ export interface ViralShareBlock {
 }
 
 export type DiagnosisElement =
-  | QuestionBlock
-  | SeoTuningBlock
-  | ResultTemplateBlock
-  | ViralShareBlock;
+  QuestionBlock | SeoTuningBlock | ResultTemplateBlock | ViralShareBlock;
 
 export interface PlugDiagnosisDefinition {
   id: string;
