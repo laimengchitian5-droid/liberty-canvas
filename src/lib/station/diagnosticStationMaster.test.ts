@@ -6,6 +6,7 @@ import {
 } from "@/lib/station/diagnosticStationMaster";
 import { isDiagnosticPlatform } from "@/lib/station/diagnosticStationRegistry";
 import { getSiteUrl } from "@/lib/site/url";
+import { DIAGNOSTIC_PLATFORM_IDS } from "@/types/diagnosticStation";
 
 describe("diagnosticStationMaster", () => {
   it("returns native routes for ja including big-five liberty path", () => {
@@ -43,7 +44,22 @@ describe("diagnosticStationMaster", () => {
     expect(
       DiagnosticStationMaster.getAvailableRoutes("en", "with_english_fallback")
         .length,
-    ).toBe(15);
+    ).toBe(DIAGNOSTIC_PLATFORM_IDS.length);
+    expect(DIAGNOSTIC_PLATFORM_IDS.length).toBe(15);
+  });
+
+  it("returns full AvailableRouteView fields (not sketch partials)", () => {
+    const [first] = getAvailableRoutes("ja", "with_english_fallback");
+    expect(first).toBeDefined();
+    expect(first?.lineName.length).toBeGreaterThan(0);
+    expect(typeof first?.isNativeLocale).toBe("boolean");
+    expect(first?.officialUrl.startsWith("https://")).toBe(true);
+    expect(
+      first &&
+        ("internalPlayPath" in first
+          ? (first as { internalPlayPath?: unknown }).internalPlayPath
+          : undefined),
+    ).toBeUndefined();
   });
   it("builds SEO without broken liberty-canvas.app{locale} canonicals", () => {
     const seo = generateStationSEO("big-five", "ja");

@@ -16,10 +16,14 @@ import type {
 export type RouteAvailabilityMode = "native" | "with_english_fallback";
 
 /**
- * Routes usable for the user's locale.
- * - native: official site lists the locale
- * - with_english_fallback: always include routes that support `en` (default)
- * Filter is O(n) over a fixed 4-route table (~constant).
+ * Locale-filtered station views.
+ *
+ * Rejected sketch defects:
+ * - `ValidLocale` / `@/src` / `internalPlayPath` → Locale + `libertyPath`
+ * - partial view objects → full {@link AvailableRouteView} (lineName, isNativeLocale)
+ * - Map.entries order → {@link listDiagnosticRoutes} (ROUTE_LIST order)
+ *
+ * Complexity: O(n) over fixed registry size (DIAGNOSTIC_PLATFORM_IDS.length = 15).
  */
 export function getAvailableRoutes(
   userLocale: string,
@@ -27,7 +31,8 @@ export function getAvailableRoutes(
 ): AvailableRouteView[] {
   const locale = resolveGameLocale(userLocale);
   const routes = listDiagnosticRoutes();
-  const out: AvailableRouteView[] = [];
+  const out: AvailableRouteView[] = new Array(routes.length);
+  let count = 0;
 
   for (const route of routes) {
     const isNativeLocale = route.supportedLocales.includes(locale);
@@ -40,17 +45,22 @@ export function getAvailableRoutes(
       continue;
     }
 
-    out.push({
+    const libertyPath = sanitizeLibertyPath(route.libertyPath);
+
+    out[count] = {
       ...route,
       isNativeLocale,
       lineName: resolveLineName(route.id, locale),
-      libertyPath: sanitizeLibertyPath(route.libertyPath),
-    });
+      libertyPath,
+    };
+    count += 1;
   }
 
+  out.length = count;
   return out;
 }
 
+/** Fail-closed: only whitelisted play/app/diagnosis/play paths; else omit. */
 function sanitizeLibertyPath(path: string | undefined): string | undefined {
   if (!path) {
     return undefined;
