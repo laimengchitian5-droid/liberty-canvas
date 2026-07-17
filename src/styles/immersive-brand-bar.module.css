@@ -13,6 +13,15 @@
   backdrop-filter: blur(10px);
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  min-inline-size: 0;
+}
+
 .bar :global(.labelCompact) {
   color: #e2e8f0;
 }

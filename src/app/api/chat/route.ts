@@ -10,7 +10,23 @@ import {
   parseAdaptiveChatRequest,
 } from "@/lib/ai/parseChatRequestBody";
 import { resolveLanguageModel } from "@/lib/ai/provider";
+import {
+  appendStationAdaptiveContext,
+  loadGameMatrixProfileFromCookies,
+} from "@/lib/ai/stationChatContext";
 import { jsonError } from "@/lib/api/http";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
+
+/**
+ * Adaptive + Rubel chat — Vercel AI SDK stream.
+ *
+ * Rejected sketch route defects (do not reintroduce):
+ * - parallel mock Edge handler returning JSON stubs
+ * - `@/src` / sessionSyncEngine / types.diagnosticStation locales
+ * - accept-Language as sole locale source
+ * - client-visible encryption secrets
+ * - forced `runtime = "edge"` (providers need Node-compatible secrets)
+ */
 
 function createFallbackStream(text: string): Response {
   const encoder = new TextEncoder();
@@ -50,6 +66,20 @@ async function buildModelMessages(
   }));
 }
 
+async function resolveSystemPrompt(body: NonNullable<
+  ReturnType<typeof parseAdaptiveChatRequest>
+>): Promise<string> {
+  if (body.mode === "rubel") {
+    return buildRubelSystemPrompt(body);
+  }
+
+  const base = buildDynamicSystemPrompt(body);
+  const profile = await loadGameMatrixProfileFromCookies();
+  const locale = body.locale?.trim() || DEFAULT_LOCALE;
+
+  return appendStationAdaptiveContext(base, profile, locale);
+}
+
 export async function POST(request: Request) {
   try {
     const payload = await request.json();
@@ -71,6 +101,7 @@ export async function POST(request: Request) {
 
     const resolved = resolveLanguageModel();
     const isRubelAgent = body.mode === "rubel";
+    const system = await resolveSystemPrompt(body);
 
     if (!resolved) {
       return createFallbackStream(
@@ -81,14 +112,15 @@ export async function POST(request: Request) {
     }
 
     try {
-      const modelMessages = await buildModelMessages(body.uiMessages, body.messages);
+      const modelMessages = await buildModelMessages(
+        body.uiMessages,
+        body.messages,
+      );
 
       const result = streamText({
         model: resolved.model,
         temperature: isRubelAgent ? 0.85 : 0.7,
-        system: isRubelAgent
-          ? buildRubelSystemPrompt(body)
-          : buildDynamicSystemPrompt(body),
+        system,
         messages: modelMessages,
       });
 

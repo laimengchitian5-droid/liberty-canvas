@@ -17,49 +17,100 @@ import { selectNavProfile, useUserStore } from "@/store/userStore";
 import a11y from "@/styles/accessibility.module.css";
 import styles from "./GlobalNav.module.css";
 
+interface NavItem {
+  readonly href: string;
+  readonly label: string;
+  readonly shortLabel: string;
+  readonly ariaLabel: string;
+  readonly isActive: (pathname: string) => boolean;
+}
+
+/**
+ * Site-wide chrome — includes one-tap gates to station hub / dashboard.
+ *
+ * Rejected sketch “GlobalHeader” defects (do not reintroduce):
+ * - parallel GlobalHeader.tsx duplicating this bar
+ * - `/{locale}/station` → `/station/{locale}`
+ * - `/{locale}/play` → `/play` (brand hub)
+ * - logo `/{locale}` → `/`
+ * - `uiText[...] || uiText.en` self-reference → `messages.nav`
+ * - emoji nav labels
+ */
 export function GlobalNav() {
-  const pathname = usePathname();
-  const { messages } = useI18n();
+  const pathname = usePathname() ?? "";
+  const { locale, messages } = useI18n();
   const { nav } = messages;
-  const { userId, status, displayName, avatarInitials, appsAuthored } = useUserStore(
-    useShallow(selectNavProfile),
-  );
+  const { userId, status, displayName, avatarInitials, appsAuthored } =
+    useUserStore(useShallow(selectNavProfile));
 
   const accentClass = deriveCreatorAccent(displayName);
   const isGuest = userId === DEFAULT_GUEST_USER_ID;
+  const stationHubHref = `/station/${locale}`;
+  const stationDashboardHref = `/station/${locale}/dashboard`;
+  const canvasHub = resolveBrandPath("liberty-canvas", "hub");
+  const plugEngine = resolveBrandPath("liberty-plug", "engine");
+  const playHub = resolveBrandPath("liberty-play", "hub");
+  const plugCatalog = resolveBrandPath("liberty-plug", "hub");
+  const forgeHub = resolveBrandPath("liberty-forge", "hub");
 
-  const NAV_ITEMS = [
+  const navItems: readonly NavItem[] = [
     {
-      href: resolveBrandPath("liberty-canvas", "hub"),
+      href: canvasHub,
       label: nav.hub,
       shortLabel: nav.hubShort,
       ariaLabel: nav.hub,
+      isActive: (path) => path === "/",
     },
     {
-      href: resolveBrandPath("liberty-plug", "engine"),
+      href: plugEngine,
       label: nav.assessment,
       shortLabel: nav.assessmentShort,
       ariaLabel: nav.assessment,
+      isActive: (path) =>
+        path === plugEngine || path.startsWith(`${plugEngine}/`),
     },
     {
-      href: resolveBrandPath("liberty-play", "hub"),
+      href: playHub,
       label: "Play",
       shortLabel: "Play",
       ariaLabel: "Liberty Play",
+      isActive: (path) => path === "/play" || path.startsWith("/play/"),
     },
     {
-      href: resolveBrandPath("liberty-plug", "hub"),
+      href: stationHubHref,
+      label: nav.station,
+      shortLabel: nav.stationShort,
+      ariaLabel: nav.station,
+      isActive: (path) =>
+        path === stationHubHref ||
+        (path.startsWith(`${stationHubHref}/`) &&
+          !path.startsWith(stationDashboardHref)),
+    },
+    {
+      href: stationDashboardHref,
+      label: nav.dashboard,
+      shortLabel: nav.dashboardShort,
+      ariaLabel: nav.dashboard,
+      isActive: (path) =>
+        path === stationDashboardHref ||
+        path.startsWith(`${stationDashboardHref}/`),
+    },
+    {
+      href: plugCatalog,
       label: nav.diagnosis,
       shortLabel: nav.diagnosisShort,
       ariaLabel: nav.diagnosis,
+      isActive: (path) =>
+        path === plugCatalog || path.startsWith(`${plugCatalog}/`),
     },
     {
-      href: resolveBrandPath("liberty-forge", "hub"),
+      href: forgeHub,
       label: nav.create,
       shortLabel: nav.createShort,
       ariaLabel: nav.create,
+      isActive: (path) => path.startsWith("/create"),
     },
-  ] as const;
+  ];
 
   const brandId = resolveBrandId(pathname);
 
@@ -72,7 +123,7 @@ export function GlobalNav() {
         <div className={styles.primaryRow}>
           <div className={styles.brandSlot}>
             <BrandWordmark brandId={brandId} locale="ja" href="/" compact />
-            <BrandMegaMenu currentPath={pathname ?? "/"} />
+            <BrandMegaMenu currentPath={pathname} />
           </div>
           <div
             className={styles.profileSlot}
@@ -95,9 +146,8 @@ export function GlobalNav() {
           </div>
 
           <ul className={styles.tabList}>
-            {NAV_ITEMS.map((item) => {
-              const isActive =
-                item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            {navItems.map((item) => {
+              const isActive = item.isActive(pathname);
 
               return (
                 <li key={item.href} className={styles.tabItem}>

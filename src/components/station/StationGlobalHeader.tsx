@@ -14,9 +14,10 @@ export interface StationGlobalHeaderProps {
 
 /**
  * Station-family chrome — one-tap paths to hub + dashboard.
+ * Main-site outbound gates live in {@link GlobalNav} (not a parallel GlobalHeader).
  *
  * Rejected sketch defects (do not reintroduce):
- * - `GlobalHeader` colliding with Rubel → `StationGlobalHeader`
+ * - `GlobalHeader` colliding with Rubel / duplicating GlobalNav
  * - `/{locale}/station` → `/station/{locale}`
  * - `/{locale}` logo → `/` (site home)
  * - `uiText[...] || uiText.en` self-reference → `resolveStationHeaderCopy`

@@ -22,6 +22,9 @@ test.describe("Brand navigation & OG", () => {
     await page.goto("/play/rubel-introvert-level-v1");
     await expect(page.getByRole("link", { name: /リバティ・プレイ/i })).toBeVisible();
     await expect(page.getByRole("button", { name: "サービス" })).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: /診断総合ターミナルへ戻る|central diagnostic terminal/i }),
+    ).toBeVisible();
   });
 
   test("bridge modal appears when crossing to main shell from immersive", async ({

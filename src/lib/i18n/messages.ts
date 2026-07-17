@@ -28,6 +28,12 @@ export interface NavMessages {
   diagnosisShort: string;
   create: string;
   createShort: string;
+  /** Central diagnostic terminal hub */
+  station: string;
+  stationShort: string;
+  /** Encrypted boarding-history dashboard */
+  dashboard: string;
+  dashboardShort: string;
 }
 
 export interface RubelPlayMessages {
@@ -183,6 +189,10 @@ const NAV_EN: NavMessages = {
   diagnosisShort: "Catalog",
   create: "Create",
   createShort: "Create",
+  station: "Terminal Hub",
+  stationShort: "Terminal",
+  dashboard: "My Dashboard",
+  dashboardShort: "Board",
 };
 
 const NAV_JA: NavMessages = {
@@ -194,6 +204,10 @@ const NAV_JA: NavMessages = {
   diagnosisShort: "一覧",
   create: "作る",
   createShort: "作る",
+  station: "診断ターミナル",
+  stationShort: "駅",
+  dashboard: "マイ実績",
+  dashboardShort: "実績",
 };
 
 const PLUG_BRIDGE_EN: PlugBridgeMessages = {
@@ -249,6 +263,10 @@ const NAV_KO: NavMessages = {
   diagnosisShort: "목록",
   create: "만들기",
   createShort: "만들기",
+  station: "진단 터미널",
+  stationShort: "터미널",
+  dashboard: "내 실적",
+  dashboardShort: "실적",
 };
 
 const NAV_ZH: NavMessages = {
@@ -260,6 +278,10 @@ const NAV_ZH: NavMessages = {
   diagnosisShort: "目录",
   create: "创建",
   createShort: "创建",
+  station: "诊断总站",
+  stationShort: "总站",
+  dashboard: "我的成绩",
+  dashboardShort: "成绩",
 };
 
 const PLUG_BRIDGE_KO: PlugBridgeMessages = {
