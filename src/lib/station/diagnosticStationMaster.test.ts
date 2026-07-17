@@ -18,16 +18,33 @@ describe("diagnosticStationMaster", () => {
     expect(bigFive?.lineName).toContain("Big Five");
   });
 
-  it("with_english_fallback includes strengths-finder for ko when not native", () => {
-    const native = getAvailableRoutes("ko", "native").map((r) => r.id);
+  it("with_english_fallback includes strengths-finder for ar when not native", () => {
+    const native = getAvailableRoutes("ar", "native").map((r) => r.id);
     expect(native).not.toContain("strengths-finder");
 
-    const fallback = getAvailableRoutes("ko", "with_english_fallback");
+    const fallback = getAvailableRoutes("ar", "with_english_fallback");
     const strengths = fallback.find((r) => r.id === "strengths-finder");
     expect(strengths).toBeDefined();
     expect(strengths?.isNativeLocale).toBe(false);
   });
 
+  it("registers disc and love-type-16 hubs", () => {
+    const disc = DiagnosticStationMaster.getRouteById("disc");
+    expect(disc?.officialUrl).toMatch(/^https:\/\//);
+    expect(disc?.libertyPath).toBeUndefined();
+    expect(generateStationSEO("disc", "ja")?.path).toBe("/station/ja/disc");
+
+    const love = DiagnosticStationMaster.getRouteById("love-type-16");
+    expect(love?.officialUrl).toContain("lovecharacter64");
+    expect(love?.libertyPath).toBeUndefined();
+  });
+
+  it("exposes fifteen O(1) registry entries", () => {
+    expect(
+      DiagnosticStationMaster.getAvailableRoutes("en", "with_english_fallback")
+        .length,
+    ).toBe(15);
+  });
   it("builds SEO without broken liberty-canvas.app{locale} canonicals", () => {
     const seo = generateStationSEO("big-five", "ja");
     expect(seo).not.toBeNull();

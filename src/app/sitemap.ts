@@ -8,6 +8,7 @@ import { listDiagnoses } from "@/lib/rubel/repository";
 import { PERSONALITY_CATEGORIES } from "@/types/diagnosis";
 import { buildAppPageUrl, buildQuizPageUrl, getSiteUrl } from "@/lib/site/url";
 import { resolveBrandPath } from "@/lib/brand/urlResolver";
+import { buildStationSitemapEntries } from "@/lib/station/buildStationSitemapEntries";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
@@ -106,6 +107,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
+    ...buildStationSitemapEntries(siteUrl),
   ];
 
   let rubelPlayRoutes: MetadataRoute.Sitemap = [];

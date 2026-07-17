@@ -1,0 +1,126 @@
+.shell {
+  box-sizing: border-box;
+  min-block-size: 100dvh;
+  margin: 0;
+  padding: 0;
+  background-color: #fcf9f8;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  max-inline-size: 1200px;
+  margin-inline: auto;
+  padding-block-start: calc(1rem + env(safe-area-inset-top, 0px));
+  padding-inline: 24px;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #9a6b63;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.navLink:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 3px;
+  border-radius: 0.25rem;
+}
+
+.footnote {
+  max-inline-size: 1200px;
+  margin: 0 auto;
+  padding: 0 24px calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #8a7c74;
+}
+
+/* ==========================================================================
+   Skeleton — Adult-Cute pulse + CLS reserve (prefers-reduced-motion safe)
+   ========================================================================== */
+.skeleton {
+  box-sizing: border-box;
+  max-inline-size: 1200px;
+  min-block-size: 100dvh;
+  margin-inline: auto;
+  padding-block-start: 40px;
+  padding-inline: 24px;
+  padding-block-end: calc(40px + env(safe-area-inset-bottom, 0px));
+}
+
+.skeletonTitle {
+  block-size: 38px;
+  inline-size: 40%;
+  max-inline-size: 18rem;
+  margin-block-end: 32px;
+  border-radius: 12px;
+  background-color: #e9dcd8;
+  animation: pulseGhost 1.5s ease-in-out infinite;
+}
+
+.skeletonProgress {
+  block-size: 140px;
+  inline-size: 100%;
+  margin-block-end: 32px;
+  border: 1px solid #edf2f7;
+  border-radius: 20px;
+  background-color: #ffffff;
+  animation: pulseGhost 1.5s ease-in-out infinite;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .skeletonGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.skeletonPanel {
+  block-size: 400px;
+  max-block-size: min(400px, 55dvh);
+  border: 1px solid #edf2f7;
+  border-radius: 24px;
+  background-color: #ffffff;
+  animation: pulseGhost 1.5s ease-in-out infinite;
+}
+
+.skeletonLabel {
+  display: block;
+  margin-block-start: 1.25rem;
+  font-size: 0.875rem;
+  color: #8a7c74;
+  text-align: center;
+}
+
+@keyframes pulseGhost {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonTitle,
+  .skeletonProgress,
+  .skeletonPanel {
+    animation: none !important;
+    opacity: 0.8 !important;
+  }
+}

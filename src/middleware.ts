@@ -10,6 +10,8 @@ import {
   resolveEdgeCore,
 } from "@/lib/edge/edgeCoreRouter";
 import { EDGE_SITE_HEADER } from "@/lib/edge/edgeRoutingOptimizer";
+import { buildLocaleCookie } from "@/lib/edge/crossDomainSession";
+import { resolveStationLocaleRedirect } from "@/lib/edge/stationLocaleRedirect";
 import {
   applyEdgeSeoHeaders,
   isSearchCrawler,
@@ -108,6 +110,28 @@ export async function middleware(request: NextRequest) {
   const edge = resolveEdgeCore(edgeRequestFromNext(request), {
     persistOnDiscoverRewrite: true,
   });
+
+  // Station SEO: /station/{id} → /station/{locale}/{id} (not /{locale}/station/...).
+  const stationPath = resolveStationLocaleRedirect(
+    request.nextUrl.pathname,
+    edge.locale,
+  );
+  if (stationPath) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = stationPath;
+    const redirectResponse = NextResponse.redirect(redirectUrl, 307);
+    const localeCookie =
+      edge.cookieToSet ??
+      buildLocaleCookie(edge.locale, request.nextUrl.hostname, {
+        secure: request.nextUrl.protocol === "https:",
+      });
+    redirectResponse.cookies.set(
+      localeCookie.name,
+      localeCookie.value,
+      localeCookie.options,
+    );
+    return applySecurityHeaders(redirectResponse, csp);
+  }
 
   const brandPath = edge.shouldRewrite
     ? edge.resolvedPath

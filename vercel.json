@@ -20,5 +20,25 @@
       "has": [{ "type": "host", "value": "discover.libertycanvas.jp" }],
       "destination": "/discover/:path*"
     }
+  ],
+  "headers": [
+    {
+      "source": "/station/:locale(en|ja|ko|zh|fr|de|ar|he)/dashboard",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    },
+    {
+      "source": "/station/:locale(en|ja|ko|zh|fr|de|ar|he)/:id(16personalities|strengths-finder|enneagram|big-five|disc|via-strengths|16pf|animal-psychology|riasec|love-languages|egogram|tritype|love-type-16|blood-type|zodiac-astrology)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, s-maxage=86400, stale-while-revalidate=3600"
+        }
+      ]
+    }
   ]
 }

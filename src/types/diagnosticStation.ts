@@ -10,6 +10,17 @@ export const DIAGNOSTIC_PLATFORMS = {
   STRENGTH_FINDER: "strengths-finder",
   ENNEAGRAM: "enneagram",
   BIG_FIVE: "big-five",
+  DISC: "disc",
+  VIA_STRENGTHS: "via-strengths",
+  PF16: "16pf",
+  ANIMAL_PSYCHOLOGY: "animal-psychology",
+  RIASEC: "riasec",
+  LOVE_LANGUAGES: "love-languages",
+  EGOGRAM: "egogram",
+  TRITYPE: "tritype",
+  LOVE_TYPE_16: "love-type-16",
+  BLOOD_TYPE: "blood-type",
+  ZODIAC_ASTROLOGY: "zodiac-astrology",
 } as const;
 
 export type DiagnosticPlatform =
@@ -20,12 +31,23 @@ export const DIAGNOSTIC_PLATFORM_IDS = [
   DIAGNOSTIC_PLATFORMS.STRENGTH_FINDER,
   DIAGNOSTIC_PLATFORMS.ENNEAGRAM,
   DIAGNOSTIC_PLATFORMS.BIG_FIVE,
+  DIAGNOSTIC_PLATFORMS.DISC,
+  DIAGNOSTIC_PLATFORMS.VIA_STRENGTHS,
+  DIAGNOSTIC_PLATFORMS.PF16,
+  DIAGNOSTIC_PLATFORMS.ANIMAL_PSYCHOLOGY,
+  DIAGNOSTIC_PLATFORMS.RIASEC,
+  DIAGNOSTIC_PLATFORMS.LOVE_LANGUAGES,
+  DIAGNOSTIC_PLATFORMS.EGOGRAM,
+  DIAGNOSTIC_PLATFORMS.TRITYPE,
+  DIAGNOSTIC_PLATFORMS.LOVE_TYPE_16,
+  DIAGNOSTIC_PLATFORMS.BLOOD_TYPE,
+  DIAGNOSTIC_PLATFORMS.ZODIAC_ASTROLOGY,
 ] as const satisfies readonly DiagnosticPlatform[];
 
 export interface StationTheme {
   /** Banner / gate accent (registry-owned hex only). */
   readonly gateColor: string;
-  /** Human line name for UI (locale-resolved separately). */
+  /** Must equal platform id — display strings live in resolveLineName. */
   readonly lineNameKey: DiagnosticPlatform;
 }
 
