@@ -431,11 +431,12 @@ export const useUserStore = create<UserStore>()(
 );
 
 export const selectNavProfile = (state: UserStore) => ({
-  userId: state.userId,
   status: state.status,
   displayName: state.data?.profile.displayName ?? "ゲスト",
   avatarInitials: state.data?.profile.avatarInitials ?? "GU",
   appsAuthored: state.data?.activity.appsAuthored ?? 0,
+  /** Single source for chrome branching — never re-derive via string compare in UI. */
+  isGuest: state.userId === DEFAULT_GUEST_USER_ID,
 });
 
 export const selectAuthPanel = (state: UserStore) => ({

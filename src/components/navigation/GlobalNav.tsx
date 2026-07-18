@@ -12,7 +12,6 @@ import { resolveBrandId } from "@/lib/brand/resolveBrand";
 import { resolveBrandPath } from "@/lib/brand/urlResolver";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { deriveCreatorAccent } from "@/lib/rubel/creatorDisplay";
-import { DEFAULT_GUEST_USER_ID } from "@/lib/user/constants";
 import { selectNavProfile, useUserStore } from "@/store/userStore";
 import a11y from "@/styles/accessibility.module.css";
 import styles from "./GlobalNav.module.css";
@@ -25,26 +24,66 @@ interface NavItem {
   readonly isActive: (pathname: string) => boolean;
 }
 
+interface NavSessionBadgeProps {
+  readonly displayName: string;
+  readonly avatarInitials: string;
+  readonly appsAuthored: number;
+  readonly accentClass: string;
+  readonly isHydrating: boolean;
+}
+
+/**
+ * Authenticated session chip — sketch `userIdBadge` without emoji / raw IDs.
+ * Guest path renders nothing; auth CTAs live in {@link UserAuthPanel}.
+ */
+const NavSessionBadge = ({
+  displayName,
+  avatarInitials,
+  appsAuthored,
+  accentClass,
+  isHydrating,
+}: NavSessionBadgeProps) => (
+  <div
+    className={styles.sessionBadge}
+    role="group"
+    aria-label={`${displayName} のプロフィール`}
+    aria-busy={isHydrating ? "true" : undefined}
+  >
+    <div
+      className={`${styles.avatar} bg-gradient-to-br ${accentClass}`}
+      aria-hidden="true"
+    >
+      <span className={styles.avatarInitials}>{avatarInitials}</span>
+    </div>
+    <div className={styles.profileMeta}>
+      <span className={styles.profileName}>{displayName}</span>
+      <span className={styles.profileStat}>{`${appsAuthored} アプリ`}</span>
+    </div>
+  </div>
+);
+
 /**
  * Site-wide chrome — includes one-tap gates to station hub / dashboard.
  *
- * Rejected sketch “GlobalHeader” defects (do not reintroduce):
- * - parallel GlobalHeader.tsx duplicating this bar
- * - `/{locale}/station` → `/station/{locale}`
- * - `/{locale}/play` → `/play` (brand hub)
- * - logo `/{locale}` → `/`
- * - `uiText[...] || uiText.en` self-reference → `messages.nav`
- * - emoji nav labels
+ * Session polarity (fixes inverted sketch):
+ * - guest → {@link UserAuthPanel} login / signup
+ * - authenticated → {@link NavSessionBadge} + logout in UserAuthPanel
+ *
+ * Rejected sketch defects (do not reintroduce):
+ * - parallel `hub/GlobalHeader.tsx`
+ * - emoji in chrome (`👤`)
+ * - raw `userId` in the badge
+ * - dead `<button>` without `type` / handlers
+ * - inverted `isGuest` branch (login when authenticated)
  */
 export function GlobalNav() {
   const pathname = usePathname() ?? "";
   const { locale, messages } = useI18n();
   const { nav } = messages;
-  const { userId, status, displayName, avatarInitials, appsAuthored } =
+  const { status, displayName, avatarInitials, appsAuthored, isGuest } =
     useUserStore(useShallow(selectNavProfile));
 
-  const accentClass = deriveCreatorAccent(displayName);
-  const isGuest = userId === DEFAULT_GUEST_USER_ID;
+  const accentClass = isGuest ? "" : deriveCreatorAccent(displayName);
   const stationHubHref = `/station/${locale}`;
   const stationDashboardHref = `/station/${locale}/dashboard`;
   const canvasHub = resolveBrandPath("liberty-canvas", "hub");
@@ -120,30 +159,21 @@ export function GlobalNav() {
       aria-label={`${PRODUCT_NAME_SLUG} navigation`}
     >
       <div className={styles.barInner}>
-        <div className={styles.primaryRow}>
+        <div className={styles.navigationGroup}>
           <div className={styles.brandSlot}>
             <BrandWordmark brandId={brandId} locale="ja" href="/" compact />
             <BrandMegaMenu currentPath={pathname} />
           </div>
-          <div
-            className={styles.profileSlot}
-            role="group"
-            aria-label={`${displayName} のプロフィール`}
-            aria-busy={status === "hydrating" ? "true" : undefined}
-          >
-            <div
-              className={`${styles.avatar} bg-gradient-to-br ${accentClass}`}
-              aria-hidden="true"
-            >
-              <span className={styles.avatarInitials}>{avatarInitials}</span>
-            </div>
-            <div className={styles.profileMeta}>
-              <span className={styles.profileName}>{displayName}</span>
-              <span className={styles.profileStat}>
-                {isGuest ? "ゲスト" : `${appsAuthored} アプリ`}
-              </span>
-            </div>
-          </div>
+
+          {!isGuest ? (
+            <NavSessionBadge
+              displayName={displayName}
+              avatarInitials={avatarInitials}
+              appsAuthored={appsAuthored}
+              accentClass={accentClass}
+              isHydrating={status === "hydrating"}
+            />
+          ) : null}
 
           <ul className={styles.tabList}>
             {navItems.map((item) => {
@@ -170,8 +200,9 @@ export function GlobalNav() {
           </ul>
         </div>
 
-        <div className={styles.authSlot}>
+        <div className={styles.metaActionGroup}>
           <LocaleSwitcher />
+          {/* Guest → ログイン/新規登録 · Authenticated → ログアウト */}
           <UserAuthPanel />
         </div>
       </div>

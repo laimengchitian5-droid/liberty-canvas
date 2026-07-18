@@ -1,10 +1,22 @@
+/**
+ * Auth chrome — Adult-Cute pills aligned with GlobalNav sand surface.
+ * Sketch `.authButton` / `.userIdBadge` intent lives here (scoped to auth).
+ */
+
 .panelGuest,
 .panelAuthenticated {
+  --auth-surface: #ffffff;
+  --auth-border: #e2d7d5;
+  --auth-ink: var(--lc-color-ink, #4a4038);
+  --auth-ink-muted: var(--lc-color-ink-muted, #6f6258);
+  --auth-rose: var(--lc-color-dusty-rose, #c9a09a);
+  --auth-spring: cubic-bezier(0.16, 1, 0.3, 1);
+
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   inline-size: 100%;
-  min-block-size: 2.75rem;
+  min-block-size: var(--lc-touch-min, 44px);
 }
 
 .panelAuthenticated {
@@ -13,6 +25,7 @@
 
 .modeSwitch {
   display: inline-flex;
+  flex-wrap: wrap;
   gap: 0.25rem;
   flex: 0 0 auto;
 }
@@ -25,46 +38,88 @@
   min-inline-size: 0;
 }
 
+/* authButton */
 .modeButton,
 .actionButton,
 .submitButton {
-  border-radius: 999px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #334155;
-  font-size: clamp(0.72rem, 2.8vw, 0.78rem);
+  box-sizing: border-box;
+  border-radius: 0.75rem;
+  border: 1px solid var(--auth-border);
+  background: var(--auth-surface);
+  color: var(--auth-ink);
+  font-size: 0.8125rem;
   font-weight: 700;
-  padding-inline: 0.75rem;
-  min-block-size: 2.75rem;
+  padding-inline: 1rem;
+  min-block-size: var(--lc-touch-min, 44px);
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--auth-spring),
+    border-color 0.2s var(--auth-spring),
+    color 0.2s var(--auth-spring);
+}
+
+.modeButton:disabled,
+.actionButton:disabled,
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .modeButtonActive,
 .submitButton {
-  border-color: #10b981;
-  background: #ecfdf5;
-  color: #047857;
+  border-color: color-mix(in srgb, var(--auth-rose) 55%, #ffffff);
+  background: color-mix(in srgb, var(--auth-rose) 14%, #ffffff);
+  color: #6b4540;
 }
 
 .label {
-  font-size: 0.68rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  color: #64748b;
+  color: var(--auth-ink-muted);
 }
 
+/* userIdBadge field */
 .input {
-  border: 1px solid #cbd5e1;
-  border-radius: 0.65rem;
-  padding: 0.55rem 0.65rem;
-  font-size: 0.8rem;
+  box-sizing: border-box;
+  border: 1px solid var(--auth-border);
+  border-radius: 1.25rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--auth-ink);
+  background-color: var(--auth-surface);
   inline-size: 100%;
-  min-block-size: 2.75rem;
+  min-block-size: var(--lc-touch-min, 44px);
+}
+
+.input::placeholder {
+  color: color-mix(in srgb, var(--auth-ink-muted) 70%, #ffffff);
 }
 
 .error {
   margin: 0;
   color: #b91c1c;
-  font-size: 0.68rem;
+  font-size: 0.6875rem;
   font-weight: 600;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .modeButton:hover:not(:disabled),
+  .actionButton:hover:not(:disabled) {
+    background-color: #f3eeeb;
+  }
+
+  .submitButton:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--auth-rose) 22%, #ffffff);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modeButton,
+  .actionButton,
+  .submitButton {
+    transition: none;
+  }
 }
 
 @media (min-width: 769px) {
