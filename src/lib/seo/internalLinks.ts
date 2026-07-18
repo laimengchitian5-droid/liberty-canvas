@@ -1,3 +1,6 @@
+import { BRAND_LANDING_SLUG } from "@/lib/landing/brandLandingSlug";
+import { buildLandingPath } from "@/lib/landing/landingCatalog";
+import { getLandingCopy } from "@/lib/landing/landingCopy";
 import type { LandingLocale } from "@/lib/landing/landingLocales";
 import {
   getLandingTopic,
@@ -5,7 +8,6 @@ import {
   type LandingTopicConfig,
   type LandingTopicSlug,
 } from "@/lib/landing/landingTopics";
-import { buildLandingPath } from "@/lib/landing/landingCatalog";
 
 export interface LandingClusterLink {
   slug: LandingTopicSlug;
@@ -29,13 +31,14 @@ export function listClusterLinksForTopic(
     (entry) =>
       entry.slug !== topic.slug &&
       (entry.plugPlayPath === topic.plugPlayPath ||
-        entry.searchIntent === topic.searchIntent),
+        entry.searchIntent === topic.searchIntent ||
+        entry.slug === BRAND_LANDING_SLUG),
   ).slice(0, limit);
 
   return peers.map((entry) => ({
     slug: entry.slug,
     href: buildLandingPath(locale, entry.slug),
-    label: entry.slug.replace(/-/g, " "),
+    label: getLandingCopy(entry.slug, locale).keyword,
     plugPlayPath: entry.plugPlayPath,
   }));
 }
@@ -44,10 +47,23 @@ export function listPillarLinks(locale: LandingLocale): Array<{
   href: string;
   label: string;
 }> {
+  const brandLabel =
+    locale === "ja" ? "LibertyCanvas とは" : "About LibertyCanvas";
+
   return [
-    { href: `/discover/${locale}`, label: "Discover Hub" },
-    { href: "/diagnosis", label: "Diagnosis Catalog" },
-    { href: "/", label: "LibertyCanvas Home" },
+    {
+      href: buildLandingPath(locale, BRAND_LANDING_SLUG),
+      label: brandLabel,
+    },
+    {
+      href: `/discover/${locale}`,
+      label: locale === "ja" ? "診断ディスカバー" : "Discover Hub",
+    },
+    {
+      href: `/diagnosis?lang=${locale}`,
+      label: locale === "ja" ? "診断カタログ" : "Diagnosis Catalog",
+    },
+    { href: "/", label: locale === "ja" ? "ホーム" : "Home" },
   ];
 }
 

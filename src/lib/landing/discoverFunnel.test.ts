@@ -4,6 +4,7 @@ import {
   buildDiscoverPlayHandoffUrl,
   isDiscoverDirectMode,
   isDiscoverFunnelRef,
+  parseDiscoverFunnelRef,
   resolveHandoffDisplayLocale,
   toLandingLocale,
 } from "@/lib/landing/discoverFunnel";
@@ -26,6 +27,20 @@ describe("discoverFunnel", () => {
     ).toBe(
       "/diagnosis/play/personality-spectrum?lang=ja&ref=discover-ja-sixteen-personalities&mode=direct",
     );
+  });
+
+  it("hands brand hub to /diagnosis with locale ref", () => {
+    expect(buildDiscoverPlayHandoffUrl("/diagnosis", "en", "libertycanvas")).toBe(
+      "/diagnosis?lang=en&ref=discover-en-libertycanvas",
+    );
+  });
+
+  it("parses funnel refs without splitting multi-hyphen slugs", () => {
+    expect(parseDiscoverFunnelRef("discover-ko-mbti-personality-types")).toEqual({
+      locale: "ko",
+      slug: "mbti-personality-types",
+    });
+    expect(parseDiscoverFunnelRef("gsc-legacy")).toBeNull();
   });
 
   it("detects discover funnel refs and direct mode", () => {

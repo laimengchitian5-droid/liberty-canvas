@@ -1,3 +1,5 @@
+import { buildBrandLandingCopyMatrix } from "@/lib/landing/brandLandingCopy";
+import { isBrandLandingSlug } from "@/lib/landing/brandLandingSlug";
 import {
   LANDING_BRAND_NARRATIVE_EN,
   LANDING_BRAND_NARRATIVE_JA,
@@ -7,6 +9,7 @@ import {
 import type { LandingLocale, CoreLandingLocale } from "@/lib/landing/landingLocales";
 import { isEuropeanDiscoverLocale } from "@/lib/landing/landingLocales";
 import { getDiscoverCopyFrDe } from "@/lib/landing/discoverCopyFrDe";
+import { applyJaSeoDepthPack } from "@/lib/landing/jaSeoDepthPack";
 import { getLegalSafeLandingCopy } from "@/lib/landing/legalSafeLandingCopy";
 import { applySerpClickPack } from "@/lib/landing/serpClickPack";
 import { buildSpecialtyLandingCopyMatrix } from "@/lib/landing/specialtyLandingCopy";
@@ -37,6 +40,7 @@ type CopyMatrix = Record<LandingTopicSlug, Record<CoreLandingLocale, LandingPage
 
 export const LANDING_COPY: CopyMatrix = {
   ...buildSpecialtyLandingCopyMatrix(),
+  ...buildBrandLandingCopyMatrix(),
   "big-five-ocean": {
     en: {
       keyword: "Big Five OCEAN Personality Test",
@@ -88,7 +92,7 @@ export const LANDING_COPY: CopyMatrix = {
         "Liberty Discover",
       ],
       promptLabel: "あなたの性格が一番出る習慣は？",
-      promptPlaceholder: "例：人混みの後は一人で本を読んで recharge する…",
+      promptPlaceholder: "例：人混みの後は一人で本を読んで心を整える…",
       submitLabel: "OCEANタイプを見る →",
       trustLine: "1.2万回以上プレイ · オープンソースAI · ログイン不要",
       schemaName: "ビッグファイブ OCEAN 性格クイズ",
@@ -345,7 +349,7 @@ export const LANDING_COPY: CopyMatrix = {
         "性格タイプ 診断",
         "Liberty Discover",
       ],
-      promptLabel: "しんどい1週間の後、どう recharge する？",
+      promptLabel: "しんどい1週間の後、どう心を整えますか？",
       promptPlaceholder: "例：大人数より、一人で創作する方が100倍回復する…",
       submitLabel: "16Pタイプを見る →",
       trustLine: "16P型マトリクス · サブ秒ルーティング",
@@ -1184,22 +1188,40 @@ export const LANDING_COPY: CopyMatrix = {
   },
 };
 
-function hydrateLandingBrand(copy: LandingPageCopy): LandingPageCopy {
-  /** Discover SERP surfaces — never leave parent brand in title/headline. */
-  const toDiscoverBrand = (text: string): string =>
-    text
+function hydrateLandingBrand(
+  copy: LandingPageCopy,
+  options?: { preserveParentBrand?: boolean },
+): LandingPageCopy {
+  const preserveParentBrand = options?.preserveParentBrand === true;
+
+  /** Discover SERP surfaces — rewrite parent brand unless navigational brand LP. */
+  const toDiscoverBrand = (text: string): string => {
+    if (preserveParentBrand) {
+      return text.replaceAll("Liberty Discover", LANDING_DISCOVER_NAME);
+    }
+
+    return text
       .replaceAll("LibertyCanvas", LANDING_DISCOVER_NAME)
       .replaceAll("Liberty Canvas", LANDING_DISCOVER_NAME)
       .replaceAll("Liberty Discover", LANDING_DISCOVER_NAME);
+  };
 
-  const keywords = copy.keywords.filter(
-    (keyword) =>
+  const keywords = copy.keywords.filter((keyword) => {
+    if (preserveParentBrand) {
+      return keyword !== "Liberty Discover";
+    }
+
+    return (
       keyword !== "Liberty Discover" &&
       keyword !== "Liberty Canvas" &&
       keyword !== LANDING_DISCOVER_NAME &&
-      keyword !== LANDING_PARENT_NAME,
-  );
-  keywords.push(LANDING_DISCOVER_NAME);
+      keyword !== LANDING_PARENT_NAME
+    );
+  });
+
+  if (!preserveParentBrand) {
+    keywords.push(LANDING_DISCOVER_NAME);
+  }
 
   return {
     ...copy,
@@ -1216,19 +1238,30 @@ function hydrateLandingBrand(copy: LandingPageCopy): LandingPageCopy {
   };
 }
 
+function composeLandingCopy(
+  slug: LandingTopicSlug,
+  locale: LandingLocale,
+  raw: LandingPageCopy,
+): LandingPageCopy {
+  const withSerp = applySerpClickPack(slug, locale, raw);
+  const withDepth = applyJaSeoDepthPack(slug, locale, withSerp);
+
+  return hydrateLandingBrand(withDepth, {
+    preserveParentBrand: isBrandLandingSlug(slug),
+  });
+}
+
 export function getLandingCopy(
   slug: LandingTopicSlug,
   locale: LandingLocale,
 ): LandingPageCopy {
   if (isEuropeanDiscoverLocale(locale)) {
-    return hydrateLandingBrand(
-      applySerpClickPack(slug, locale, getDiscoverCopyFrDe(slug, locale)),
-    );
+    return composeLandingCopy(slug, locale, getDiscoverCopyFrDe(slug, locale));
   }
 
   const copy =
     getLegalSafeLandingCopy(slug, locale) ??
     LANDING_COPY[slug][locale as CoreLandingLocale];
 
-  return hydrateLandingBrand(applySerpClickPack(slug, locale, copy));
+  return composeLandingCopy(slug, locale, copy);
 }

@@ -11,6 +11,8 @@ import {
   listIndexableLandingTopicSlugs,
   shouldIndexLandingSlug,
 } from "@/lib/landing/landingIndexPolicy";
+import { LANDING_LOCALES } from "@/lib/landing/landingLocales";
+import { LANDING_TOPIC_SLUGS } from "@/lib/landing/landingTopics";
 import {
   buildResubmitSitemapEntries,
   renderResubmitSitemapXml,
@@ -53,10 +55,15 @@ describe("Discover SEO brand + index policy", () => {
     expect(meta.robots).toMatchObject({ index: true, follow: true });
   });
 
-  it("excludes upcoming pages from indexable listing (84 = 14×6)", () => {
-    expect(listAllLandingPages()).toHaveLength(120);
-    expect(listIndexableLandingTopicSlugs()).toHaveLength(14);
-    expect(listIndexableLandingPages()).toHaveLength(84);
+  it("excludes upcoming pages from indexable listing", () => {
+    const total = LANDING_TOPIC_SLUGS.length * LANDING_LOCALES.length;
+    const indexableTopics = listIndexableLandingTopicSlugs().length;
+
+    expect(listAllLandingPages()).toHaveLength(total);
+    expect(indexableTopics).toBe(15);
+    expect(listIndexableLandingPages()).toHaveLength(
+      indexableTopics * LANDING_LOCALES.length,
+    );
   });
 });
 

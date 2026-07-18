@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { SatelliteIntakeForm, SatelliteLandingShell } from "@/components/satellite";
+import { BRAND_LANDING_SLUG } from "@/lib/landing/brandLandingSlug";
 import type { LandingPageDefinition } from "@/lib/landing/landingCatalog";
 import {
   buildDiscoverFunnelRef,
@@ -60,9 +61,11 @@ export function LandingIntakeClient({ page }: LandingIntakeClientProps) {
         funnelStep: "discover_submit",
         locale: page.locale,
         slug: page.slug,
+        plugPlayPath: page.topic.plugPlayPath,
+        searchIntent: page.topic.searchIntent,
       });
     },
-    [funnelRef, page.locale, page.slug],
+    [funnelRef, page.locale, page.slug, page.topic.plugPlayPath, page.topic.searchIntent],
   );
 
   const navigateToPlay = useCallback(
@@ -188,13 +191,30 @@ export function LandingHubClient({ locale, pages }: LandingHubClientProps) {
       <div className="mx-auto max-w-md">
         <h1 className="text-2xl font-bold">{hubTitle}</h1>
         <p className="mt-2 text-sm text-slate-400">
-          LibertyCanvas · AI × 性格診断 × 自由
+          {locale === "ja"
+            ? "LibertyCanvas · AI × 性格診断 × 自由"
+            : "LibertyCanvas · AI personality quizzes"}
         </p>
+        <Link
+          href={`/discover/${locale}/${BRAND_LANDING_SLUG}`}
+          className={cn(
+            rubelDs.glassCard,
+            "mt-4 inline-flex min-h-11 w-full items-center justify-center px-4 py-3 text-sm font-medium text-indigo-200 hover:border-indigo-400/40",
+          )}
+        >
+          {locale === "ja"
+            ? "LibertyCanvas とは？使い方を見る →"
+            : locale === "ko"
+              ? "LibertyCanvas 소개 보기 →"
+              : locale === "zh"
+                ? "了解 LibertyCanvas →"
+                : "What is LibertyCanvas? →"}
+        </Link>
         <Link
           href={`/diagnosis?lang=${locale}`}
           className={cn(
             rubelDs.primary,
-            "mt-4 inline-flex min-h-11 w-full items-center justify-center text-sm font-semibold",
+            "mt-3 inline-flex min-h-11 w-full items-center justify-center text-sm font-semibold",
           )}
         >
           {locale === "ja"

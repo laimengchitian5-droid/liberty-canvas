@@ -1,7 +1,9 @@
+import { BRAND_LANDING_SLUG } from "@/lib/landing/brandLandingSlug";
 import type { LandingPageCopy } from "@/lib/landing/landingCopy";
 import type { LandingLocale } from "@/lib/landing/landingLocales";
 import type { LandingTopicSlug } from "@/lib/landing/landingTopics";
 import { LANDING_DISCOVER_NAME } from "@/lib/landing/landingBrand";
+import { PRODUCT_NAME, PRODUCT_NAME_JA } from "@/lib/brand/constants";
 
 type SerpPatch = Pick<LandingPageCopy, "title" | "metaDescription" | "headline">;
 
@@ -36,6 +38,42 @@ function packAll(
 const SERP_CLICK_PACK: Partial<
   Record<LandingTopicSlug, Partial<Record<LandingLocale, SerpPatch>>>
 > = {
+  [BRAND_LANDING_SLUG]: packAll({
+    en: {
+      title: `${PRODUCT_NAME} — Free AI Personality Test Hub`,
+      headline: "LibertyCanvas: free AI quizzes, cosmic results, no signup",
+      metaDescription:
+        "Official LibertyCanvas hub. Free AI personality tests — Big Five, motivation spectrum, cosmic chat. Start in one answer.",
+    },
+    ja: {
+      title: `${PRODUCT_NAME_JA}（libertycanvas）とは｜無料AI性格診断`,
+      headline: "リバティ・キャンバスの使い方 — 1回答で宇宙キャラ診断",
+      metaDescription:
+        "libertycanvas（リバティ・キャンバス）公式。無料AI性格診断の紹介と使い方。登録不要・1回答から開始。",
+    },
+    ko: {
+      title: `${PRODUCT_NAME} — 무료 AI 성격 검사 허브`,
+      headline: "LibertyCanvas: 한 답변 AI 우주 캐릭터",
+      metaDescription: "공식 LibertyCanvas. 무료 AI 성격 검사·코스믹 채팅. 가입 불필요.",
+    },
+    zh: {
+      title: `${PRODUCT_NAME} — 免费 AI 性格测试中心`,
+      headline: "LibertyCanvas：一次回答看见宇宙角色",
+      metaDescription: "LibertyCanvas 官方入口。免费 AI 性格测试与全肯定聊天。无需注册。",
+    },
+    fr: {
+      title: `${PRODUCT_NAME} — hub de tests IA gratuits`,
+      headline: "LibertyCanvas : une réponse, clarté cosmique",
+      metaDescription:
+        "Hub officiel LibertyCanvas. Tests de personnalité IA gratuits. Sans inscription.",
+    },
+    de: {
+      title: `${PRODUCT_NAME} — kostenlose KI-Persönlichkeitstests`,
+      headline: "LibertyCanvas: Persönlichkeitstest mit einer Antwort",
+      metaDescription:
+        "Offizieller LibertyCanvas-Hub. Kostenlose KI-Persönlichkeitstests. Ohne Anmeldung.",
+    },
+  }),
   "enneagram-nine-types": packAll({
     en: {
       title: "9 Motivation Patterns — Free AI Test in 1 Answer",
@@ -246,18 +284,41 @@ const SERP_CLICK_PACK: Partial<
       metaDescription: "無料のインナーチャイルド診断。1回答→全肯定AIコンパニオン。",
     },
   ),
-  "shadow-self-archetype": packEnJa(
-    {
-      title: "Free Shadow Self Archetype Quiz — Hidden Patterns",
+  "shadow-self-archetype": packAll({
+    en: {
+      title: "Free Shadow Self Quiz — Jung-Inspired Archetypes",
       headline: "Which hidden pattern quietly shapes your choices?",
-      metaDescription: "Free shadow-self archetype quiz. One answer → cosmic AI insight.",
+      metaDescription:
+        "Free shadow self quiz online. Jung-inspired archetypes → cosmic AI insight. No login.",
     },
-    {
-      title: "無料・シャドウセルフ診断",
-      headline: "静かに選択を形づくる、隠れたパターンは？",
-      metaDescription: "無料のシャドウセルフ診断。1回答→宇宙AIインサイト。登録不要。",
+    ja: {
+      title: "無料シャドウ診断｜ユング着想の影アーキタイプ",
+      headline: "静かに選択を形づくる、あなたの「影」は？",
+      metaDescription:
+        "無料のシャドウ（影）自己診断。ユング心理学着想→宇宙AIインサイト。登録不要。",
     },
-  ),
+    ko: {
+      title: "무료 섀도우 셀프 검사｜숨은 패턴",
+      headline: "선택을 조용히 만드는 숨은 패턴은?",
+      metaDescription: "무료 섀도우 아키타입 검사. 한 답변→코스믹 AI 인사이트.",
+    },
+    zh: {
+      title: "免费阴影自我测试｜荣格启发原型",
+      headline: "安静塑造选择的隐藏模式是？",
+      metaDescription: "免费阴影自我测试。一次回答→宇宙 AI 洞察。无需注册。",
+    },
+    fr: {
+      title: "Quiz Ombre de soi gratuit — archétypes inspirés de Jung",
+      headline: "Quel motif caché façonne vos choix ?",
+      metaDescription: "Quiz ombre de soi gratuit. Une réponse → insight cosmique IA.",
+    },
+    de: {
+      title: "Kostenloser Schatten-Selbst-Test — Jung-Archetypen",
+      headline: "Welches verborgene Muster prägt Ihre Entscheidungen?",
+      metaDescription:
+        "Kostenloser Shadow-Self-Persönlichkeitstest. Eine Antwort → kosmischer KI-Insight.",
+    },
+  }),
   "world-specialty-soul": packEnJa(
     {
       title: "Which Nation's Culinary Terroir Echoes Your Profile?",

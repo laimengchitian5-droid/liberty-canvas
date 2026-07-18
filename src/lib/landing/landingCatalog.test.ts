@@ -1,21 +1,41 @@
 import { describe, expect, it } from "vitest";
+import { BRAND_LANDING_SLUG } from "@/lib/landing/brandLandingSlug";
 import {
+  buildLandingMetadata,
   buildLandingPageDefinition,
   listAllLandingPages,
   listLandingStaticParams,
 } from "@/lib/landing/landingCatalog";
 import { buildLandingIntakeOutcome } from "@/lib/landing/landingIntakeBridge";
+import { LANDING_LOCALES } from "@/lib/landing/landingLocales";
+import { LANDING_TOPIC_SLUGS } from "@/lib/landing/landingTopics";
 import { getSeedDiagnosisById } from "@/lib/rubel/repository";
 
+const EXPECTED_LANDING_PAGES = LANDING_TOPIC_SLUGS.length * LANDING_LOCALES.length;
+
 describe("landingCatalog", () => {
-  it("generates 120 static params (20 topics × 6 locales)", () => {
-    expect(listLandingStaticParams()).toHaveLength(120);
+  it("generates static params for every topic × locale", () => {
+    expect(listLandingStaticParams()).toHaveLength(EXPECTED_LANDING_PAGES);
   });
 
   it("lists all landing pages with absolute urls", () => {
     const pages = listAllLandingPages();
-    expect(pages).toHaveLength(120);
+    expect(pages).toHaveLength(EXPECTED_LANDING_PAGES);
     expect(pages[0]?.absoluteUrl).toContain("/discover/");
+  });
+
+  it("serves navigational libertycanvas brand landing with parent brand intact", () => {
+    const jaPage = buildLandingPageDefinition("ja", BRAND_LANDING_SLUG);
+    expect(jaPage?.topic.plugPlayPath).toBe("/diagnosis");
+    expect(jaPage?.topic.searchIntent).toBe("navigational");
+    expect(jaPage?.copy.title).toMatch(/libertycanvas|リバティ/i);
+    expect(jaPage?.copy.keywords).toEqual(
+      expect.arrayContaining(["libertycanvas"]),
+    );
+    expect(jaPage?.copy.faq.length).toBeGreaterThanOrEqual(3);
+
+    const meta = buildLandingMetadata(jaPage!);
+    expect(meta.openGraph?.images).toBeTruthy();
   });
 
   it("resolves sixteen-personalities with legal-safe copy", () => {

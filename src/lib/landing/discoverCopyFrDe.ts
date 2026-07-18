@@ -1,3 +1,4 @@
+import { buildBrandDiscoverCopyFrDe } from "@/lib/landing/brandLandingCopy";
 import type { LandingPageCopy } from "@/lib/landing/landingCopy";
 import type { EuropeanDiscoverLocale } from "@/lib/landing/landingLocales";
 import type { LandingTopicSlug } from "@/lib/landing/landingTopics";
@@ -44,6 +45,7 @@ type FrDeMatrix = Record<
 
 export const DISCOVER_COPY_FR_DE: FrDeMatrix = {
   ...buildSpecialtyDiscoverCopyFrDe(),
+  ...buildBrandDiscoverCopyFrDe(),
   "enneagram-nine-types": {
     fr: {
       keyword: "Test du spectre motivationnel",

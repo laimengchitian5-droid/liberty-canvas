@@ -8,12 +8,43 @@ export const DISCOVER_DIRECT_MODE = "direct" as const;
 export type DiscoverFunnelSubmitEvent =
   "discover_funnel_submit" | "discover_funnel_direct";
 
+export interface DiscoverFunnelRefParts {
+  locale: LandingLocale;
+  slug: string;
+}
+
 export function buildDiscoverFunnelRef(locale: LandingLocale, slug: string): string {
-  return `${DISCOVER_FUNNEL_REF_PREFIX}${locale}-${slug}`;
+  const safeSlug = slug.trim().replace(/^\/+|\/+$/g, "");
+  return `${DISCOVER_FUNNEL_REF_PREFIX}${locale}-${safeSlug}`;
 }
 
 export function isDiscoverFunnelRef(ref: string | null | undefined): ref is string {
   return typeof ref === "string" && ref.startsWith(DISCOVER_FUNNEL_REF_PREFIX);
+}
+
+/** Parse `discover-{locale}-{slug}` — locale is the first path segment (no hyphens). */
+export function parseDiscoverFunnelRef(
+  ref: string | null | undefined,
+): DiscoverFunnelRefParts | null {
+  if (!isDiscoverFunnelRef(ref)) {
+    return null;
+  }
+
+  const body = ref.slice(DISCOVER_FUNNEL_REF_PREFIX.length);
+  const separator = body.indexOf("-");
+
+  if (separator <= 0 || separator >= body.length - 1) {
+    return null;
+  }
+
+  const localeCandidate = body.slice(0, separator);
+  const slug = body.slice(separator + 1).trim();
+
+  if (!isLandingLocale(localeCandidate) || slug.length === 0) {
+    return null;
+  }
+
+  return { locale: localeCandidate, slug };
 }
 
 export function isDiscoverDirectMode(mode: string | null | undefined): boolean {
@@ -38,6 +69,7 @@ export function buildDiscoverPlayHandoffUrl(
   slug: string,
   options?: { direct?: boolean },
 ): string {
+  const path = plugPath.trim() || "/diagnosis";
   const params = new URLSearchParams({
     lang: locale,
     ref: buildDiscoverFunnelRef(locale, slug),
@@ -47,5 +79,6 @@ export function buildDiscoverPlayHandoffUrl(
     params.set("mode", DISCOVER_DIRECT_MODE);
   }
 
-  return `${plugPath}?${params.toString()}`;
+  const joiner = path.includes("?") ? "&" : "?";
+  return `${path}${joiner}${params.toString()}`;
 }

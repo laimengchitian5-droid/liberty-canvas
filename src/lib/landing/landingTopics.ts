@@ -1,6 +1,8 @@
+import { BRAND_LANDING_SLUG } from "@/lib/landing/brandLandingSlug";
 import { buildSpecialtyLandingTopics } from "@/lib/landing/specialtyLandingCopy";
 
 export const LANDING_TOPIC_SLUGS = [
+  BRAND_LANDING_SLUG,
   "big-five-ocean",
   "enneagram-nine-types",
   "sixteen-personalities",
@@ -39,6 +41,20 @@ export interface LandingTopicConfig {
 }
 
 export const LANDING_TOPICS: LandingTopicConfig[] = [
+  {
+    slug: BRAND_LANDING_SLUG,
+    playDiagnosisId: "rubel-introvert-level-v1",
+    plugPlayPath: "/diagnosis",
+    schemaType: "WebApplication",
+    searchIntent: "navigational",
+    searchTags: [
+      "libertycanvas",
+      "liberty canvas",
+      "リバティキャンバス",
+      "無料性格診断",
+      "AI personality test",
+    ],
+  },
   {
     slug: "big-five-ocean",
     playDiagnosisId: "rubel-introvert-level-v1",

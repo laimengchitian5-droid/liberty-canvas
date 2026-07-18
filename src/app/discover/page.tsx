@@ -16,21 +16,25 @@ import {
 import { LANDING_LOCALES, LANDING_LOCALE_META } from "@/lib/landing/landingLocales";
 import { getSiteUrl } from "@/lib/site/url";
 
+/** Phase 8C — JA-first hub (GSC clicks are Japan-heavy). */
+const DISCOVER_HUB_LEAD_JA =
+  "無料の性格診断キーワードから、1回答で本編へ。ビッグファイブ・動機スペクトル・シャドウまで。";
 const DISCOVER_HUB_LEAD_EN =
-  "Which nation's culinary terroir echoes your implicit data profile?";
+  "From global personality keywords to one-answer Liberty Plug quizzes — Big Five, motivation spectrum, shadow themes.";
 
 export const metadata: Metadata = {
-  title: `Discover — Global Personality SEO Hub | ${LANDING_DISCOVER_NAME}`,
-  description: DISCOVER_HUB_LEAD_EN,
+  title: `性格診断ディスカバー｜${LANDING_DISCOVER_NAME}`,
+  description: DISCOVER_HUB_LEAD_JA,
   alternates: {
     canonical: `${getSiteUrl()}/discover`,
     languages: buildDiscoverLocaleAlternates(),
   },
   openGraph: {
-    title: `Discover | ${LANDING_DISCOVER_NAME}`,
-    description: DISCOVER_HUB_LEAD_EN,
+    title: `性格診断ディスカバー｜${LANDING_DISCOVER_NAME}`,
+    description: DISCOVER_HUB_LEAD_JA,
     url: `${getSiteUrl()}/discover`,
     siteName: LANDING_DISCOVER_NAME,
+    locale: "ja_JP",
     images: [{ url: buildGenericOgImageUrl(), width: 1200, height: 630 }],
   },
   robots: { index: true, follow: true },
@@ -46,7 +50,7 @@ export default function DiscoverIndexPage() {
       {
         ...buildDiscoverHubCollectionPage(siteUrl),
         alternateName: LANDING_DISCOVER_IDENTITY_JA,
-        description: DISCOVER_HUB_LEAD_EN,
+        description: DISCOVER_HUB_LEAD_JA,
         inLanguage: ["ja", "en", "ko", "zh", "fr", "de"],
       },
     ],
@@ -60,10 +64,9 @@ export default function DiscoverIndexPage() {
       />
       <h1 className="text-2xl font-bold">{LANDING_DISCOVER_NAME_JA}</h1>
       <p className="mt-2 text-sm text-slate-400">{LANDING_DISCOVER_IDENTITY_JA}</p>
-      <p className="mt-4 text-sm leading-relaxed text-slate-300">
-        {DISCOVER_HUB_LEAD_EN}
-      </p>
-      <p className="mt-2 text-sm text-slate-400">Programmatic SEO — pick your region:</p>
+      <p className="mt-4 text-sm leading-relaxed text-slate-300">{DISCOVER_HUB_LEAD_JA}</p>
+      <p className="mt-2 text-sm text-slate-500">{DISCOVER_HUB_LEAD_EN}</p>
+      <p className="mt-4 text-sm text-slate-400">地域を選んでください / Pick your region:</p>
       <ul className="mt-6 grid gap-3">
         {LANDING_LOCALES.map((locale) => (
           <li key={locale}>
