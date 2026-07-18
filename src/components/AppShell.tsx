@@ -15,6 +15,20 @@ import { resolveBrandPath } from "@/lib/brand/urlResolver";
 import shellStyles from "@/styles/app-shell.module.css";
 import immersiveStyles from "@/styles/immersive-brand-bar.module.css";
 
+/**
+ * Root chrome shell — wraps Providers children with nav / immersive / privacy.
+ *
+ * Sketch map (do NOT ship the thin flex wrapper):
+ * - outer `minBlockSize: 100vh` div → {@link shellStyles.appShell} (`100dvh`)
+ * - always-on `<GlobalNav currentLocale>` → conditional {@link GlobalNav} (no locale prop)
+ *
+ * Rejected sketch defects:
+ * - `React.FC` · unused `currentLocale: string` (locale lives in {@link useI18n})
+ * - inline styles (layout tokens belong in `app-shell.module.css`)
+ * - relative `./navigation/GlobalNav` without `@/` alias
+ * - always rendering GlobalNav (Station owns StationGlobalHeader; immersive brands use bar)
+ */
+
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const brandId = resolveBrandId(pathname);

@@ -25,13 +25,18 @@ export interface IdentityHubConductorProps {
 /**
  * 10-second Identity Hub Conductor — one Adult-Cute question → express CTA.
  *
+ * Sketch map (do NOT ship the thin gate wrapper):
+ * - TEXT_REGISTRY / `currentLocale` → {@link resolveConductorSurfaceCopy} + `locale: Locale`
+ * - `window.location.href` boarding → Next `<Link href={ctaHref}>` (+ beacon on click)
+ * - client-invented fallback slug → {@link buildConductorFallbackResponse} (live Plug only)
+ *
  * Rejected sketch defects (do not reintroduce):
- * - `@/src/types` · broken `React.FC` without props generic
- * - inline TEXT_REGISTRY (use {@link resolveConductorSurfaceCopy})
- * - async callback inside `startTransition`
- * - `global-identity-core` · unvalidated `as ConductorResponse`
- * - emoji chrome · `router.push` without `lang`/`ref` (use `ctaHref`)
- * - telemetry with invented slugs or raw answer text in meta
+ * - `@/src/...` imports · broken `React.FC` without props generic
+ * - `currentLocale: string` · inline TEXT_REGISTRY
+ * - `startTransition(async () => fetch…)` (fetch outside; transition only commits UI)
+ * - `global-identity-core` · `/discover/{locale}/{slug}` · unvalidated `as ConductorResponse`
+ * - `metaData` / answer body in telemetry (canonical field is `meta`; length/source only)
+ * - emoji `✓` chrome · single-line `<input>` (use textarea) · CSS `.conductorContainer`
  */
 export const IdentityHubConductor = ({ locale }: IdentityHubConductorProps) => {
   const copy = resolveConductorSurfaceCopy(locale);
@@ -194,6 +199,7 @@ export const IdentityHubConductor = ({ locale }: IdentityHubConductorProps) => {
               href={conductorResult.ctaHref}
               className={`${styles.cta} ${styles.ctaBoarding}`}
               data-testid="conductor-boarding-cta"
+              autoFocus
               onClick={() => {
                 handleBoardingClick(conductorResult);
               }}

@@ -1,3 +1,17 @@
+/**
+ * Discover landing catalog — SSOT for locale×topic page definitions.
+ *
+ * Sketch map (do NOT ship a 3-row affiliate table):
+ * - `CatalogItem.slug` → {@link LandingTopicSlug} via {@link LANDING_TOPICS}
+ * - `redirectUrl: "https://16personalities.com"` → `topic.plugPlayPath`
+ *   (first-party `/diagnosis…` only; projected by pseoManifestEngine)
+ *
+ * Rejected sketch defects:
+ * - `LANDING_CATALOG` + bare `slug: string` / external `redirectUrl`
+ * - invented topics (`mind-explorer`, `global-identity-core`)
+ * - outbound assessment-vendor sinks (16personalities.com et al.)
+ */
+
 import type { Metadata } from "next";
 import type { LandingFaqItem, LandingPageCopy } from "@/lib/landing/landingCopy";
 import type { LandingLocale } from "@/lib/landing/landingLocales";

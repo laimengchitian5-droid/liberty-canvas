@@ -12,7 +12,13 @@ import {
 
 /**
  * Node runtime — AI SDK providers need server secrets (not Edge-safe).
- * Sketch `runtime = "edge"` + mock LLM rejected.
+ *
+ * Rejected sketch defects:
+ * - `runtime = "edge"` ("超爆速" does not beat missing provider secrets)
+ * - `@/src/types` / `@/src/lib` imports
+ * - locale mockRegistry instead of {@link runIdentityConductor}
+ * - incomplete JSON (`ctaHref` only) skipping Zod response contract
+ * - `/discover/{locale}/{slug}` (use Plug play path from assemble/fallback)
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -36,11 +42,11 @@ function jsonConductorOk(
 /**
  * POST /api/station/conductor
  *
- * Layers (sketch-aligned, production-hardened):
- * 1) Request Zod guard
- * 2) Deterministic Plug slug (never invented IDs)
- * 3) AI prose via {@link runIdentityConductor} → Zod / timeout fallback
- * 4) Fatal catch → sync HA fallback with live slug (not `global-identity-core`)
+ * Layers:
+ * 1) Request Zod guard ({@link ConductorRequestSchema})
+ * 2) Deterministic Plug slug inside {@link runIdentityConductor} (AI cannot re-route)
+ * 3) AI prose → Zod / timeout → sync fallback prose
+ * 4) Response Zod + fatal HA fallback (never invent `global-identity-core`)
  */
 export async function POST(request: Request): Promise<Response> {
   let parsedRequest: ConductorRequest | null = null;

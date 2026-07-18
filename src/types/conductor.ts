@@ -1,5 +1,16 @@
 import { z } from "zod";
 
+/**
+ * Conductor API contracts — Zod at every boundary.
+ *
+ * Rejected sketch defects (do not reintroduce):
+ * - bare `locale: string` / `expressLineSlug: string` on the response
+ * - `ConductorResponse = AiResponse & { slug; ctaHref }` without Zod
+ * - unbounded AI prose (`acknowledge` / `teaser` without max)
+ * - dropping `expressLineName` · `ctaLabel` · `source`
+ * - rejecting legacy `answer` alias before one-release migrate completes
+ */
+
 /** Liberty Plug play slugs — conductor never invents licensed 16-type IDs. */
 export const CONDUCTOR_EXPRESS_SLUGS = [
   "personality-spectrum",

@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { usePathname } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 import { UserAuthPanel } from "@/components/auth/UserAuthPanel";
@@ -15,6 +22,7 @@ import { PRODUCT_NAME_SLUG } from "@/lib/brand/constants";
 import { resolveBrandId } from "@/lib/brand/resolveBrand";
 import { resolveBrandPath } from "@/lib/brand/urlResolver";
 import { useI18n } from "@/lib/i18n/I18nProvider";
+import type { Locale } from "@/lib/i18n/config";
 import { deriveCreatorAccent } from "@/lib/rubel/creatorDisplay";
 import { selectNavProfile, useUserStore } from "@/store/userStore";
 import a11y from "@/styles/accessibility.module.css";
@@ -57,22 +65,33 @@ const NavSessionBadge = ({
   </div>
 );
 
+function resolveAccountTriggerLabel(locale: Locale): string {
+  switch (locale) {
+    case "ja":
+      return "アカウント";
+    case "ko":
+      return "계정";
+    case "zh":
+      return "账户";
+    default:
+      return "Account";
+  }
+}
+
 /**
  * Site-wide chrome — single {@link GlobalNav} (never fork `GlobalNavbar.tsx`).
  *
- * Sketch map (`GlobalNavbar.tsx` → this module):
- * - `header` + `brandMenuSection` → `.bar` / `.barInner` / `.navigationGroup`
- * - scroll `navLinks` → `.tabList` + {@link buildGlobalNavItems} (live routes only)
- * - `authStationBlock` → `.metaActionGroup` + {@link LocaleSwitcher} + {@link UserAuthPanel}
- * - `brandLogo` → {@link BrandWordmark} (outside scroll rail)
+ * Sketch map:
+ * - leftSection / mainMenu → brand + scroll tabs (live routes only)
+ * - rightSection → LocaleSwitcher + guest auth capsule (popover)
+ * - authTrigger → expands real {@link UserAuthPanel} (no emoji / fake buttons)
  *
- * Rejected sketch defects (do not reintroduce):
- * - new `GlobalNavbar.tsx` / `GlobalNavbar.module.css` fork
- * - `React.FC` + unused `currentLocale` prop (locale from {@link useI18n})
- * - emoji chrome (`👑` / flag options) · hardcoded `guest_user` readOnly input
- * - dead / mislabeled hrefs (`宇宙AI診断`→`/diagnosis`, Discover as プレイルーム)
- * - raw `<select>` / fake login buttons (use real auth + locale panels)
- * - nested `role="navigation"` inside banner without i18n labels
+ * Rejected sketch defects:
+ * - `@/src/...` imports · `lib/navigation/buildGlobalNavItems` fork
+ * - `React.FC` · `currentLocale` prop (locale from {@link useI18n})
+ * - raw `<a href>` + `role="menubar"` · text brand "Liberty" (use BrandWordmark)
+ * - emoji `👤 Account` · passing fake props into LocaleSwitcher / UserAuthPanel
+ * - CSS class names `.navbar` / `.navLink` (contract is `.bar` / `.tab`)
  */
 export function GlobalNav() {
   const pathname = usePathname() ?? "";
@@ -81,8 +100,52 @@ export function GlobalNav() {
   const { status, displayName, avatarInitials, appsAuthored, isGuest } =
     useUserStore(useShallow(selectNavProfile));
 
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const authShellRef = useRef<HTMLDivElement>(null);
+  const authPanelId = useId();
+
   const accentClass = isGuest ? "" : deriveCreatorAccent(displayName);
   const brandId = resolveBrandId(pathname);
+  const accountLabel = resolveAccountTriggerLabel(locale);
+
+  const closeAuth = useCallback(() => {
+    setIsAuthOpen(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isGuest) {
+      setIsAuthOpen(false);
+    }
+  }, [isGuest]);
+
+  useEffect(() => {
+    if (!isAuthOpen) {
+      return;
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      const root = authShellRef.current;
+      if (!root) {
+        return;
+      }
+      if (event.target instanceof Node && !root.contains(event.target)) {
+        closeAuth();
+      }
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeAuth();
+      }
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [closeAuth, isAuthOpen]);
 
   const navItems = buildGlobalNavItems(nav, {
     canvasHub: resolveBrandPath("liberty-canvas", "hub"),
@@ -117,7 +180,6 @@ export function GlobalNav() {
             />
           ) : null}
 
-          {/* Scroll barrier — flex-shrink:0 tabs; overflow-x on .tabList */}
           <ul className={styles.tabList}>
             {navItems.map((item) => {
               const isActive = item.isActive(pathname);
@@ -145,7 +207,34 @@ export function GlobalNav() {
 
         <div className={styles.metaActionGroup}>
           <LocaleSwitcher />
-          <UserAuthPanel />
+
+          {isGuest ? (
+            <div className={styles.authShell} ref={authShellRef}>
+              <button
+                type="button"
+                className={`${styles.authTrigger} ${a11y.touchTargetInline} ${a11y.focusRing}`}
+                aria-expanded={isAuthOpen}
+                aria-controls={authPanelId}
+                onClick={() => {
+                  setIsAuthOpen((open) => !open);
+                }}
+              >
+                {accountLabel}
+              </button>
+              {isAuthOpen ? (
+                <div
+                  id={authPanelId}
+                  className={styles.authPopover}
+                  role="region"
+                  aria-label={accountLabel}
+                >
+                  <UserAuthPanel layout="popover" />
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <UserAuthPanel layout="rail" />
+          )}
         </div>
       </div>
     </nav>

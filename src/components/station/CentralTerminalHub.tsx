@@ -23,17 +23,21 @@ export interface CentralTerminalHubProps {
 const GATE_HEX = /^#[0-9A-Fa-f]{6}$/;
 
 /**
- * Public central terminal — all registry routes + dashboard transfer.
+ * Public central terminal — conductor + registry routes + dashboard transfer.
+ *
+ * Sketch map (do NOT ship the hollow wrapper):
+ * - `currentLocale` / emoji gate title → `locale` + {@link resolveStationHubCopy}
+ * - `#services` placeholder div → live {@link getAvailableRoutes} grid
+ * - empty `gateZone` (import without mount) → {@link IdentityHubConductor} after header
+ * - `.hubWrapper` / `.catalogGrid` / `.gateZone` → `.terminalContainer` / `.gateMatrixArea`
  *
  * Rejected sketch defects (do not reintroduce):
- * - `@/src/...` → `@/lib` / `@/types` / `@/components`
- * - `/{locale}/station/...` → `/station/{locale}/...`
- * - `internalPlayPath` → `libertyPath`
- * - `resolveLineName(route)` → use `AvailableRouteView.lineName`
- * - `playedIds.includes` → O(1) Record lookup via `isStationRouteCleared`
- * - `uiText[...] || uiText.en` self-reference → `resolveStationHubCopy`
- * - emoji status chrome
- * - false O(1) claim on full registry scan — fixed n=15, O(n) is intentional
+ * - `React.FC` · bare `currentLocale: string` (use `Locale` via {@link resolveGameLocale})
+ * - dropping `userProfile` (cleared stamps require server matrix)
+ * - inline-styled fake catalog / emoji `🚉` chrome / `#services` hash nav
+ * - importing Conductor then leaving the gate section empty
+ * - `@/src/...` · `/{locale}/station/...` · `internalPlayPath` · `playedIds.includes`
+ * - false O(1) claim on full registry scan — fixed n≈15, O(n) is intentional
  */
 export const CentralTerminalHub = ({
   locale,

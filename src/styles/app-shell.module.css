@@ -1,17 +1,22 @@
+/**
+ * App shell layout — logical sizing; never inline styles in AppShell.tsx.
+ * Prefer 100dvh (mobile browser chrome); 100vh kept as fallback.
+ */
+
 .appShell {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
   overflow-x: clip;
 }
 
 .appMain {
-  flex: 1;
+  flex: 1 1 auto;
   padding-block-end: var(--lc-page-pad-bottom);
 }
 
 .appMainImmersive {
-  flex: 1;
+  flex: 1 1 auto;
   padding-block-end: 0;
 }

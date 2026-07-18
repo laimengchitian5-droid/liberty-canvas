@@ -6,6 +6,15 @@ import { useI18n } from "@/lib/i18n/I18nProvider";
 import a11y from "@/styles/accessibility.module.css";
 import styles from "./LocaleSwitcher.module.css";
 
+/**
+ * Locale control — controlled via {@link useI18n}; all {@link SUPPORTED_LOCALES}.
+ *
+ * Rejected sketch defects:
+ * - `React.FC` + unused `currentLocale` prop + inline styles
+ * - `defaultValue` uncontrolled select (no `setLocale`)
+ * - ja/en only · inventing `--lc-size-touch-target` / `--lc-radius-full`
+ */
+
 const LOCALE_SHORT: Record<Locale, string> = {
   en: "EN",
   ja: "JA",

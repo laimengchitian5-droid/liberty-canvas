@@ -133,10 +133,38 @@
   }
 }
 
-/* Desktop: destroy vertical stacking — one compact auth rail */
+/* Popover capsule — always stacked, labels visible */
+.panelGuest[data-layout="popover"] {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.65rem;
+  inline-size: 100%;
+}
+
+.panelGuest[data-layout="popover"] .fieldRow {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.panelGuest[data-layout="popover"] .input {
+  inline-size: 100%;
+  max-inline-size: none;
+}
+
+.panelGuest[data-layout="popover"] .modeSwitch {
+  flex-wrap: wrap;
+}
+
+.panelGuest[data-layout="popover"] .error {
+  position: static;
+  white-space: normal;
+}
+
+/* Desktop rail — compact horizontal (guest only when not popover) */
 @media (min-width: 769px) {
-  .panelGuest,
-  .panelAuthenticated {
+  .panelGuest[data-layout="rail"],
+  .panelAuthenticated[data-layout="rail"] {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
@@ -145,14 +173,14 @@
     max-inline-size: none;
   }
 
-  .fieldRow {
+  .panelGuest[data-layout="rail"] .fieldRow {
     flex-direction: row;
     align-items: center;
     flex: 0 0 auto;
     position: relative;
   }
 
-  .label {
+  .panelGuest[data-layout="rail"] .label {
     position: absolute;
     inline-size: 1px;
     block-size: 1px;
@@ -164,18 +192,18 @@
     border: 0;
   }
 
-  .input {
+  .panelGuest[data-layout="rail"] .input {
     inline-size: 7.5rem;
     max-inline-size: 7.5rem;
   }
 
-  .modeButton,
-  .submitButton,
-  .actionButton {
+  .panelGuest[data-layout="rail"] .modeButton,
+  .panelGuest[data-layout="rail"] .submitButton,
+  .panelAuthenticated[data-layout="rail"] .actionButton {
     flex: 0 0 auto;
   }
 
-  .error {
+  .panelGuest[data-layout="rail"] .error {
     position: absolute;
     inset-block-start: 100%;
     inset-inline-start: 0;
@@ -183,13 +211,13 @@
     white-space: nowrap;
   }
 
-  .panelGuest {
+  .panelGuest[data-layout="rail"] {
     position: relative;
   }
 }
 
 @media (max-width: 768px) {
-  .panelGuest {
+  .panelGuest[data-layout="rail"] {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
@@ -197,22 +225,22 @@
     gap: 0.4rem;
   }
 
-  .fieldRow {
+  .panelGuest[data-layout="rail"] .fieldRow {
     flex: 1 1 9rem;
     min-inline-size: min(100%, 9rem);
   }
 
-  .submitButton {
+  .panelGuest[data-layout="rail"] .submitButton {
     flex: 0 0 auto;
     min-inline-size: 4.5rem;
   }
 
-  .panelAuthenticated {
+  .panelAuthenticated[data-layout="rail"] {
     flex-direction: row;
     justify-content: center;
   }
 
-  .actionButton {
+  .panelAuthenticated[data-layout="rail"] .actionButton {
     min-inline-size: 5.5rem;
   }
 }

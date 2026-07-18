@@ -11,12 +11,18 @@ import type { Locale } from "@/lib/i18n/config";
 /**
  * Identity Hub Conductor client telemetry.
  *
+ * Sketch map (do NOT ship the thin beacon wrapper):
+ * - `ConductorEventSchema` + `timestamp` → {@link parseConductorEvent} (`occurredAtMs`)
+ * - `navigator.sendBeacon("/api/station/telemetry")` → {@link trackDiagnosisEvent}
+ *   (consent-gated; beacon preferred inside diagnosis analytics SSOT)
+ *
  * Rejected sketch defects:
  * - `@/src/types` import path
- * - parallel `/api/station/telemetry` sink (diagnosis analytics is SSOT)
- * - `timestamp` field on wire (use `occurredAtMs` → ISO `at`)
- * - sendBeacon without consent / Zod / fetch fallback
- * - emoji console chrome
+ * - inventing `/api/station/telemetry` (route does not exist; dual bus forbidden)
+ * - wire field `timestamp` (canonical is `occurredAtMs` → ISO `at`)
+ * - `Omit<ConductorEvent, "timestamp">` without Locale / Plug slug narrowing
+ * - sendBeacon-only with no consent gate / no fetch keepalive fallback
+ * - claiming "0ms INP" while skipping validation (Zod first, then flush)
  */
 
 export type TrackConductorEventInput = {

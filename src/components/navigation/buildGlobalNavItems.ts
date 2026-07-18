@@ -22,6 +22,13 @@ export interface GlobalNavPathContext {
 
 /**
  * Pure nav matrix — O(1) allocation of a fixed route table.
+ * Canonical path: `components/navigation/` (never `lib/navigation/`).
+ *
+ * Rejected sketch defects:
+ * - `lib/navigation/buildGlobalNavItems.ts` fork
+ * - hash hrefs (`#services`, `#space-ai`) / 3-item ja·en hardcode
+ * - `locale: string` registry map instead of {@link NavMessages} + path context
+ * - missing `isActive` / shortLabel / ariaLabel
  *
  * Sketch route rewrites (do not reintroduce dead paths):
  * - `/home` → canvas hub `/`

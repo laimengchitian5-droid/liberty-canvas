@@ -5,11 +5,17 @@ import { LANDING_TOPIC_SLUGS } from "@/lib/landing/landingTopics";
 /**
  * Discover pSEO contracts — Zod at the boundary, no open redirects.
  *
+ * Sketch map (do NOT ship surface-only `PageMetadata`):
+ * - title/description/h1/cta → {@link PseoPageSurfaceSchema} (bounded + trim)
+ * - `targetRedirectUrl: z.string().url()` → {@link FirstPartyPathSchema}
+ *   as `destinationPath` on {@link PseoManifestEntrySchema}
+ * - missing locale×slug → {@link PseoRouteParamsSchema} (landing enums)
+ *
  * Rejected sketch defects:
+ * - unbounded `z.string().min(n)` without `.max` / `.trim`
+ * - required absolute `targetRedirectUrl` (affiliate / open-redirect sink)
+ * - generic `PageMetadata` / `RouteParams` names (collide with Next.js Metadata)
  * - bare `locale: string` / `slug: string` (use landing enums)
- * - `targetRedirectUrl: z.string().url()` as required affiliate sink
- *   (Liberty Discover routes first-party via `destinationPath`)
- * - generic `PageMetadata` / `RouteParams` names (collide with Next.js)
  */
 
 /** Same-origin relative path only — rejects `//…`, schemes, and empty. */

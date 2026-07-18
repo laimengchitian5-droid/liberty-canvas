@@ -28,7 +28,8 @@ html {
   /* Surfaces */
   --lc-color-cream: #faf9f6;
   --lc-color-cream-soft: #fffcf7;
-  --lc-color-sand: #f1ebd9;
+  /* Soft Adult-Cute sand / dusty yellow (nav chrome) */
+  --lc-color-sand: #f9f6f0;
   --lc-color-navy: #0f172a;
 
   /* Brand accents */

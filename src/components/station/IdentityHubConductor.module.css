@@ -2,11 +2,15 @@
  * Identity Hub Conductor — Adult-Cute tokens + Liskov CTA variants.
  * Class contract is owned by IdentityHubConductor.tsx (not Gate CSS).
  *
+ * Sketch map (do NOT rename):
+ * - `.conductorContainer` / `.conductorForm` → `.panel` / `.form`
+ * - `.skeleton` / `.skeletonShort` → `.skeletonLine` / `.skeletonLineShort`
+ *
  * Rejected sketch defects:
- * - `.conductorContainer` + `.gateGrid` in this file (hub owns shell / catalog)
- * - `--canvas-bg-dark` navy panel + light text (breaks Adult-Cute)
- * - inventing `--canvas-*` (use `--lc-*` from globals.css)
- * - `.resultSlot` already reserved at 11.25rem (180px) below
+ * - inventing `--lc-color-text-main` · `--lc-color-brand-rose` · `--lc-size-touch-target`
+ *   · `--lc-color-skeleton` · `--lc-space-*` (map via local `--cond-*` + real `--lc-*`)
+ * - 48px touch target (use `--lc-touch-min` 44px)
+ * - `.gateGrid` / navy `--canvas-*` panel chrome
  */
 
 .panel {
@@ -72,11 +76,11 @@
 .input {
   box-sizing: border-box;
   inline-size: 100%;
-  min-block-size: 3rem;
+  min-block-size: var(--lc-touch-min, 44px);
   padding-block: 0.75rem;
   padding-inline: 1rem;
   border: 2px solid var(--cond-border-default);
-  border-radius: 1rem;
+  border-radius: var(--lc-radius-card, 1.25rem);
   background-color: #ffffff;
   color: var(--cond-text-main);
   font-size: 1rem;
@@ -106,11 +110,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: 3rem;
+  min-block-size: var(--lc-touch-min, 44px);
   inline-size: 100%;
   padding-inline: 1rem;
   border: none;
-  border-radius: 1rem;
+  border-radius: var(--lc-radius-card, 1.25rem);
   font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
@@ -139,7 +143,7 @@
 .ctaBoarding {
   background-color: var(--cond-brand-emerald);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgb(16 185 129 / 0.2);
+  box-shadow: 0 4px 12px rgb(16 185 129 / 0.15);
   transition:
     background-color 0.2s var(--cond-spring),
     transform 0.2s var(--cond-spring);

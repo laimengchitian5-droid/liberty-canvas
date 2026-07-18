@@ -9,7 +9,11 @@ import {
 
 /**
  * Internal energy taxonomy — never exposed as play URLs.
- * Sketch keys (`mind-explorer`, `career-nexus`, …) are rejected; only Plug slugs ship.
+ *
+ * Sketch map (do NOT ship the 3-entry Map):
+ * - `energy-high` → personality-spectrum (kept)
+ * - `energy-low` → big-five (NOT `mind-explorer`)
+ * - `default` → personality-spectrum (NOT `global-identity-core`)
  */
 type EnergyBand = "energy-high" | "energy-low" | "workplace-vibe" | "default";
 
@@ -100,12 +104,14 @@ function matchEnergyBand(text: string): EnergyBand {
 
 /**
  * Deterministic express routing — O(rules), typed Plug slug only.
+ * Specialty keyword rules win before energy bands; AI never chooses the slug.
  *
  * Rejected sketch defects:
- * - `@/src/types` → `@/types`
+ * - `ReadonlyMap` + `Map.get(...)!` (use typed `Record` / exhaustiveness)
  * - invented slugs (`mind-explorer`, `career-nexus`, `global-identity-core`)
- * - `Map.get(...)!` non-null assertions
- * - bare `string` return (loses exhaustiveness)
+ * - bare `string` return · locale-only prompt that omits locked express line
+ * - dropping specialty routes (romance / genz / oshikatsu / motivation / big-five)
+ * - `@/src/types` → `@/types`
  */
 export function routeExpressLineFromAnswer(
   userAnswer: string,

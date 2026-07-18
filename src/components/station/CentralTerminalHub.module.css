@@ -1,10 +1,18 @@
 /* ==========================================================================
    Central Terminal Hub — compact Adult-Cute board
    Sketch map:
-   - .conductorContainer → .terminalContainer (shell under sticky GlobalNav)
-   - .gateGrid           → .terminalGrid (15-line catalog; NOT Conductor CSS)
-   Rejected: navy `--canvas-bg-dark` hub/conductor shell, gateGrid inside
-   IdentityHubConductor, bare minmax(280px) without min(100%, …) guard.
+   - .hubWrapper  → .terminalContainer (shell under sticky GlobalNav)
+   - .gateZone    → Conductor owns its panel + CLS; catalog is .gateMatrixArea
+   - .gateTitle   → .sectionTitle / hub copy (no dashed “gate chrome” box)
+   - .gateGrid    → .terminalGrid (15-line catalog; NOT Conductor CSS)
+   Rejected sketch defects:
+   - inventing `--lc-space-xl` · `--lc-color-bg-white` · `--lc-radius-lg`
+     (use real `--lc-*` + local lengths)
+   - dashed `.gateZone` with empty `min-block-size: 24rem` CLS wall
+     (Conductor `.resultSlot` already reserves 11.25rem; hub must not double-tax)
+   - narrowing shell to 800px (keep 1000px for auto-fit gate cards)
+   - navy `--canvas-bg-dark` · gateGrid inside IdentityHubConductor
+   - bare minmax(280px) without min(100%, …) guard
    ========================================================================== */
 
 .terminalContainer {

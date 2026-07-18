@@ -10,7 +10,22 @@ import { selectAuthPanel, useUserStore } from "@/store/userStore";
 import a11y from "@/styles/accessibility.module.css";
 import styles from "./UserAuthPanel.module.css";
 
-export function UserAuthPanel() {
+/**
+ * Nav auth panel — session via userStore (login / signup / sign-out).
+ *
+ * Rejected sketch defects:
+ * - `React.FC` + unused `currentLocale` prop + inline styles
+ * - hardcoded `guest_user` without pattern / establishSession
+ * - inventing `--lc-color-text-muted` / `--lc-color-brand-rose` token names
+ * - submit button with no form / no validation
+ */
+
+export interface UserAuthPanelProps {
+  /** `rail` = dense nav row; `popover` = stacked capsule panel. */
+  readonly layout?: "rail" | "popover";
+}
+
+export function UserAuthPanel({ layout = "rail" }: UserAuthPanelProps) {
   const { authStatus, authErrorMessage, isGuest } = useUserStore(
     useShallow(selectAuthPanel),
   );
@@ -48,7 +63,12 @@ export function UserAuthPanel() {
 
   if (!isGuest) {
     return (
-      <div className={styles.panelAuthenticated} role="group" aria-label="アカウント操作">
+      <div
+        className={styles.panelAuthenticated}
+        data-layout={layout}
+        role="group"
+        aria-label="アカウント操作"
+      >
         <button
           type="button"
           className={`${styles.actionButton} ${a11y.touchTargetInline} ${a11y.focusRing}`}
@@ -66,6 +86,7 @@ export function UserAuthPanel() {
   return (
     <form
       className={styles.panelGuest}
+      data-layout={layout}
       aria-label="ログインまたは新規登録"
       onSubmit={onSubmit}
     >

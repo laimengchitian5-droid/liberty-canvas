@@ -12,12 +12,18 @@ import { generateAllPseoRoutes } from "@/lib/station/pseoManifestEngine";
 /**
  * Discover pSEO SSG — locale × topic landings that hand off to first-party play.
  *
+ * Sketch map (do NOT ship the thin outbound LP):
+ * - `PSEO_REGISTRY.entries()` static params → {@link generateAllPseoRoutes}
+ * - `getPageMetadata` + `targetRedirectUrl` → {@link resolveLandingPage} + catalog
+ * - Conductor `.ctaBoarding` + inline `<main>` → {@link LandingIntakeClient}
+ *
  * Rejected sketch defects (do not reintroduce):
- * - Page-local `GlobalNavbar` (Discover is immersive → AppShell brand bar;
- *   never stack a second header or fork GlobalNav)
- * - `@/src/...` · Conductor CSS · navy inline LP · 16personalities outbound
- * - `getPageMetadata` / `targetRedirectUrl` (use resolveLandingPage + catalog)
- * - Drop LandingIntakeClient / JSON-LD / notFound fail-closed
+ * - `@/src/...` · IdentityHubConductor CSS on Discover · navy/inline LP styles
+ * - `target="_blank"` to external assessment vendors (16personalities et al.)
+ * - always `robots: { index: true }` (use {@link buildLandingMetadata} / index policy)
+ * - dropping JSON-LD · `notFound()` fail-closed · LandingIntakeClient
+ * - Page-local `GlobalNavbar` / stacking a second header over AppShell
+ * - claiming “197カ国” SSG from a 2-slug hand Map
  *
  * Do not conflate with `/diagnosis/play/[slug]` (Plug compiler runtime).
  */

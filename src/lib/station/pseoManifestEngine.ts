@@ -18,12 +18,18 @@ import {
  * Tracking for first-party funnels lives in Discover `ref` / analytics — not outbound
  * affiliate query strings on third-party assessment vendors.
  *
+ * Sketch map (do NOT ship the nested hand registry):
+ * - `PSEO_REGISTRY.get(locale)!.get(slug)!` → {@link getPseoManifestEntry} (flat O(1) cell)
+ * - `PageMetadata` + `targetRedirectUrl: LANDING_CATALOG[n].redirectUrl`
+ *   → {@link PseoManifestEntry} + `destinationPath` from `topic.plugPlayPath`
+ * - `getPageMetadata` → deprecated alias of {@link getPseoManifestEntry}
+ *
  * Rejected sketch defects (do not reintroduce):
- * - `@/src/types` import path · deprecated `PageMetadata` + `targetRedirectUrl`
- * - `BASE_REDIRECT_URLS` → `16personalities.com` (or any external assessment sink)
- * - Hand-authored nested `ReadonlyMap` “197-country” keyword registry
- * - Invented express slugs (`mind-explorer`, `global-identity-core`, …)
- * - Broken nested Map typing on the `en` branch of sketch registries
+ * - `@/src/types` · `LANDING_CATALOG` affiliate table · `16personalities.com` sinks
+ * - hand-authored nested `ReadonlyMap` (“197カ国” / FOMO “公式16タイプ” copy)
+ * - invented slugs (`global-identity-core`, `mind-explorer`, …) as default fallbacks
+ * - `Map.get(...)!` non-null assertions · `PageMetadataSchema.parse` on untrusted rows
+ * - dual bus of copy (engine must project catalog, not re-author SERP strings)
  */
 
 const CELL_SEP = "\u0000";

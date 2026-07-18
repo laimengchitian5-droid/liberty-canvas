@@ -5,11 +5,11 @@ import { CONDUCTOR_EXPRESS_SLUGS } from "@/types/conductor";
 /**
  * Identity Hub Conductor telemetry contracts.
  *
- * Rejected sketch defects:
- * - bare `locale: string` / `expressLineSlug: string`
- * - unbounded `timestamp: z.number()` (NaN / Infinity / far-future)
- * - parallel analytics vocabulary (`express_line_boarded` without conductor_ prefix)
- * - inventing a second event bus outside diagnosis analytics SSOT
+ * Rejected sketch defects (do not reintroduce):
+ * - bare `locale: string` / `expressLineSlug: string` (use closed enums)
+ * - required unbounded `timestamp: z.number()` (use finite `occurredAtMs` window)
+ * - `metaData` only (canonical field is `meta`; alias kept one release)
+ * - inventing a second event bus (wire via {@link toConductorAnalyticsWire})
  */
 
 export const CONDUCTOR_TELEMETRY_EVENTS = [
