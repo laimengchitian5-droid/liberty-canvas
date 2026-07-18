@@ -81,17 +81,17 @@ function resolveAccountTriggerLabel(locale: Locale): string {
 /**
  * Site-wide chrome — single {@link GlobalNav} (never fork `GlobalNavbar.tsx`).
  *
- * Sketch map:
- * - leftSection / mainMenu → brand + scroll tabs (live routes only)
- * - rightSection → LocaleSwitcher + guest auth capsule (popover)
- * - authTrigger → expands real {@link UserAuthPanel} (no emoji / fake buttons)
+ * Sketch map (do NOT ship the hollow “hub-only” nav):
+ * - leftSection / mainMenu → BrandWordmark + scroll tabs (live routes only)
+ * - rightSection → LocaleSwitcher + guest auth capsule / session badge
+ * - “erase all auth to fix density” → encapsulate in popover (auth stays)
  *
  * Rejected sketch defects:
- * - `@/src/...` imports · `lib/navigation/buildGlobalNavItems` fork
+ * - `@/src/...` · `lib/navigation/buildGlobalNavItems` fork
  * - `React.FC` · `currentLocale` prop (locale from {@link useI18n})
  * - raw `<a href>` + `role="menubar"` · text brand "Liberty" (use BrandWordmark)
- * - emoji `👤 Account` · passing fake props into LocaleSwitcher / UserAuthPanel
- * - CSS class names `.navbar` / `.navLink` (contract is `.bar` / `.tab`)
+ * - deleting {@link UserAuthPanel} / session chrome (density ≠ amputate auth)
+ * - fake props into LocaleSwitcher · CSS `.navbar` / `.navLink` (use `.bar` / `.tab`)
  */
 export function GlobalNav() {
   const pathname = usePathname() ?? "";

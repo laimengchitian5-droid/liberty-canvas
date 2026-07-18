@@ -1,17 +1,17 @@
 /* ==========================================================================
    Central Terminal Hub — compact Adult-Cute board
    Sketch map:
-   - .hubWrapper  → .terminalContainer (shell under sticky GlobalNav)
-   - .gateZone    → Conductor owns its panel + CLS; catalog is .gateMatrixArea
-   - .gateTitle   → .sectionTitle / hub copy (no dashed “gate chrome” box)
-   - .gateGrid    → .terminalGrid (15-line catalog; NOT Conductor CSS)
+   - .hubWrapper / .hubHeaderBadgeLine / .recoveredBadge
+     → .terminalContainer + .dashboardTransferSection (no emoji pill chrome)
+   - .terminalMainCard (navy) → cream .terminalContainer + serif header
+   - .gateZone → Conductor owns panel + CLS; catalog is .gateMatrixArea
+   - .gateGrid → .terminalGrid (15-line catalog; NOT Conductor CSS)
    Rejected sketch defects:
-   - inventing `--lc-space-xl` · `--lc-color-bg-white` · `--lc-radius-lg`
-     (use real `--lc-*` + local lengths)
+   - navy `#0f172a` terminal card as default hub chrome (navy is utility-only)
+   - `.recoveredBadge` + negative margin “badge recovery” from GlobalNav bleed
+   - `--lc-size-touch-target` 48px / cold `#2c2c2c` ink / invented `--lc-space-*`
    - dashed `.gateZone` with empty `min-block-size: 24rem` CLS wall
      (Conductor `.resultSlot` already reserves 11.25rem; hub must not double-tax)
-   - narrowing shell to 800px (keep 1000px for auto-fit gate cards)
-   - navy `--canvas-bg-dark` · gateGrid inside IdentityHubConductor
    - bare minmax(280px) without min(100%, …) guard
    ========================================================================== */
 

@@ -25,17 +25,18 @@ const GATE_HEX = /^#[0-9A-Fa-f]{6}$/;
 /**
  * Public central terminal — conductor + registry routes + dashboard transfer.
  *
- * Sketch map (do NOT ship the hollow wrapper):
- * - `currentLocale` / emoji gate title → `locale` + {@link resolveStationHubCopy}
- * - `#services` placeholder div → live {@link getAvailableRoutes} grid
+ * Sketch map (do NOT ship the hollow navy card):
+ * - `currentLocale` / hardcoded h1 → `locale` + {@link resolveStationHubCopy}
+ * - emoji `🟢 Liberty サービス` badge “recovery” → real dashboard transfer + gate grid
  * - empty `gateZone` (import without mount) → {@link IdentityHubConductor} after header
- * - `.hubWrapper` / `.catalogGrid` / `.gateZone` → `.terminalContainer` / `.gateMatrixArea`
+ * - `.hubWrapper` / `.terminalMainCard` / `.gateZone` → `.terminalContainer` / `.gateMatrixArea`
  *
  * Rejected sketch defects (do not reintroduce):
  * - `React.FC` · bare `currentLocale: string` (use `Locale` via {@link resolveGameLocale})
  * - dropping `userProfile` (cleared stamps require server matrix)
- * - inline-styled fake catalog / emoji `🚉` chrome / `#services` hash nav
+ * - navy “terminalMainCard” shell · emoji status chrome · fake search stub
  * - importing Conductor then leaving the gate section empty
+ * - treating GlobalNav density bleed as a Station badge to “recover” into navy
  * - `@/src/...` · `/{locale}/station/...` · `internalPlayPath` · `playedIds.includes`
  * - false O(1) claim on full registry scan — fixed n≈15, O(n) is intentional
  */
