@@ -3,15 +3,15 @@
  *
  * Sketch map (do NOT fork `GlobalNavbar.module.css`):
  * - .navbar / .leftSection / .rightSection → .bar / .barInner / rails
- * - .menuList / .navLink → .tabList / .tab
+ * - .menuList overflow-x → .tabList (already scrolls; thin thumb below)
+ * - .navLink flex-shrink: 0 → .tabItem / .tab (`flex: 0 0 auto`)
  * - .authWrapper / .authPopover → .authShell / .authPopover (+ reduced-motion)
  *
  * Rejected sketch defects:
- * - class rename `.navbar` (contract is `.bar`)
- * - inventing `--lc-color-bg-light` · `--lc-size-touch-target` · `--lc-zindex-nav`
- *   · `--lc-color-brand-rose` · `--lc-shadow-lg` (use `--lc-*` + local `--nav-*`)
+ * - class rename `.navbar` / `.menuList` / `.navLink` (contract is `.bar` / `.tab*`)
+ * - inventing `--lc-color-border` · `--lc-size-touch-target` · `--lc-zindex-nav`
  * - “48px死守 / GSC penalty” myth (WCAG 2.2 target is `--lc-touch-min` 44px)
- * - linear `ease` hover · missing prefers-reduced-motion kill on popover
+ * - linear `ease` · missing prefers-reduced-motion on scroll / popover
  * - `max-block-size` hard clip / `max-inline-size: 50%` brand rail
  *
  * Collision contract: meta/brand/session never shrink; tabs scroll.
@@ -142,6 +142,7 @@
 /**
  * navigationScrollWrapper — PC/mobile same contract:
  * take remaining width, never crush labels, scroll overflow.
+ * Thin scrollbar (not hidden) so desktop overflow stays discoverable.
  */
 .tabList {
   display: flex;
@@ -150,19 +151,36 @@
   gap: 0.5rem;
   flex: 1 1 auto;
   min-inline-size: 0;
+  max-inline-size: 100%;
   margin: 0;
-  padding-block: 0.15rem;
+  padding-block: 0.15rem 0.35rem;
   padding-inline: 0;
   list-style: none;
   overflow-x: auto;
   overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  /* Adult-Cute: hide scrollbar chrome; momentum scroll remains */
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nav-border) transparent;
 }
 
 .tabList::-webkit-scrollbar {
-  display: none;
+  block-size: 6px;
+}
+
+.tabList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tabList::-webkit-scrollbar-thumb {
+  background-color: var(--nav-border);
+  border-radius: 999px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tabList::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--nav-brand) 55%, var(--nav-border));
+  }
 }
 
 .tabItem {
@@ -293,6 +311,10 @@
 @media (prefers-reduced-motion: reduce) {
   .bar {
     backdrop-filter: none;
+  }
+
+  .tabList {
+    scroll-behavior: auto;
   }
 
   .tab,
