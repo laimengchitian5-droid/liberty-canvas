@@ -2,8 +2,11 @@
  * Production deploy gate — quality first, deploy only with --prod.
  *
  * Usage:
- *   node scripts/deploy-prod-gate.mjs           # npm run ci only
- *   node scripts/deploy-prod-gate.mjs --prod    # ci, then npm run deploy:prod
+ *   node scripts/deploy-prod-gate.mjs           # npm run ci:release only
+ *   node scripts/deploy-prod-gate.mjs --prod    # ci:release, then npm run deploy:prod
+ *
+ * Uses `ci:release` (lint + typecheck + test + build), not full `ci`.
+ * Repo-wide Prettier debt makes `format:check` a false deploy blocker.
  *
  * Rejected sketch defects:
  * - git add / commit / push origin main
@@ -40,11 +43,11 @@ console.log(
   `[deploy-prod-gate] starting (mode=${deployProd ? "ci+prod" : "ci-only"})`,
 );
 
-runNpm("ci");
+runNpm("ci:release");
 
 if (!deployProd) {
   console.log(
-    "[deploy-prod-gate] quality gate passed. Re-run with --prod to deploy.",
+    "[deploy-prod-gate] release gate passed. Re-run with --prod to deploy.",
   );
   process.exit(0);
 }

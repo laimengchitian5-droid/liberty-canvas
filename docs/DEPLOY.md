@@ -10,7 +10,7 @@ https://liberty-canvas.vercel.app
 npm run ci
 ```
 
-Or the thin gate wrapper (same `ci` pipeline, no git / no secret mutation):
+Or the thin gate wrapper (`ci:release` = lint + typecheck + test + build; no git / no secret mutation). Full `npm run ci` still includes `format:check` for local/CI formatting debt:
 
 ```bash
 npm run deploy:gate
