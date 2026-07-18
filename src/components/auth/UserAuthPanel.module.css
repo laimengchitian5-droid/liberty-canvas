@@ -2,6 +2,16 @@
  * Auth chrome — Adult-Cute pills aligned with GlobalNav sand surface.
  * Desktop: one horizontal station row (sketch `.authStationBlock` intent).
  * Mobile: safe wrap. Touch targets stay ≥ `--lc-touch-min` (44px).
+ *
+ * Sketch map (do NOT ship `.panelContainer` fork):
+ * - `.panelContainer` / `.tabHeader` / `.tabButton` → `.panelGuest` + `.modeSwitch`
+ * - `.authForm` / `.inputGroup` → form is `.panelGuest` + `.fieldRow`
+ * - fixed `280px` popover width → owned by GlobalNav `.authPopover`
+ *
+ * Rejected sketch defects:
+ * - inventing `--lc-color-text-muted` · `--lc-color-brand-rose` · `--lc-size-touch-target`
+ * - 48px touch · `outline: none` on focus · `transition: all`
+ * - class rename that drops `data-layout="rail" | "popover"` dual contract
  */
 
 .panelGuest,
@@ -100,6 +110,14 @@
   background-color: var(--auth-surface);
   inline-size: 100%;
   min-block-size: var(--lc-touch-min, 44px);
+  outline: none;
+  transition: border-color 0.2s var(--auth-spring);
+}
+
+.input:focus-visible {
+  border-color: var(--auth-rose);
+  outline: 3px solid color-mix(in srgb, var(--auth-rose) 45%, transparent);
+  outline-offset: 2px;
 }
 
 .input::placeholder {
@@ -127,7 +145,8 @@
 @media (prefers-reduced-motion: reduce) {
   .modeButton,
   .actionButton,
-  .submitButton {
+  .submitButton,
+  .input {
     transition: none;
     animation: none;
   }

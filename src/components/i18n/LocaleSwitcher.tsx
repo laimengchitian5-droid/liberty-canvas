@@ -9,10 +9,15 @@ import styles from "./LocaleSwitcher.module.css";
 /**
  * Locale control — controlled via {@link useI18n}; all {@link SUPPORTED_LOCALES}.
  *
+ * Sketch map (do NOT ship pathname segment rewrite):
+ * - `currentLocale` prop + `router.push(/ja→/en)` → {@link useI18n}`setLocale`
+ * - emoji `🌐` → lucide {@link Globe2}
+ * - ja/en-only `<option>` → {@link SUPPORTED_LOCALES} + {@link getLocaleLabel}
+ *
  * Rejected sketch defects:
- * - `React.FC` + unused `currentLocale` prop + inline styles
- * - `defaultValue` uncontrolled select (no `setLocale`)
- * - ja/en only · inventing `--lc-size-touch-target` / `--lc-radius-full`
+ * - `React.FC` · `currentLocale` prop · fake props from GlobalNav sketches
+ * - splitting `pathname` to invent `/en/services` (Liberty routes are not locale-prefixed)
+ * - ja/en only · emoji chrome · CSS class forks (`.switcherWrapper`)
  */
 
 const LOCALE_SHORT: Record<Locale, string> = {

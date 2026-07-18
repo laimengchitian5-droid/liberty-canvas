@@ -5,11 +5,17 @@ import { CONDUCTOR_EXPRESS_SLUGS } from "@/types/conductor";
 /**
  * Identity Hub Conductor telemetry contracts.
  *
+ * Sketch map (do NOT ship the open-string Zod blob):
+ * - `eventName` typos (`conductor_boarding_express`) → {@link CONDUCTOR_TELEMETRY_EVENTS}
+ * - `locale` regex / `expressLineSlug` open regex → {@link SUPPORTED_LOCALES} /
+ *   {@link CONDUCTOR_EXPRESS_SLUGS} closed enums
+ * - required `timestamp` + `<= Date.now()` → optional `occurredAtMs` finite window
+ *
  * Rejected sketch defects (do not reintroduce):
- * - bare `locale: string` / `expressLineSlug: string` (use closed enums)
- * - required unbounded `timestamp: z.number()` (use finite `occurredAtMs` window)
- * - `metaData` only (canonical field is `meta`; alias kept one release)
- * - inventing a second event bus (wire via {@link toConductorAnalyticsWire})
+ * - open `z.string()` locale/slug (accepts invented routes / non-product locales)
+ * - flaky future-clock refine on `Date.now()` at parse time
+ * - missing `meta` · inventing a second event bus (use {@link toConductorAnalyticsWire})
+ * - “197カ国” claims without landing/i18n SSOT
  */
 
 export const CONDUCTOR_TELEMETRY_EVENTS = [

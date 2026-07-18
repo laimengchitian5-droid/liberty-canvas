@@ -3,10 +3,14 @@ import { z } from "zod";
 /**
  * Conductor API contracts — Zod at every boundary.
  *
+ * Sketch map (do NOT ship the bare interface):
+ * - `expressLineSlug: string` → {@link CONDUCTOR_EXPRESS_SLUGS} enum
+ * - `acknowledge` / `teaser` unbounded → Zod max lengths
+ * - missing fields → `expressLineName` · `ctaLabel` · `source`
+ *
  * Rejected sketch defects (do not reintroduce):
- * - bare `locale: string` / `expressLineSlug: string` on the response
- * - `ConductorResponse = AiResponse & { slug; ctaHref }` without Zod
- * - unbounded AI prose (`acknowledge` / `teaser` without max)
+ * - bare `interface ConductorResponse` without Zod (no runtime guard)
+ * - bare `locale: string` / open `expressLineSlug: string` on the wire
  * - dropping `expressLineName` · `ctaLabel` · `source`
  * - rejecting legacy `answer` alias before one-release migrate completes
  */

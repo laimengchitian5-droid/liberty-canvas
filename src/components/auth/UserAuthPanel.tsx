@@ -13,11 +13,16 @@ import styles from "./UserAuthPanel.module.css";
 /**
  * Nav auth panel — session via userStore (login / signup / sign-out).
  *
+ * Sketch map (do NOT ship the console.log mock form):
+ * - `currentLocale` / inline ja·en strings → i18n later; labels stay Japanese SSOT for now
+ * - `activeTab: register` → {@link AUTH_SESSION_MODES} (`login` | `signup`)
+ * - `panelContainer` / `role="tablist"` → `layout="rail" | "popover"` + mode switch
+ *
  * Rejected sketch defects:
- * - `React.FC` + unused `currentLocale` prop + inline styles
- * - hardcoded `guest_user` without pattern / establishSession
- * - inventing `--lc-color-text-muted` / `--lc-color-brand-rose` token names
- * - submit button with no form / no validation
+ * - `React.FC` · `currentLocale` prop · fake props from GlobalNav sketches
+ * - `console.log` submit · hardcoded `guest_user` without {@link USER_ID_PATTERN}
+ * - skipping {@link establishSession} / sign-out / authenticated rail
+ * - inventing CSS class forks (`.panelContainer`) over `data-layout` contract
  */
 
 export interface UserAuthPanelProps {

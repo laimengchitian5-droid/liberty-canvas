@@ -1,3 +1,18 @@
+/**
+ * Locale chrome — compact globe pill (mobile) / expanded select (desktop).
+ *
+ * Sketch map (do NOT ship `.switcherWrapper` fork):
+ * - `.switcherWrapper` / `.selectContainer` → `.root`
+ * - `.globeIcon` / `.selectBox` → `.icon` (lucide) + `.select`
+ * - `.visuallyHidden` → `.srOnly`
+ *
+ * Rejected sketch defects:
+ * - inventing `--lc-color-bg-white` · `--lc-size-touch-target` · `--lc-color-brand-rose`
+ * - “48px絶対防御” / emoji ▾ pseudo-arrow (native select + shortCode badge)
+ * - `outline: none` without a visible focus ring replacement
+ * - fixed wide pill that fights GlobalNav density on mobile
+ */
+
 .root {
   position: relative;
   display: inline-flex;
@@ -6,11 +21,14 @@
   flex: 0 0 auto;
   inline-size: 2.75rem;
   block-size: 2.75rem;
+  min-block-size: var(--lc-touch-min, 44px);
+  min-inline-size: var(--lc-touch-min, 44px);
   border-radius: 999px;
   border: 1px solid #cbd5e1;
   background: #ffffff;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 .icon {

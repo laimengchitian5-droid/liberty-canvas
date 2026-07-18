@@ -20,16 +20,15 @@ import {
  *
  * Sketch map (do NOT ship the nested hand registry):
  * - `PSEO_REGISTRY.get(locale)!.get(slug)!` → {@link getPseoManifestEntry} (flat O(1) cell)
- * - `PageMetadata` + `targetRedirectUrl: LANDING_CATALOG[n].redirectUrl`
- *   → {@link PseoManifestEntry} + `destinationPath` from `topic.plugPlayPath`
+ * - `PseoPageMetadata.targetRedirectUrl` → `destinationPath` from `topic.plugPlayPath`
  * - `getPageMetadata` → deprecated alias of {@link getPseoManifestEntry}
  *
  * Rejected sketch defects (do not reintroduce):
- * - `@/src/types` · `LANDING_CATALOG` affiliate table · `16personalities.com` sinks
- * - hand-authored nested `ReadonlyMap` (“197カ国” / FOMO “公式16タイプ” copy)
- * - invented slugs (`global-identity-core`, `mind-explorer`, …) as default fallbacks
- * - `Map.get(...)!` non-null assertions · `PageMetadataSchema.parse` on untrusted rows
- * - dual bus of copy (engine must project catalog, not re-author SERP strings)
+ * - hand-authored nested `ReadonlyMap` + `Map.get(...)!` fallbacks
+ * - invented slugs (`global-identity-core`, `cosmic-line-02`, …)
+ * - absolute sinks (`https://vercel.app`, 16personalities.com, any external URL)
+ * - dual SERP copy bus (engine projects catalog; does not re-author titles)
+ * - bare `string` locale/slug without landing enums / Zod
  */
 
 const CELL_SEP = "\u0000";

@@ -2,17 +2,16 @@
  * Site chrome — Adult-Cute sand surface.
  *
  * Sketch map (do NOT fork `GlobalNavbar.module.css`):
- * - .navbarContainer         → .bar / .barInner
- * - .leftSection / .mainMenu → .navigationGroup + .brandSlot + .tabList
- * - .rightSection            → .metaActionGroup (+ UserAuthPanel row)
- * - .navItemBase / .tabMenu  → .tab / .tabActive (no `composes:`)
- * - .authTrigger / .localeSelect → UserAuthPanel / LocaleSwitcher
+ * - .navbar / .leftSection / .rightSection → .bar / .barInner / rails
+ * - .menuList / .navLink → .tabList / .tab
+ * - .authWrapper / .authPopover → .authShell / .authPopover (+ reduced-motion)
  *
  * Rejected sketch defects:
- * - parallel `GlobalNavbar.module.css` / class rename `.navbar` (contract is `.bar`)
+ * - class rename `.navbar` (contract is `.bar`)
  * - inventing `--lc-color-bg-light` · `--lc-size-touch-target` · `--lc-zindex-nav`
- *   (use `--lc-color-sand` · `--lc-touch-min` · local z-index)
- * - 48px touch / `composes:` / hover invert to solid rose + white
+ *   · `--lc-color-brand-rose` · `--lc-shadow-lg` (use `--lc-*` + local `--nav-*`)
+ * - “48px死守 / GSC penalty” myth (WCAG 2.2 target is `--lc-touch-min` 44px)
+ * - linear `ease` hover · missing prefers-reduced-motion kill on popover
  * - `max-block-size` hard clip / `max-inline-size: 50%` brand rail
  *
  * Collision contract: meta/brand/session never shrink; tabs scroll.

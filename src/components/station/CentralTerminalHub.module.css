@@ -2,14 +2,15 @@
    Central Terminal Hub — compact Adult-Cute board
    Sketch map:
    - .hubWrapper → .terminalContainer (1200px shell already absorbed)
-   - .terminalGrid / .stationCell → keep auto-fit + route-color top border
+   - .hubHeaderBadgeLine / .recoveredBadge → dashboard transfer (no emoji pill)
+   - .terminalMainCard (navy) → cream shell + serif header
+   - .terminalGrid / .stationCell → auto-fit + route-color top border + hover
    - .gateZone → Conductor `.resultSlot` (11.25rem); never empty 24rem hub wall
    Rejected sketch defects:
-   - claiming “正本死守” while renaming shell to `.hubWrapper` / inventing tokens
-   - cold `#2c2c2c` · `--lc-color-bg-white` · `--lc-color-brand-rose` aliases
-   - fixed `min-block-size: 10.5rem` (grid uses `100%` for row alignment)
-   - stripping `list-style` / status / CTA classes from the cell contract
-   - navy scroll rail · dashed empty `.gateZone` 24rem CLS tax
+   - claiming “正本死守” while shipping navy card + overlapping badge z-index
+   - inventing `--lc-space-xl` · `--lc-color-bg-light` · `--lc-size-touch-target`
+   - 48px touch / negative-margin badge stack / empty dashed `.gateZone` 24rem
+   - fixed `min-block-size: 10.5rem` (grid uses `100%`) · strip list/CTA contract
    ========================================================================== */
 
 .terminalContainer {
