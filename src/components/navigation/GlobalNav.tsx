@@ -7,6 +7,10 @@ import { LocaleSwitcher } from "@/components/i18n/LocaleSwitcher";
 import { BrandMegaMenu } from "@/components/brand/BrandMegaMenu";
 import { BrandNavLink } from "@/components/brand/BrandNavLink";
 import { BrandWordmark } from "@/components/brand/BrandWordmark";
+import {
+  buildDiscoverHubPath,
+  buildGlobalNavItems,
+} from "@/components/navigation/buildGlobalNavItems";
 import { PRODUCT_NAME_SLUG } from "@/lib/brand/constants";
 import { resolveBrandId } from "@/lib/brand/resolveBrand";
 import { resolveBrandPath } from "@/lib/brand/urlResolver";
@@ -15,14 +19,6 @@ import { deriveCreatorAccent } from "@/lib/rubel/creatorDisplay";
 import { selectNavProfile, useUserStore } from "@/store/userStore";
 import a11y from "@/styles/accessibility.module.css";
 import styles from "./GlobalNav.module.css";
-
-interface NavItem {
-  readonly href: string;
-  readonly label: string;
-  readonly shortLabel: string;
-  readonly ariaLabel: string;
-  readonly isActive: (pathname: string) => boolean;
-}
 
 interface NavSessionBadgeProps {
   readonly displayName: string;
@@ -34,7 +30,6 @@ interface NavSessionBadgeProps {
 
 /**
  * Authenticated session chip — sketch `userIdBadge` without emoji / raw IDs.
- * Guest path renders nothing; auth CTAs live in {@link UserAuthPanel}.
  */
 const NavSessionBadge = ({
   displayName,
@@ -63,18 +58,20 @@ const NavSessionBadge = ({
 );
 
 /**
- * Site-wide chrome — includes one-tap gates to station hub / dashboard.
+ * Site-wide chrome — single GlobalNav (never fork `hub/GlobalNav.tsx`).
  *
- * Session polarity (fixes inverted sketch):
- * - guest → {@link UserAuthPanel} login / signup
- * - authenticated → {@link NavSessionBadge} + logout in UserAuthPanel
+ * Sketch map:
+ * - `headerContainer` → `.bar` / `.barInner`
+ * - `navigationScrollWrapper` → `.tabList` (labels never crush; scroll)
+ * - `brandLogo` → {@link BrandWordmark} in `.brandSlot` (outside scroll)
+ * - `navLinkItem` → {@link BrandNavLink} + `.tab`
+ * - `metaActionGroup` → locale + {@link UserAuthPanel}
  *
- * Rejected sketch defects (do not reintroduce):
- * - parallel `hub/GlobalHeader.tsx`
- * - emoji in chrome (`👤`)
- * - raw `userId` in the badge
- * - dead `<button>` without `type` / handlers
- * - inverted `isGuest` branch (login when authenticated)
+ * Rejected sketch defects:
+ * - raw `<a href>` / dead routes (`/home`, `/ai-diagnostic`, `/play-room`, …)
+ * - hardcoded `/station/ja` (use active locale)
+ * - brand inside the scroll rail (would scroll away)
+ * - missing `"use client"` / imports / i18n
  */
 export function GlobalNav() {
   const pathname = usePathname() ?? "";
@@ -84,74 +81,18 @@ export function GlobalNav() {
     useUserStore(useShallow(selectNavProfile));
 
   const accentClass = isGuest ? "" : deriveCreatorAccent(displayName);
-  const stationHubHref = `/station/${locale}`;
-  const stationDashboardHref = `/station/${locale}/dashboard`;
-  const canvasHub = resolveBrandPath("liberty-canvas", "hub");
-  const plugEngine = resolveBrandPath("liberty-plug", "engine");
-  const playHub = resolveBrandPath("liberty-play", "hub");
-  const plugCatalog = resolveBrandPath("liberty-plug", "hub");
-  const forgeHub = resolveBrandPath("liberty-forge", "hub");
-
-  const navItems: readonly NavItem[] = [
-    {
-      href: canvasHub,
-      label: nav.hub,
-      shortLabel: nav.hubShort,
-      ariaLabel: nav.hub,
-      isActive: (path) => path === "/",
-    },
-    {
-      href: plugEngine,
-      label: nav.assessment,
-      shortLabel: nav.assessmentShort,
-      ariaLabel: nav.assessment,
-      isActive: (path) =>
-        path === plugEngine || path.startsWith(`${plugEngine}/`),
-    },
-    {
-      href: playHub,
-      label: "Play",
-      shortLabel: "Play",
-      ariaLabel: "Liberty Play",
-      isActive: (path) => path === "/play" || path.startsWith("/play/"),
-    },
-    {
-      href: stationHubHref,
-      label: nav.station,
-      shortLabel: nav.stationShort,
-      ariaLabel: nav.station,
-      isActive: (path) =>
-        path === stationHubHref ||
-        (path.startsWith(`${stationHubHref}/`) &&
-          !path.startsWith(stationDashboardHref)),
-    },
-    {
-      href: stationDashboardHref,
-      label: nav.dashboard,
-      shortLabel: nav.dashboardShort,
-      ariaLabel: nav.dashboard,
-      isActive: (path) =>
-        path === stationDashboardHref ||
-        path.startsWith(`${stationDashboardHref}/`),
-    },
-    {
-      href: plugCatalog,
-      label: nav.diagnosis,
-      shortLabel: nav.diagnosisShort,
-      ariaLabel: nav.diagnosis,
-      isActive: (path) =>
-        path === plugCatalog || path.startsWith(`${plugCatalog}/`),
-    },
-    {
-      href: forgeHub,
-      label: nav.create,
-      shortLabel: nav.createShort,
-      ariaLabel: nav.create,
-      isActive: (path) => path.startsWith("/create"),
-    },
-  ];
-
   const brandId = resolveBrandId(pathname);
+
+  const navItems = buildGlobalNavItems(nav, {
+    canvasHub: resolveBrandPath("liberty-canvas", "hub"),
+    discoverHub: buildDiscoverHubPath(locale),
+    plugEngine: resolveBrandPath("liberty-plug", "engine"),
+    playHub: resolveBrandPath("liberty-play", "hub"),
+    stationHub: `/station/${locale}`,
+    stationDashboard: `/station/${locale}/dashboard`,
+    plugCatalog: resolveBrandPath("liberty-plug", "hub"),
+    forgeHub: resolveBrandPath("liberty-forge", "hub"),
+  });
 
   return (
     <nav
@@ -175,6 +116,7 @@ export function GlobalNav() {
             />
           ) : null}
 
+          {/* Scroll barrier — flex-shrink:0 tabs; overflow-x on .tabList */}
           <ul className={styles.tabList}>
             {navItems.map((item) => {
               const isActive = item.isActive(pathname);
@@ -202,7 +144,6 @@ export function GlobalNav() {
 
         <div className={styles.metaActionGroup}>
           <LocaleSwitcher />
-          {/* Guest → ログイン/新規登録 · Authenticated → ログアウト */}
           <UserAuthPanel />
         </div>
       </div>

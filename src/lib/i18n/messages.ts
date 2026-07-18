@@ -22,8 +22,13 @@ export interface CommonMessages {
 export interface NavMessages {
   hub: string;
   hubShort: string;
+  /** Discover SEO / services hub (`/discover/{locale}`) */
+  discover: string;
+  discoverShort: string;
   assessment: string;
   assessmentShort: string;
+  play: string;
+  playShort: string;
   diagnosis: string;
   diagnosisShort: string;
   create: string;
@@ -181,10 +186,14 @@ export interface LocaleMessages {
 }
 
 const NAV_EN: NavMessages = {
-  hub: "Discover",
-  hubShort: "Hub",
+  hub: "Home",
+  hubShort: "Home",
+  discover: "Services",
+  discoverShort: "SEO",
   assessment: "Cosmic AI Diagnosis",
   assessmentShort: "Cosmic",
+  play: "Play",
+  playShort: "Play",
   diagnosis: "Catalog",
   diagnosisShort: "Catalog",
   create: "Create",
@@ -198,8 +207,12 @@ const NAV_EN: NavMessages = {
 const NAV_JA: NavMessages = {
   hub: "ホーム",
   hubShort: "Home",
+  discover: "サービス",
+  discoverShort: "Discover",
   assessment: "宇宙AI診断",
   assessmentShort: "宇宙",
+  play: "プレイルーム",
+  playShort: "Play",
   diagnosis: "カタログ",
   diagnosisShort: "一覧",
   create: "作る",
@@ -257,8 +270,12 @@ const COMPILER_INTRO_JA: CompilerIntroMessages = {
 const NAV_KO: NavMessages = {
   hub: "홈",
   hubShort: "Home",
+  discover: "서비스",
+  discoverShort: "Discover",
   assessment: "우주 AI 진단",
   assessmentShort: "우주",
+  play: "플레이룸",
+  playShort: "Play",
   diagnosis: "카탈로그",
   diagnosisShort: "목록",
   create: "만들기",
@@ -272,6 +289,10 @@ const NAV_KO: NavMessages = {
 const NAV_ZH: NavMessages = {
   hub: "首页",
   hubShort: "Home",
+  discover: "服务",
+  discoverShort: "Discover",
+  play: "游戏室",
+  playShort: "Play",
   assessment: "宇宙 AI 诊断",
   assessmentShort: "宇宙",
   diagnosis: "目录",
