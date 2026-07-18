@@ -1,18 +1,15 @@
 /* ==========================================================================
    Central Terminal Hub — compact Adult-Cute board
    Sketch map:
-   - .hubWrapper / .hubHeaderBadgeLine / .recoveredBadge
-     → .terminalContainer + .dashboardTransferSection (no emoji pill chrome)
-   - .terminalMainCard (navy) → cream .terminalContainer + serif header
-   - .gateZone → Conductor owns panel + CLS; catalog is .gateMatrixArea
-   - .gateGrid → .terminalGrid (15-line catalog; NOT Conductor CSS)
+   - .hubWrapper → .terminalContainer (1200px shell already absorbed)
+   - .terminalGrid / .stationCell → keep auto-fit + route-color top border
+   - .gateZone → Conductor `.resultSlot` (11.25rem); never empty 24rem hub wall
    Rejected sketch defects:
-   - navy `#0f172a` terminal card as default hub chrome (navy is utility-only)
-   - `.recoveredBadge` + negative margin “badge recovery” from GlobalNav bleed
-   - `--lc-size-touch-target` 48px / cold `#2c2c2c` ink / invented `--lc-space-*`
-   - dashed `.gateZone` with empty `min-block-size: 24rem` CLS wall
-     (Conductor `.resultSlot` already reserves 11.25rem; hub must not double-tax)
-   - bare minmax(280px) without min(100%, …) guard
+   - claiming “正本死守” while renaming shell to `.hubWrapper` / inventing tokens
+   - cold `#2c2c2c` · `--lc-color-bg-white` · `--lc-color-brand-rose` aliases
+   - fixed `min-block-size: 10.5rem` (grid uses `100%` for row alignment)
+   - stripping `list-style` / status / CTA classes from the cell contract
+   - navy scroll rail · dashed empty `.gateZone` 24rem CLS tax
    ========================================================================== */
 
 .terminalContainer {
@@ -20,7 +17,7 @@
   display: flex;
   flex-direction: column;
   inline-size: 100%;
-  max-inline-size: 1000px;
+  max-inline-size: 1200px;
   min-block-size: 100dvh;
   margin-inline: auto;
   /* 1.5rem Adult-Cute landing under ~72px sticky nav (gap-zero under chrome) */
@@ -176,7 +173,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.005);
   transition:
     transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cellCleared {
@@ -268,6 +266,7 @@
 
   .stationCell:hover {
     transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--route-color) 45%, #edf2f7);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
   }
 
