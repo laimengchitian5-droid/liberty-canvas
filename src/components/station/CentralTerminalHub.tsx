@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { IdentityHubConductor } from "@/components/station/IdentityHubConductor";
 import { resolveGameLocale } from "@/lib/playable/gameContentSchema";
 import { getAvailableRoutes } from "@/lib/station/diagnosticStationMaster";
 import {
@@ -51,6 +52,8 @@ export const CentralTerminalHub = ({
         <h1 className={styles.mainTitle}>{copy.hubTitle}</h1>
         <p className={styles.mainSubtitle}>{copy.hubSubtitle}</p>
       </header>
+
+      <IdentityHubConductor locale={resolvedLocale} />
 
       <section
         className={styles.dashboardTransferSection}

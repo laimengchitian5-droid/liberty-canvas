@@ -10,11 +10,23 @@ https://liberty-canvas.vercel.app
 npm run ci
 ```
 
+Or the thin gate wrapper (same `ci` pipeline, no git / no secret mutation):
+
+```bash
+npm run deploy:gate
+```
+
 ## Vercel CLI (manual production deploy)
 
 ```bash
 npm run build
 npx vercel deploy --prod --yes
+```
+
+Quality-gated production deploy (runs `npm run ci`, then `npm run deploy:prod`). Does **not** commit or push:
+
+```bash
+npm run deploy:prod:gated
 ```
 
 ## Git + GitHub + Vercel auto-deploy

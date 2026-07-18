@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { DiagnosisCompiler } from "@/components/diagnosis/DiagnosisCompiler";
 import { DiagnosisRefCapture } from "@/components/diagnosis/DiagnosisRefCapture";
@@ -6,6 +7,7 @@ import { RubelBridgeHandoffCapture } from "@/components/diagnosis/RubelBridgeHan
 import { SchemaGraphJsonLd } from "@/components/seo/SchemaGraphJsonLd";
 import { listPlugDiagnosisSlugs } from "@/config/diagnoses";
 import { getMergedPlugDiagnosisBySlug } from "@/lib/builder/plugCatalog";
+import { extractSeoBlock } from "@/lib/diagnosis/extractDiagnosisElements";
 import { buildPlugDiagnosisMetadata } from "@/lib/diagnosis/buildPlugDiagnosisMetadata";
 import { buildUserAwareJsonLd } from "@/lib/seo/generateUserAwareMetadata";
 import {
@@ -13,9 +15,18 @@ import {
   mergeSchemaGraphs,
   resolvePlayOgImageUrl,
 } from "@/lib/seo/schemaGraph";
-import { extractSeoBlock } from "@/lib/diagnosis/extractDiagnosisElements";
-import { Suspense } from "react";
 
+/**
+ * Liberty Plug play runtime — DiagnosisCompiler owns the UI.
+ *
+ * Rejected sketch defects (do not reintroduce):
+ * - Replace this page with a thin pSEO / affiliate shell
+ * - `generateAllPseoRoutes()` (Discover locale×slug) as play static params
+ * - IdentityHubConductor CSS reuse + outbound `targetRedirectUrl`
+ * - Invented `params.locale` on a slug-only route
+ *
+ * Multilingual LP SSG lives at `/discover/[locale]/[slug]`.
+ */
 export const dynamicParams = true;
 
 interface DiagnosisPlayPageProps {

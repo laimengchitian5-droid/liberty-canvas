@@ -16,6 +16,7 @@ export const analyticsEventSchema = z.object({
       "discover_ref",
       "discover_submit",
       "discover_arrival",
+      "conductor_gate",
       "play_start",
       "result_view",
       "share",
@@ -23,6 +24,7 @@ export const analyticsEventSchema = z.object({
       "specialty_bridge",
     ])
     .optional(),
+  locale: z.string().trim().min(2).max(12).optional(),
   frameworkId: z.string().optional(),
   query: z.string().optional(),
   searchBackend: z.string().optional(),

@@ -23,6 +23,7 @@ import {
   buildOrganizationEntity,
   mergeSchemaGraphs,
 } from "@/lib/seo/schemaGraph";
+import type { PseoRouteParams } from "@/types/pseoManifest";
 
 const MAX_FAQ_SCHEMA_ITEMS = 6;
 
@@ -110,7 +111,7 @@ export function listIndexableLandingPages(): LandingPageDefinition[] {
   return listAllLandingPages().filter((page) => shouldIndexLandingSlug(page.slug));
 }
 
-export function listLandingStaticParams(): Array<{ locale: string; slug: string }> {
+export function listLandingStaticParams(): PseoRouteParams[] {
   return LANDING_TOPIC_SLUGS.flatMap((slug) =>
     LANDING_LOCALES.map((locale) => ({ locale, slug })),
   );

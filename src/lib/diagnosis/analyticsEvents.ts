@@ -7,6 +7,8 @@ export const DIAGNOSIS_ANALYTICS_EVENTS = [
   "discover_funnel_submit",
   "discover_funnel_direct",
   "discover_play_arrival",
+  "conductor_pre_screen",
+  "conductor_express_boarded",
   "diagnosis_started",
   "diagnosis_completed",
   "diagnosis_advice_opened",

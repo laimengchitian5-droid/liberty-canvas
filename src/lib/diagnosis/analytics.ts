@@ -19,6 +19,7 @@ export type FunnelStep =
   | "discover_ref"
   | "discover_submit"
   | "discover_arrival"
+  | "conductor_gate"
   | "play_start"
   | "result_view"
   | "share"
@@ -48,18 +49,36 @@ function canTrackClientAnalytics(): boolean {
   return hasAnalyticsConsent();
 }
 
+const ANALYTICS_EVENTS_PATH = "/api/diagnosis/analytics/events";
+
 function flushAnalyticsToServer(entry: Record<string, unknown>): void {
   if (typeof window === "undefined") {
     return;
   }
 
+  const body = JSON.stringify(entry);
+
   try {
-    void fetch("/api/diagnosis/analytics/events", {
+    if (typeof navigator.sendBeacon === "function") {
+      const queued = navigator.sendBeacon(
+        ANALYTICS_EVENTS_PATH,
+        new Blob([body], { type: "application/json" }),
+      );
+      if (queued) {
+        return;
+      }
+    }
+  } catch {
+    // fall through to fetch keepalive
+  }
+
+  try {
+    void fetch(ANALYTICS_EVENTS_PATH, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(entry),
+      body,
       keepalive: true,
     });
   } catch {

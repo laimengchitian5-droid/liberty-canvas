@@ -1,20 +1,24 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { LandingIntakeClient } from "@/components/landing/LandingIntakeClient";
+import { getBrand } from "@/lib/brand/registry";
 import {
   buildLandingJsonLd,
   buildLandingMetadata,
-  listLandingStaticParams,
   resolveLandingPage,
 } from "@/lib/landing/landingCatalog";
-import { notFound } from "next/navigation";
-import { getBrand } from "@/lib/brand/registry";
+import { generateAllPseoRoutes } from "@/lib/station/pseoManifestEngine";
 
+/**
+ * Discover pSEO SSG — locale × topic landings that hand off to first-party play.
+ * Do not conflate with `/diagnosis/play/[slug]` (Plug compiler runtime).
+ */
 interface DiscoverLandingPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
 
 export function generateStaticParams() {
-  return listLandingStaticParams();
+  return generateAllPseoRoutes();
 }
 
 export async function generateMetadata({
@@ -30,7 +34,9 @@ export async function generateMetadata({
   return buildLandingMetadata(page);
 }
 
-export default async function DiscoverLandingPage({ params }: DiscoverLandingPageProps) {
+export default async function DiscoverLandingPage({
+  params,
+}: DiscoverLandingPageProps) {
   const { locale, slug } = await params;
   const page = resolveLandingPage(locale, slug);
 

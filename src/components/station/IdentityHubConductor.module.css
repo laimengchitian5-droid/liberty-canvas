@@ -1,0 +1,277 @@
+/**
+ * Identity Hub Conductor — Adult-Cute tokens + Liskov CTA variants.
+ * Class contract is owned by IdentityHubConductor.tsx (not Gate CSS).
+ */
+
+.panel {
+  --cond-brand-rose: var(--lc-color-dusty-rose, #c9a09a);
+  --cond-brand-rose-hover: #ba8f89;
+  --cond-brand-emerald: #10b981;
+  --cond-brand-emerald-hover: #059669;
+  --cond-text-main: var(--lc-color-ink, #4a4038);
+  --cond-text-muted: var(--lc-color-ink-muted, #6f6258);
+  --cond-bg-surface: #f7f4ef;
+  --cond-bg-disabled: #f5f5f5;
+  --cond-border-default: #e2d7d5;
+  --cond-spring: cubic-bezier(0.16, 1, 0.3, 1);
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-block-end: 1.25rem;
+  padding: 1.1rem 1.15rem 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--cond-brand-rose) 35%, #ffffff);
+  background: color-mix(in srgb, var(--cond-bg-surface) 88%, #ffffff);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cond-text-muted);
+}
+
+.title {
+  margin: 0.15rem 0 0;
+  font-family:
+    "Noto Serif JP", "Playfair Display", "Hiragino Mincho ProN", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cond-text-main);
+  line-height: 1.35;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.inputLabel {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cond-text-main);
+  text-align: start;
+  line-height: 1.45;
+}
+
+.input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: 3rem;
+  padding-block: 0.75rem;
+  padding-inline: 1rem;
+  border: 2px solid var(--cond-border-default);
+  border-radius: 1rem;
+  background-color: #ffffff;
+  color: var(--cond-text-main);
+  font-size: 1rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s var(--cond-spring);
+}
+
+.input:focus-visible {
+  border-color: var(--cond-brand-rose);
+  outline: 3px solid var(--cond-brand-rose);
+  outline-offset: 2px;
+}
+
+.input:disabled {
+  background-color: var(--cond-bg-disabled);
+  color: #999999;
+  cursor: not-allowed;
+}
+
+/**
+ * Shared CTA base (Liskov) — variants must remain substitutable
+ * without breaking touch / focus contracts.
+ */
+.cta {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 3rem;
+  inline-size: 100%;
+  padding-inline: 1rem;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.cta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ctaSubmit {
+  background-color: var(--cond-brand-rose);
+  color: #ffffff;
+  transition:
+    background-color 0.2s var(--cond-spring),
+    transform 0.2s var(--cond-spring);
+}
+
+.ctaSubmit:focus-visible {
+  outline: 3px solid var(--cond-brand-rose);
+  outline-offset: 2px;
+}
+
+.ctaBoarding {
+  background-color: var(--cond-brand-emerald);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgb(16 185 129 / 0.2);
+  transition:
+    background-color 0.2s var(--cond-spring),
+    transform 0.2s var(--cond-spring);
+}
+
+.ctaBoarding:focus-visible {
+  outline: 3px solid var(--cond-brand-emerald);
+  outline-offset: 2px;
+}
+
+.error {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #b91c1c;
+}
+
+/* CLS reserve — 180px band for skeleton ↔ teaser swap */
+.resultSlot {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-block-size: 11.25rem;
+}
+
+.skeletonPulse {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeletonLine,
+.skeletonLineShort {
+  border-radius: 0.5rem;
+  min-block-size: 1.25rem;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--cond-brand-rose) 10%, #f0f0f0) 25%,
+    color-mix(in srgb, var(--cond-brand-rose) 18%, #e0e0e0) 50%,
+    color-mix(in srgb, var(--cond-brand-rose) 10%, #f0f0f0) 75%
+  );
+  background-size: 200% 100%;
+  animation: conductorShimmer 1.5s ease-in-out infinite;
+}
+
+.skeletonLine {
+  inline-size: 100%;
+}
+
+.skeletonLineShort {
+  inline-size: 60%;
+}
+
+@keyframes conductorShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  text-align: start;
+  animation: conductorFadeIn 0.4s var(--cond-spring) both;
+}
+
+.acknowledgeText {
+  margin: 0;
+  color: var(--cond-brand-emerald);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.teaserText {
+  margin: 0;
+  color: var(--cond-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.lineBadge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-block-size: 2rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid var(--cond-border-default);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6b4540;
+}
+
+@keyframes conductorFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ctaSubmit:hover:not(:disabled) {
+    background-color: var(--cond-brand-rose-hover);
+    transform: translateY(-1px);
+  }
+
+  .ctaBoarding:hover {
+    background-color: var(--cond-brand-emerald-hover);
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaSubmit,
+  .ctaBoarding,
+  .input {
+    transition: none;
+  }
+
+  .ctaSubmit:hover:not(:disabled),
+  .ctaBoarding:hover {
+    transform: none;
+  }
+
+  .result {
+    animation: none;
+  }
+
+  .skeletonLine,
+  .skeletonLineShort {
+    animation: none;
+  }
+}
