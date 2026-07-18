@@ -1,27 +1,32 @@
 /* ==========================================================================
    Central Terminal Hub — compact Adult-Cute board
-   Sketch uptake: 1000px shell, centered header, denser 15-line grid.
-   Rejected: cold slate (#2d3748/#718096), missing safe-area / transfer board.
+   Sketch map:
+   - .conductorContainer → .terminalContainer (shell under sticky GlobalNav)
+   - .gateGrid           → .terminalGrid (15-line catalog; NOT Conductor CSS)
+   Rejected: navy `--canvas-bg-dark` hub/conductor shell, gateGrid inside
+   IdentityHubConductor, bare minmax(280px) without min(100%, …) guard.
    ========================================================================== */
 
 .terminalContainer {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   inline-size: 100%;
   max-inline-size: 1000px;
   min-block-size: 100dvh;
   margin-inline: auto;
-  padding-block-start: 48px;
-  padding-inline: 24px;
-  padding-block-end: calc(48px + env(safe-area-inset-bottom, 0px));
-  color: #4a3f3a;
-  background-color: #fcf9f8;
+  /* 1.5rem Adult-Cute landing under ~72px sticky nav (gap-zero under chrome) */
+  padding-block-start: 1.5rem;
+  padding-inline: 1.5rem;
+  padding-block-end: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  color: var(--lc-color-ink, #4a4038);
+  background-color: var(--lc-color-cream, #faf9f6);
 }
 
 @media (max-width: 640px) {
   .terminalContainer {
-    padding-block-start: 24px;
-    padding-inline: 16px;
-    padding-block-end: calc(24px + env(safe-area-inset-bottom, 0px));
+    padding-inline: 1rem;
+    padding-block-end: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -117,6 +122,7 @@
    ========================================================================== */
 
 .gateMatrixArea {
+  margin-block-start: 1rem;
   margin-block-end: 1rem;
 }
 
@@ -132,21 +138,17 @@
   text-align: start;
 }
 
+/* gateGrid — auto-fit; min(100%, …) keeps cards inside the viewport */
 .terminalGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 1.25rem;
+  inline-size: 100%;
+  box-sizing: border-box;
   margin: 0;
+  margin-block-start: 0;
   padding: 0;
   list-style: none;
-}
-
-@media (min-width: 640px) {
-  .terminalGrid {
-    /* min(100%, 220px) prevents overflow on narrow tablets */
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
-    gap: 20px;
-  }
 }
 
 .stationCell {

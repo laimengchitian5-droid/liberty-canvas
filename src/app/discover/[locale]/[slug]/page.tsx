@@ -11,6 +11,14 @@ import { generateAllPseoRoutes } from "@/lib/station/pseoManifestEngine";
 
 /**
  * Discover pSEO SSG — locale × topic landings that hand off to first-party play.
+ *
+ * Rejected sketch defects (do not reintroduce):
+ * - Page-local `GlobalNavbar` (Discover is immersive → AppShell brand bar;
+ *   never stack a second header or fork GlobalNav)
+ * - `@/src/...` · Conductor CSS · navy inline LP · 16personalities outbound
+ * - `getPageMetadata` / `targetRedirectUrl` (use resolveLandingPage + catalog)
+ * - Drop LandingIntakeClient / JSON-LD / notFound fail-closed
+ *
  * Do not conflate with `/diagnosis/play/[slug]` (Plug compiler runtime).
  */
 interface DiscoverLandingPageProps {

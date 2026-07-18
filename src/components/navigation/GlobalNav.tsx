@@ -58,20 +58,21 @@ const NavSessionBadge = ({
 );
 
 /**
- * Site-wide chrome — single GlobalNav (never fork `hub/GlobalNav.tsx`).
+ * Site-wide chrome — single {@link GlobalNav} (never fork `GlobalNavbar.tsx`).
  *
- * Sketch map:
- * - `headerContainer` → `.bar` / `.barInner`
- * - `navigationScrollWrapper` → `.tabList` (labels never crush; scroll)
- * - `brandLogo` → {@link BrandWordmark} in `.brandSlot` (outside scroll)
- * - `navLinkItem` → {@link BrandNavLink} + `.tab`
- * - `metaActionGroup` → locale + {@link UserAuthPanel}
+ * Sketch map (`GlobalNavbar.tsx` → this module):
+ * - `header` + `brandMenuSection` → `.bar` / `.barInner` / `.navigationGroup`
+ * - scroll `navLinks` → `.tabList` + {@link buildGlobalNavItems} (live routes only)
+ * - `authStationBlock` → `.metaActionGroup` + {@link LocaleSwitcher} + {@link UserAuthPanel}
+ * - `brandLogo` → {@link BrandWordmark} (outside scroll rail)
  *
- * Rejected sketch defects:
- * - raw `<a href>` / dead routes (`/home`, `/ai-diagnostic`, `/play-room`, …)
- * - hardcoded `/station/ja` (use active locale)
- * - brand inside the scroll rail (would scroll away)
- * - missing `"use client"` / imports / i18n
+ * Rejected sketch defects (do not reintroduce):
+ * - new `GlobalNavbar.tsx` / `GlobalNavbar.module.css` fork
+ * - `React.FC` + unused `currentLocale` prop (locale from {@link useI18n})
+ * - emoji chrome (`👑` / flag options) · hardcoded `guest_user` readOnly input
+ * - dead / mislabeled hrefs (`宇宙AI診断`→`/diagnosis`, Discover as プレイルーム)
+ * - raw `<select>` / fake login buttons (use real auth + locale panels)
+ * - nested `role="navigation"` inside banner without i18n labels
  */
 export function GlobalNav() {
   const pathname = usePathname() ?? "";
